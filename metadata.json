@@ -1,0 +1,6 @@
+{
+  "name": "ExamSetu Nepal",
+  "description": "Comprehensive MCQ exam practice platform for Lok Sewa, SEE, NEB, Banking, TSC, and Entrance exams in Nepal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subject Practice Hub - ExamSetu Nepal</title>
+  <meta name="description" content="Practice chapter-wise MCQs with instant explanations or take timed mock tests for Lok Sewa, SEE, NEB, and Banking.">
+  <link rel="stylesheet" href="/css/remixicon.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon"><i class="ri-book-open-fill"></i></div>
+        <div class="brand-title"><span class="brand-name">ExamSetu <span>Nepal</span></span></div>
+      </a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/exams" class="nav-link">All Exams</a></li>
+          <li><a href="/practice" class="nav-link"><i class="ri-compass-3-line"></i> Practice Mode</a></li>
+          <li><a href="/subject?slug=general-knowledge" class="nav-link active">Subjects</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle dark mode"><i class="ri-moon-line"></i></button>
+        <div id="navAuthSlot">
+          <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+        </div>
+        <button class="nav-toggle" id="navToggle"><i class="ri-menu-line"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Breadcrumbs -->
+      <div style="font-size:0.85rem;color:var(--muted-text);margin-bottom:20px;">
+        <a href="/" style="color:var(--muted-text);"><i class="ri-home-4-line"></i> Home</a> /
+        <a href="/exams" style="color:var(--muted-text);">Exams</a> /
+        <span id="breadcrumbSubject" style="color:var(--text);font-weight:600;">Subject Practice Hub</span>
+      </div>
+
+      <!-- Subject Hero Header -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:36px;box-shadow:var(--shadow-sm);margin-bottom:36px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+          <div style="max-width:700px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+              <span id="subjectExamBadge" class="tag-badge tag-badge-primary">Exam</span>
+              <span class="tag-badge" style="background:var(--success-light);color:var(--success);"><i class="ri-shield-check-line"></i> Syllabus Aligned</span>
+              <span class="tag-badge" style="background:var(--accent-light);color:var(--accent);"><i class="ri-translate-2"></i> Nepali + English</span>
+            </div>
+            <h1 id="subjectTitle" style="font-size:2.2rem;font-weight:800;margin-bottom:8px;">Subject Practice Hub</h1>
+            <p id="subjectDescription" style="color:var(--muted-text);font-size:1.05rem;line-height:1.5;">
+              Master this subject through chapter-wise self-paced study or full timed mock examinations.
+            </p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <a id="heroPracticeBtn" href="/practice" class="btn btn-secondary btn-lg" style="justify-content:center;">
+              <i class="ri-questionnaire-line"></i> Instant Practice Mode
+            </a>
+            <a id="heroMockBtn" href="/test" class="btn btn-primary btn-lg" style="justify-content:center;">
+              <i class="ri-timer-line"></i> Timed Mock Exam
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mode Selector Guide -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px;margin-bottom:36px;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:var(--radius-md);padding:18px 20px;">
+          <h4 style="font-size:1rem;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px;">
+            <i class="ri-flashlight-line" style="color:var(--primary);"></i> Self-Paced Practice Mode
+          </h4>
+          <p style="font-size:0.88rem;color:var(--muted-text);">
+            No countdown timer. Immediate feedback after selecting an option, comprehensive explanations, bookmarking, and error reporting.
+          </p>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:var(--radius-md);padding:18px 20px;">
+          <h4 style="font-size:1rem;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px;">
+            <i class="ri-timer-flash-line" style="color:var(--accent);"></i> Timed Mock Test Mode
+          </h4>
+          <p style="font-size:0.88rem;color:var(--muted-text);">
+            Strict countdown clock with negative marking simulation, question palette navigation, auto-submit, and full diagnostic scorecards.
+          </p>
+        </div>
+      </div>
+
+      <!-- Chapter / Topic Wise Section -->
+      <div id="topicsSection" style="margin-bottom:44px;">
+        <div class="section-header" style="text-align:left;margin-bottom:20px;">
+          <h2 style="font-size:1.5rem;font-weight:800;display:flex;align-items:center;gap:10px;">
+            <i class="ri-node-tree" style="color:var(--primary);"></i> Chapter & Topic Breakdown
+          </h2>
+          <p style="color:var(--muted-text);font-size:0.95rem;">Focus your preparation on specific high-weightage syllabus topics.</p>
+        </div>
+
+        <div id="topicsGrid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:20px;">
+          <div style="text-align:center;padding:30px;grid-column:1/-1;color:var(--muted-text);">
+            <i class="ri-loader-4-line ri-spin" style="font-size:2rem;color:var(--primary);"></i>
+            <p style="margin-top:8px;">Loading topic syllabus...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Standard Full-Length Model Sets -->
+      <div class="section-header" style="text-align:left;margin-bottom:20px;">
+        <h2 style="font-size:1.5rem;font-weight:800;display:flex;align-items:center;gap:10px;">
+          <i class="ri-file-list-3-line" style="color:var(--primary);"></i> Full-Length Model Sets
+        </h2>
+        <p style="color:var(--muted-text);font-size:0.95rem;">Balanced question papers covering all chapters according to official exam patterns.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:24px;margin-bottom:36px;" id="practiceSetsList">
+        <!-- Set Card 1 -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <span class="tag-badge tag-badge-primary">Model Set 01</span>
+            <span style="font-size:0.8rem;color:var(--muted-text);font-weight:600;"><i class="ri-timer-line"></i> 10 Mins</span>
+          </div>
+          <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">Standard Set 1 (10 Questions)</h3>
+          <p style="font-size:0.9rem;color:var(--muted-text);margin-bottom:20px;flex-grow:1;">High-yield mixed questions covering the most frequently asked concepts.</p>
+          <div style="display:flex;gap:10px;padding-top:14px;border-top:1px solid var(--border);">
+            <a id="set1PracticeBtn" href="/practice" class="btn btn-secondary btn-sm" style="flex:1;justify-content:center;">
+              <i class="ri-compass-3-line"></i> Practice
+            </a>
+            <a id="set1MockBtn" href="/test" class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">
+              <i class="ri-play-line"></i> Mock Test
+            </a>
+          </div>
+        </div>
+
+        <!-- Set Card 2 -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <span class="tag-badge tag-badge-warning">Model Set 02</span>
+            <span style="font-size:0.8rem;color:var(--muted-text);font-weight:600;"><i class="ri-timer-line"></i> 20 Mins</span>
+          </div>
+          <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">Comprehensive Set 2 (20 Questions)</h3>
+          <p style="font-size:0.9rem;color:var(--muted-text);margin-bottom:20px;flex-grow:1;">Full endurance test simulating the actual examination hall experience.</p>
+          <div style="display:flex;gap:10px;padding-top:14px;border-top:1px solid var(--border);">
+            <a id="set2PracticeBtn" href="/practice" class="btn btn-secondary btn-sm" style="flex:1;justify-content:center;">
+              <i class="ri-compass-3-line"></i> Practice
+            </a>
+            <a id="set2MockBtn" href="/test" class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">
+              <i class="ri-play-line"></i> Mock Test
+            </a>
+          </div>
+        </div>
+
+        <!-- Set Card 3: Rapid Fire -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <span class="tag-badge" style="background:#fee2e2;color:#dc2626;">Speed Drill</span>
+            <span style="font-size:0.8rem;color:var(--muted-text);font-weight:600;"><i class="ri-timer-line"></i> 5 Mins</span>
+          </div>
+          <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">5-Minute Rapid Drill</h3>
+          <p style="font-size:0.9rem;color:var(--muted-text);margin-bottom:20px;flex-grow:1;">Fast-paced 5 questions drill to test reflex recall and accuracy.</p>
+          <div style="display:flex;gap:10px;padding-top:14px;border-top:1px solid var(--border);">
+            <a id="set3PracticeBtn" href="/practice" class="btn btn-secondary btn-sm" style="flex:1;justify-content:center;">
+              <i class="ri-compass-3-line"></i> Practice
+            </a>
+            <a id="set3MockBtn" href="/test" class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">
+              <i class="ri-play-line"></i> Mock Test
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- In-Page Ad Container -->
+      <div class="ad-container" style="margin-top:40px;">
+        <div class="ad-label">Advertisement</div>
+        <div class="ad-slot-responsive">
+          <span>Responsive Ad Slot • ExamSetu Nepal Practice Sets</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 ExamSetu Nepal. All rights reserved.</div>
+      <div><a href="/disclaimer" style="color:var(--muted-text);">Practice Disclaimer</a></div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const slug = urlParams.get('slug') || 'general-knowledge';
+      const examParam = urlParams.get('exam') || '';
+
+      let displaySubject = 'General Knowledge';
+      let displayExam = examParam || 'Lok Sewa';
+
+      if (slug.includes('computer')) { displaySubject = 'Computer/IT'; displayExam = 'Lok Sewa'; }
+      else if (slug.includes('science')) { displaySubject = 'Science'; displayExam = 'SEE'; }
+      else if (slug.includes('math')) { displaySubject = 'Mathematics'; displayExam = 'SEE'; }
+      else if (slug.includes('banking')) { displaySubject = 'Banking Law & Economy'; displayExam = 'Banking'; }
+      else if (slug.includes('tsc') || slug.includes('education')) { displaySubject = 'Education Pedagogy'; displayExam = 'TSC'; }
+      else if (slug.includes('iq')) { displaySubject = 'General Mental Ability (IQ)'; displayExam = 'Lok Sewa'; }
+      else if (slug.includes('entrance')) { displaySubject = 'Engineering / Medical Aptitude'; displayExam = 'Entrance'; }
+
+      document.getElementById('subjectTitle').textContent = `${displaySubject} Practice Hub`;
+      document.getElementById('breadcrumbSubject').textContent = displaySubject;
+      document.getElementById('subjectExamBadge').textContent = displayExam;
+
+      const basePracticeUrl = `/practice?exam=${encodeURIComponent(displayExam)}&subject=${encodeURIComponent(displaySubject)}`;
+      const baseMockUrl = `/test?exam=${encodeURIComponent(displayExam)}&subject=${encodeURIComponent(displaySubject)}`;
+
+      document.getElementById('heroPracticeBtn').href = `${basePracticeUrl}&limit=20`;
+      document.getElementById('heroMockBtn').href = `${baseMockUrl}&count=10`;
+
+      document.getElementById('set1PracticeBtn').href = `${basePracticeUrl}&limit=10`;
+      document.getElementById('set1MockBtn').href = `${baseMockUrl}&count=10`;
+
+      document.getElementById('set2PracticeBtn').href = `${basePracticeUrl}&limit=20`;
+      document.getElementById('set2MockBtn').href = `${baseMockUrl}&count=20`;
+
+      document.getElementById('set3PracticeBtn').href = `${basePracticeUrl}&limit=5`;
+      document.getElementById('set3MockBtn').href = `${baseMockUrl}&count=5`;
+
+      // Fetch dynamic topics for this subject
+      const topicsContainer = document.getElementById('topicsGrid');
+      try {
+        const res = await fetch(`/api/subjects/${encodeURIComponent(slug)}/topics`);
+        const data = await res.json();
+        if (data.success && data.topics && data.topics.length > 0) {
+          topicsContainer.innerHTML = data.topics.map(t => {
+            const topicPracticeUrl = `/practice?exam=${encodeURIComponent(displayExam)}&subject=${encodeURIComponent(displaySubject)}&topic=${encodeURIComponent(t.name)}`;
+            const topicMockUrl = `/test?exam=${encodeURIComponent(displayExam)}&subject=${encodeURIComponent(displaySubject)}&topic=${encodeURIComponent(t.name)}`;
+            return `
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;display:flex;flex-direction:column;box-shadow:var(--shadow-sm);">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <span class="tag-badge tag-badge-primary"><i class="ri-bookmark-3-line"></i> Chapter</span>
+                  <span style="font-size:0.75rem;color:var(--muted-text);"><i class="ri-check-double-line"></i> Verified Qs</span>
+                </div>
+                <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:6px;">${escapeHTML(t.name)}</h3>
+                <p style="font-size:0.88rem;color:var(--muted-text);margin-bottom:16px;flex-grow:1;">${escapeHTML(t.description || 'Topic specific questions with answer keys and explanations.')}</p>
+                <div style="display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border);">
+                  <a href="${topicPracticeUrl}" class="btn btn-secondary btn-sm" style="flex:1;justify-content:center;">
+                    <i class="ri-compass-3-line"></i> Practice
+                  </a>
+                  <a href="${topicMockUrl}" class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">
+                    <i class="ri-play-line"></i> Mock
+                  </a>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          // Fallback popular topics for this subject
+          const defaultTopics = [
+            { name: 'Core Foundations', desc: 'Fundamental definitions, articles, theorems, and essential principles.' },
+            { name: 'High-Yield Past Questions', desc: 'Questions frequently repeated in previous examinations.' },
+            { name: 'Advanced Applied Problems', desc: 'Scenario-based analytical questions designed for top scorers.' }
+          ];
+          topicsContainer.innerHTML = defaultTopics.map(t => `
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;display:flex;flex-direction:column;box-shadow:var(--shadow-sm);">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <span class="tag-badge tag-badge-primary"><i class="ri-bookmark-3-line"></i> Module</span>
+                <span style="font-size:0.75rem;color:var(--muted-text);">Active</span>
+              </div>
+              <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:6px;">${escapeHTML(t.name)}</h3>
+              <p style="font-size:0.88rem;color:var(--muted-text);margin-bottom:16px;flex-grow:1;">${escapeHTML(t.desc)}</p>
+              <div style="display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border);">
+                <a href="${basePracticeUrl}" class="btn btn-secondary btn-sm" style="flex:1;justify-content:center;">
+                  <i class="ri-compass-3-line"></i> Practice
+                </a>
+                <a href="${baseMockUrl}" class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">
+                  <i class="ri-play-line"></i> Mock
+                </a>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.warn('Error fetching topics:', err);
+      }
+    });
+  </script>
+</body>
+</html>

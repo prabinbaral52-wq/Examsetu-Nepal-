@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal - ExamSetu Nepal</title>
+  <meta name="description" content="Manage questions, moderation status, candidate reports, exams, imports, and user attempts on ExamSetu Nepal.">
+  <link rel="stylesheet" href="/css/remixicon.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon"><i class="ri-shield-keyhole-fill"></i></div>
+        <div class="brand-title">
+          <span class="brand-name">ExamSetu <span>Admin</span></span>
+        </div>
+      </a>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn"><i class="ri-moon-line"></i></button>
+        <a href="/" class="btn btn-secondary btn-sm"><i class="ri-external-link-line"></i> View Site</a>
+        <button onclick="ExamSetu.logout()" class="btn btn-outline btn-sm"><i class="ri-logout-box-r-line"></i> Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content" id="adminPanelContainer">
+    <div class="container">
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h1 style="font-size:2.2rem;font-weight:800;letter-spacing:-0.5px;">Administration Center</h1>
+          <p style="color:var(--muted-text);">Full control over question bank, moderation workflows, student error reports, and candidate scores.</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div style="display:flex;gap:10px;margin-bottom:32px;overflow-x:auto;padding-bottom:6px;border-bottom:1px solid var(--border);">
+        <button class="btn btn-primary btn-sm admin-tab-btn active" data-tab="overview">
+          <i class="ri-dashboard-line"></i> Overview Stats
+        </button>
+        <button class="btn btn-secondary btn-sm admin-tab-btn" data-tab="questions">
+          <i class="ri-questionnaire-line"></i> Question Bank & Moderation
+        </button>
+        <button class="btn btn-secondary btn-sm admin-tab-btn" data-tab="reports">
+          <i class="ri-flag-2-line"></i> Question Reports <span id="adminReportsBadge" class="tag-badge tag-badge-danger" style="margin-left:4px;display:none;">0</span>
+        </button>
+        <button class="btn btn-secondary btn-sm admin-tab-btn" data-tab="import">
+          <i class="ri-upload-cloud-line"></i> Bulk Import
+        </button>
+        <button class="btn btn-secondary btn-sm admin-tab-btn" data-tab="attempts">
+          <i class="ri-history-line"></i> Test Attempts
+        </button>
+        <button class="btn btn-secondary btn-sm admin-tab-btn" data-tab="users">
+          <i class="ri-user-settings-line"></i> Users
+        </button>
+      </div>
+
+      <!-- TAB 1: OVERVIEW STATS -->
+      <div id="tab-overview" class="admin-tab-pane">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:20px;margin-bottom:36px;">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);">
+            <div style="font-size:0.85rem;color:var(--muted-text);font-weight:600;margin-bottom:8px;">Total Questions Bank</div>
+            <div id="statQuestions" style="font-size:2.4rem;font-weight:900;color:var(--primary);">0</div>
+            <div style="font-size:0.8rem;color:var(--muted-text);margin-top:4px;">Across all subjects</div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);">
+            <div style="font-size:0.85rem;color:var(--muted-text);font-weight:600;margin-bottom:8px;">Total Tests Taken</div>
+            <div id="statAttempts" style="font-size:2.4rem;font-weight:900;color:var(--success);">0</div>
+            <div style="font-size:0.8rem;color:var(--muted-text);margin-top:4px;">Evaluated attempts</div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);">
+            <div style="font-size:0.85rem;color:var(--muted-text);font-weight:600;margin-bottom:8px;">Registered Users</div>
+            <div id="statUsers" style="font-size:2.4rem;font-weight:900;color:var(--accent);">0</div>
+            <div style="font-size:0.8rem;color:var(--muted-text);margin-top:4px;">Active students & admins</div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);">
+            <div style="font-size:0.85rem;color:var(--muted-text);font-weight:600;margin-bottom:8px;">Exam Categories</div>
+            <div id="statExams" style="font-size:2.4rem;font-weight:900;color:var(--info);">0</div>
+            <div style="font-size:0.8rem;color:var(--muted-text);margin-top:4px;">Lok Sewa, SEE, NEB etc.</div>
+          </div>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:30px;box-shadow:var(--shadow-sm);">
+          <h3 style="font-size:1.2rem;font-weight:800;margin-bottom:12px;">Welcome to ExamSetu Admin Console</h3>
+          <p style="color:var(--muted-text);line-height:1.6;margin-bottom:16px;">
+            Here you can create new MCQs, review questions under moderation, inspect candidate error reports, import bulk JSON questions, and audit user test scores.
+          </p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button onclick="AdminPanel.switchTab('questions')" class="btn btn-primary btn-sm"><i class="ri-add-circle-line"></i> Add New Question</button>
+            <button onclick="AdminPanel.switchTab('reports')" class="btn btn-secondary btn-sm"><i class="ri-flag-2-line"></i> Review Reported Questions</button>
+            <button onclick="AdminPanel.switchTab('import')" class="btn btn-secondary btn-sm"><i class="ri-upload-line"></i> Bulk JSON Import</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: QUESTIONS MANAGER & MODERATION -->
+      <div id="tab-questions" class="admin-tab-pane" style="display:none;">
+        <!-- Add Question Card -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-sm);margin-bottom:32px;">
+          <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:20px;">
+            <i class="ri-add-box-line" style="color:var(--primary);"></i> Add New Multiple Choice Question
+          </h2>
+
+          <form id="addQuestionForm">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:16px;margin-bottom:16px;">
+              <div class="form-group">
+                <label for="qExam" class="form-label">Exam</label>
+                <select id="qExam" class="form-input" required>
+                  <option value="Lok Sewa">Lok Sewa</option>
+                  <option value="SEE">SEE (Class 10)</option>
+                  <option value="NEB">NEB (+2)</option>
+                  <option value="Banking">Banking</option>
+                  <option value="TSC">TSC (Teachers Service)</option>
+                  <option value="Entrance">Entrance Exams</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="qSubject" class="form-label">Subject</label>
+                <input type="text" id="qSubject" class="form-input" placeholder="e.g. General Knowledge" value="General Knowledge" required>
+              </div>
+
+              <div class="form-group">
+                <label for="qTopic" class="form-label">Topic / Chapter</label>
+                <input type="text" id="qTopic" class="form-input" placeholder="e.g. Nepal Constitution" value="Nepal Constitution">
+              </div>
+
+              <div class="form-group">
+                <label for="qDifficulty" class="form-label">Difficulty</label>
+                <select id="qDifficulty" class="form-input">
+                  <option value="easy">Easy</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="qStatus" class="form-label">Status</label>
+                <select id="qStatus" class="form-input">
+                  <option value="published" selected>Published</option>
+                  <option value="under_review">Under Review</option>
+                  <option value="draft">Draft</option>
+                  <option value="archived">Archived</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="qText" class="form-label">Question Text (English or Nepali)</label>
+              <textarea id="qText" class="form-input" rows="3" placeholder="Enter clear, complete question text" required></textarea>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+              <div class="form-group">
+                <label for="qOptA" class="form-label">Option A</label>
+                <input type="text" id="qOptA" class="form-input" placeholder="Option A text" required>
+              </div>
+              <div class="form-group">
+                <label for="qOptB" class="form-label">Option B</label>
+                <input type="text" id="qOptB" class="form-input" placeholder="Option B text" required>
+              </div>
+              <div class="form-group">
+                <label for="qOptC" class="form-label">Option C</label>
+                <input type="text" id="qOptC" class="form-input" placeholder="Option C text">
+              </div>
+              <div class="form-group">
+                <label for="qOptD" class="form-label">Option D</label>
+                <input type="text" id="qOptD" class="form-input" placeholder="Option D text">
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:200px 1fr;gap:16px;margin-bottom:20px;">
+              <div class="form-group">
+                <label for="qCorrect" class="form-label">Correct Option</label>
+                <select id="qCorrect" class="form-input" required>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                  <option value="D">D</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="qExplanation" class="form-label">Explanation / Reference</label>
+                <input type="text" id="qExplanation" class="form-input" placeholder="Short, clear explanation or reference law/article">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              <i class="ri-save-line"></i> Save Question to Database
+            </button>
+          </form>
+        </div>
+
+        <!-- Questions Filter & Table -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);overflow-x:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
+            <h2 style="font-size:1.2rem;font-weight:800;">Existing Question Bank</h2>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <label for="filterStatusSelect" style="font-size:0.85rem;color:var(--muted-text);font-weight:600;">Status:</label>
+              <select id="filterStatusSelect" class="form-input" style="padding:6px 12px;font-size:0.85rem;" onchange="AdminPanel.loadQuestions(this.value)">
+                <option value="all">All Statuses</option>
+                <option value="published">Published</option>
+                <option value="under_review">Under Review</option>
+                <option value="draft">Draft</option>
+                <option value="archived">Archived</option>
+              </select>
+            </div>
+          </div>
+
+          <table style="width:100%;border-collapse:collapse;font-size:0.9rem;text-align:left;">
+            <thead>
+              <tr style="border-bottom:2px solid var(--border);color:var(--muted-text);">
+                <th style="padding:10px;">ID</th>
+                <th style="padding:10px;">Exam & Subject</th>
+                <th style="padding:10px;">Question</th>
+                <th style="padding:10px;">Ans</th>
+                <th style="padding:10px;">Status</th>
+                <th style="padding:10px;">Moderation</th>
+              </tr>
+            </thead>
+            <tbody id="adminQuestionsList"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 3: QUESTION REPORTS -->
+      <div id="tab-reports" class="admin-tab-pane" style="display:none;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);overflow-x:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <div>
+              <h2 style="font-size:1.25rem;font-weight:800;">Candidate Question Reports</h2>
+              <p style="font-size:0.88rem;color:var(--muted-text);">User feedback flags on potential incorrect answers, typos, or outdated syllabus questions.</p>
+            </div>
+            <button onclick="AdminPanel.loadReports()" class="btn btn-secondary btn-sm"><i class="ri-refresh-line"></i> Refresh</button>
+          </div>
+
+          <table style="width:100%;border-collapse:collapse;font-size:0.9rem;text-align:left;">
+            <thead>
+              <tr style="border-bottom:2px solid var(--border);color:var(--muted-text);">
+                <th style="padding:10px;">ID</th>
+                <th style="padding:10px;">Question</th>
+                <th style="padding:10px;">Reason</th>
+                <th style="padding:10px;">Details</th>
+                <th style="padding:10px;">Status</th>
+                <th style="padding:10px;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminReportsList"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 4: IMPORT BULK QUESTIONS -->
+      <div id="tab-import" class="admin-tab-pane" style="display:none;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-sm);">
+          <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:8px;">Import Questions from JSON</h2>
+          <p style="color:var(--muted-text);font-size:0.9rem;margin-bottom:20px;">
+            Paste an array of question objects following the ExamSetu question schema.
+          </p>
+
+          <form id="importQuestionsForm">
+            <div class="form-group">
+              <label for="importJsonText" class="form-label">JSON Data</label>
+              <textarea id="importJsonText" class="form-input" rows="12" style="font-family:monospace;font-size:0.85rem;" placeholder='[
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Nepal Constitution",
+    "difficulty": "medium",
+    "question": "Sample question text?",
+    "options": {
+      "A": "Option A",
+      "B": "Option B",
+      "C": "Option C",
+      "D": "Option D"
+    },
+    "correct_answer": "B",
+    "explanation": "Brief explanation",
+    "status": "published"
+  }
+]'></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              <i class="ri-file-upload-line"></i> Run Bulk Import
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- TAB 5: TEST ATTEMPTS -->
+      <div id="tab-attempts" class="admin-tab-pane" style="display:none;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);overflow-x:auto;">
+          <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:16px;">Candidate Mock Exam Attempts</h2>
+          <table style="width:100%;border-collapse:collapse;font-size:0.9rem;text-align:left;">
+            <thead>
+              <tr style="border-bottom:2px solid var(--border);color:var(--muted-text);">
+                <th style="padding:10px;">ID</th>
+                <th style="padding:10px;">Candidate</th>
+                <th style="padding:10px;">Exam & Subject</th>
+                <th style="padding:10px;">Score</th>
+                <th style="padding:10px;">Time Spent</th>
+                <th style="padding:10px;">Date</th>
+                <th style="padding:10px;">View</th>
+              </tr>
+            </thead>
+            <tbody id="adminAttemptsList"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 6: USERS -->
+      <div id="tab-users" class="admin-tab-pane" style="display:none;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);overflow-x:auto;">
+          <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:16px;">Registered Users</h2>
+          <table style="width:100%;border-collapse:collapse;font-size:0.9rem;text-align:left;">
+            <thead>
+              <tr style="border-bottom:2px solid var(--border);color:var(--muted-text);">
+                <th style="padding:10px;">ID</th>
+                <th style="padding:10px;">Name</th>
+                <th style="padding:10px;">Email</th>
+                <th style="padding:10px;">Role</th>
+                <th style="padding:10px;">Streak / XP</th>
+                <th style="padding:10px;">Registered Date</th>
+              </tr>
+            </thead>
+            <tbody id="adminUsersList"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 ExamSetu Nepal. Admin Portal.</div>
+      <div>Authorized Personnel Only</div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

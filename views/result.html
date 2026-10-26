@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exam Result & Performance Report - ExamSetu Nepal</title>
+  <meta name="description" content="View your comprehensive mock test performance analytics, answer key, and question explanations on ExamSetu Nepal.">
+  <link rel="stylesheet" href="/css/remixicon.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon"><i class="ri-book-open-fill"></i></div>
+        <div class="brand-title"><span class="brand-name">ExamSetu <span>Nepal</span></span></div>
+      </a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/exams" class="nav-link">All Exams</a></li>
+          <li><a href="/dashboard" class="nav-link">My Dashboard</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn"><i class="ri-moon-line"></i></button>
+        <div id="navAuthSlot">
+          <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Breadcrumbs -->
+      <div style="font-size:0.85rem;color:var(--muted-text);margin-bottom:20px;">
+        <a href="/" style="color:var(--muted-text);"><i class="ri-home-4-line"></i> Home</a> /
+        <a href="/exams" style="color:var(--muted-text);">Exams</a> /
+        <span style="color:var(--text);font-weight:600;">Test Result</span>
+      </div>
+
+      <!-- Result Scorecard Hero -->
+      <div class="result-hero-card" id="resultHeroArea">
+        <div style="text-align:center;padding:40px;">
+          <i class="ri-loader-4-line ri-spin" style="font-size:3rem;color:var(--primary);"></i>
+          <p style="margin-top:12px;color:var(--muted-text);">Loading score evaluation...</p>
+        </div>
+      </div>
+
+      <!-- In-Page Ad Container -->
+      <div class="ad-container">
+        <div class="ad-label">Advertisement</div>
+        <div class="ad-slot-responsive">
+          <span>728x90 Performance Report Ad Unit • ExamSetu Nepal</span>
+        </div>
+      </div>
+
+      <!-- Detailed Question-by-Question Review -->
+      <section style="margin-top:40px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+          <div>
+            <h2 style="font-size:1.8rem;font-weight:800;">Question Solutions & Explanations</h2>
+            <p style="color:var(--muted-text);">Detailed breakdown of each question with citations and official explanations.</p>
+          </div>
+
+          <div style="display:flex;gap:8px;" id="reviewFilterBtns">
+            <button class="btn btn-primary btn-sm r-filter-btn" data-filter="all">All</button>
+            <button class="btn btn-secondary btn-sm r-filter-btn" data-filter="correct">Correct</button>
+            <button class="btn btn-secondary btn-sm r-filter-btn" data-filter="wrong">Wrong</button>
+            <button class="btn btn-secondary btn-sm r-filter-btn" data-filter="skipped">Skipped</button>
+          </div>
+        </div>
+
+        <div id="detailedReviewContainer">
+          <!-- Injected dynamically -->
+        </div>
+      </section>
+
+      <!-- Bottom Actions -->
+      <div style="display:flex;justify-content:center;gap:16px;margin:50px 0;flex-wrap:wrap;">
+        <a id="retryTestBtn" href="/test" class="btn btn-primary btn-lg">
+          <i class="ri-restart-line"></i> Retry This Test
+        </a>
+        <a href="/exams" class="btn btn-secondary btn-lg">
+          <i class="ri-compass-3-line"></i> Browse Other Exams
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 ExamSetu Nepal. All rights reserved.</div>
+      <div><a href="/disclaimer" style="color:var(--muted-text);">Official Practice Disclaimer</a></div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    let currentResultsList = [];
+
+    async function loadResult() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const attemptId = urlParams.get('id');
+
+      let resultData = null;
+
+      // Try sessionStorage cache first for instantaneous rendering
+      const cached = sessionStorage.getItem('examsetu_last_result');
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          if (!attemptId || String(parsed.attemptId) === String(attemptId)) {
+            resultData = parsed;
+          }
+        } catch (e) {}
+      }
+
+      // If not cached, fetch from API
+      if (!resultData && attemptId) {
+        try {
+          const res = await fetch(`/api/tests/${attemptId}/result`);
+          const data = await res.json();
+          if (data.success) {
+            resultData = {
+              attemptId: data.attempt.id,
+              examName: data.attempt.exam_name,
+              subjectName: data.attempt.subject_name,
+              result: data.result
+            };
+          }
+        } catch (e) {
+          console.error('Fetch result error:', e);
+        }
+      }
+
+      if (!resultData || !resultData.result) {
+        document.getElementById('resultHeroArea').innerHTML = `
+          <div style="padding:40px;">
+            <i class="ri-file-warning-line" style="font-size:3rem;color:var(--warning);"></i>
+            <h2 style="margin-top:16px;">Result Not Found</h2>
+            <p style="color:var(--muted-text);margin-bottom:24px;">Please complete a practice test to view performance analytics.</p>
+            <a href="/exams" class="btn btn-primary">Start a Practice Test</a>
+          </div>
+        `;
+        return;
+      }
+
+      renderHeroScore(resultData);
+      currentResultsList = resultData.result.detailedResults || [];
+      renderReviewList(currentResultsList);
+    }
+
+    function renderHeroScore(data) {
+      const r = data.result;
+      const isPassed = r.isPassed;
+      const pct = r.percentage || 0;
+      const m = Math.floor((r.timeTakenSeconds || 0) / 60);
+      const s = (r.timeTakenSeconds || 0) % 60;
+
+      document.getElementById('retryTestBtn').href = `/test?exam=${encodeURIComponent(data.examName)}&subject=${encodeURIComponent(data.subjectName)}`;
+
+      document.getElementById('resultHeroArea').innerHTML = `
+        <div style="--percent:${pct};" class="score-circle-wrapper">
+          <div class="score-circle-inner">
+            <span class="score-big-percent">${pct}%</span>
+            <span class="score-grade">${isPassed ? 'Passed' : 'Needs Practice'}</span>
+          </div>
+        </div>
+
+        <div class="result-status-badge ${isPassed ? 'status-passed' : 'status-failed'}">
+          <i class="${isPassed ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill'}"></i>
+          ${isPassed ? 'Congratulations! You Passed' : 'Test Completed (Under Qualifying Score)'}
+        </div>
+
+        <h1 style="font-size:1.8rem;font-weight:800;margin-bottom:6px;">${escapeHTML(data.examName)} - ${escapeHTML(data.subjectName)}</h1>
+        <p style="color:var(--muted-text);font-size:0.95rem;">Qualifying mark: 40% • Attempt recorded in your local history</p>
+
+        <div class="result-metrics-grid">
+          <div class="metric-card">
+            <div class="metric-val" style="color:var(--primary);">${r.totalQuestions}</div>
+            <div class="metric-label">Total Questions</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val" style="color:var(--success);">${r.correctCount}</div>
+            <div class="metric-label">Correct Answers</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val" style="color:var(--danger);">${r.wrongCount}</div>
+            <div class="metric-label">Wrong Answers</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val" style="color:var(--muted-text);">${r.skippedCount}</div>
+            <div class="metric-label">Skipped</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val" style="color:var(--text);">${m}m ${s}s</div>
+            <div class="metric-label">Time Taken</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderReviewList(items) {
+      const container = document.getElementById('detailedReviewContainer');
+      if (items.length === 0) {
+        container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--muted-text);">No questions match this filter.</div>`;
+        return;
+      }
+
+      container.innerHTML = items.map((q, idx) => {
+        let cardClass = 'skipped-item';
+        let statusBadge = '<span class="tag-badge" style="background:var(--surface-alt);color:var(--muted-text);">Skipped</span>';
+
+        if (q.userAnswer) {
+          if (q.isCorrect) {
+            cardClass = 'correct-item';
+            statusBadge = '<span class="tag-badge" style="background:var(--success-light);color:var(--success);"><i class="ri-check-line"></i> Correct</span>';
+          } else {
+            cardClass = 'wrong-item';
+            statusBadge = '<span class="tag-badge" style="background:var(--danger-light);color:var(--danger);"><i class="ri-close-line"></i> Incorrect</span>';
+          }
+        }
+
+        return `
+          <div class="review-item-card ${cardClass}">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="q-badge">Question ${idx + 1}</span>
+                ${statusBadge}
+                <span style="font-size:0.8rem;color:var(--muted-text);">${escapeHTML(q.topic || 'General')}</span>
+              </div>
+              <button onclick="bookmarkQuestion(${q.questionId})" class="btn btn-secondary btn-sm" title="Bookmark Question">
+                <i class="ri-bookmark-line"></i> Save
+              </button>
+            </div>
+
+            <h3 style="font-size:1.15rem;font-weight:700;line-height:1.4;margin-bottom:16px;">
+              ${escapeHTML(q.question)}
+            </h3>
+
+            <div class="review-opt-list">
+              ${['A', 'B', 'C', 'D'].map(key => {
+                const optText = q.options[key];
+                const isCorrectAnswer = key.toUpperCase() === q.correctAnswer.toUpperCase();
+                const isUserChoice = q.userAnswer && key.toUpperCase() === q.userAnswer.toUpperCase();
+
+                let rowClass = '';
+                let markIcon = '';
+
+                if (isCorrectAnswer) {
+                  rowClass = 'is-correct-answer';
+                  markIcon = '<span style="font-size:0.8rem;color:var(--success);"><i class="ri-check-line"></i> Correct Answer</span>';
+                } else if (isUserChoice && !q.isCorrect) {
+                  rowClass = 'is-user-wrong';
+                  markIcon = '<span style="font-size:0.8rem;color:var(--danger);"><i class="ri-close-line"></i> Your Answer</span>';
+                }
+
+                return `
+                  <div class="review-opt-row ${rowClass}">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <span class="opt-key" style="width:26px;height:26px;font-size:0.8rem;">${key}</span>
+                      <span>${escapeHTML(optText)}</span>
+                    </div>
+                    <div>${markIcon}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="explanation-box">
+              <strong><i class="ri-lightbulb-line"></i> Detailed Explanation:</strong><br>
+              ${escapeHTML(q.explanation || 'No further explanation provided for this question.')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Filter Buttons logic
+    document.querySelectorAll('.r-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.r-filter-btn').forEach(b => {
+          b.classList.remove('btn-primary');
+          b.classList.add('btn-secondary');
+        });
+        btn.classList.remove('btn-secondary');
+        btn.classList.add('btn-primary');
+
+        const filter = btn.dataset.filter;
+        if (filter === 'all') {
+          renderReviewList(currentResultsList);
+        } else if (filter === 'correct') {
+          renderReviewList(currentResultsList.filter(q => q.isCorrect));
+        } else if (filter === 'wrong') {
+          renderReviewList(currentResultsList.filter(q => q.userAnswer && !q.isCorrect));
+        } else if (filter === 'skipped') {
+          renderReviewList(currentResultsList.filter(q => !q.userAnswer));
+        }
+      });
+    });
+
+    async function bookmarkQuestion(qId) {
+      try {
+        const res = await fetch('/api/user/bookmarks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ questionId: qId })
+        });
+        const data = await res.json();
+        if (data.success) {
+          ExamSetu.showToast('Question saved to bookmarks!', 'success');
+        } else {
+          ExamSetu.showToast(data.message || 'Please log in to save questions.', 'warning');
+        }
+      } catch (e) {
+        ExamSetu.showToast('Could not save question.', 'danger');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadResult);
+  </script>
+</body>
+</html>

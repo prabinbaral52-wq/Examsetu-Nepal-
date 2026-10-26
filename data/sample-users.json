@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Prabin Baral (Admin)",
+    "email": "admin@examsetu.com",
+    "password_plain": "admin123",
+    "role": "admin",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 2,
+    "name": "Aayush Shrestha",
+    "email": "student@examsetu.com",
+    "password_plain": "student123",
+    "role": "student",
+    "created_at": "2026-10-25"
+  }
+]

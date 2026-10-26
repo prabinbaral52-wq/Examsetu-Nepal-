@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Exam Categories & Practice Sets - ExamSetu Nepal</title>
+  <meta name="description" content="Explore MCQ practice exams for Lok Sewa, SEE, NEB, Banking, and TSC in Nepal. Timed mock tests with instant score reports.">
+  <link rel="stylesheet" href="/css/remixicon.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon"><i class="ri-book-open-fill"></i></div>
+        <div class="brand-title">
+          <span class="brand-name">ExamSetu <span>Nepal</span></span>
+        </div>
+      </a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/exams" class="nav-link active">All Exams</a></li>
+          <li><a href="/subject?slug=general-knowledge" class="nav-link">Lok Sewa GK</a></li>
+          <li><a href="/subject?slug=science" class="nav-link">SEE Science</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle dark mode"><i class="ri-moon-line"></i></button>
+        <div id="navAuthSlot">
+          <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+        </div>
+        <button class="nav-toggle" id="navToggle"><i class="ri-menu-line"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Breadcrumb -->
+      <div style="font-size:0.85rem;color:var(--muted-text);margin-bottom:20px;">
+        <a href="/" style="color:var(--muted-text);"><i class="ri-home-4-line"></i> Home</a> / <span style="color:var(--text);font-weight:600;">Exams</span>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;flex-wrap:wrap;gap:16px;">
+        <div>
+          <h1 style="font-size:2.4rem;font-weight:800;letter-spacing:-0.5px;">All Exam Categories</h1>
+          <p style="color:var(--muted-text);font-size:1.05rem;">Select your targeted exam to explore subject-wise mock tests and question banks.</p>
+        </div>
+
+        <div style="position:relative;min-width:280px;">
+          <i class="ri-search-line" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted-text);"></i>
+          <input type="text" id="examSearchInput" placeholder="Search exams or subjects..." class="form-input" style="padding-left:40px;">
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div style="display:flex;gap:10px;margin-bottom:36px;overflow-x:auto;padding-bottom:6px;" id="filterPills">
+        <button class="btn btn-primary btn-sm filter-pill" data-cat="all">All Exams</button>
+        <button class="btn btn-secondary btn-sm filter-pill" data-cat="Lok Sewa">Lok Sewa</button>
+        <button class="btn btn-secondary btn-sm filter-pill" data-cat="SEE">SEE Class 10</button>
+        <button class="btn btn-secondary btn-sm filter-pill" data-cat="Banking">Banking</button>
+        <button class="btn btn-secondary btn-sm filter-pill" data-cat="TSC">TSC License</button>
+        <button class="btn btn-secondary btn-sm filter-pill" data-cat="NEB">NEB +2</button>
+        <button class="btn btn-secondary btn-sm filter-pill" data-cat="Entrance">Entrance</button>
+      </div>
+
+      <!-- Categories & Subjects Grid -->
+      <div id="examsGridContainer" class="categories-grid">
+        <div style="text-align:center;padding:40px;grid-column:1/-1;">
+          <i class="ri-loader-4-line ri-spin" style="font-size:2.5rem;color:var(--primary);"></i>
+          <p style="margin-top:12px;color:var(--muted-text);">Loading exam catalogs...</p>
+        </div>
+      </div>
+
+      <!-- In-Page Ad Container -->
+      <div class="ad-container">
+        <div class="ad-label">Advertisement</div>
+        <div class="ad-slot-responsive">
+          <span>728x90 In-Feed Ad Unit • ExamSetu Nepal</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 ExamSetu Nepal. All rights reserved.</div>
+      <div><a href="/disclaimer" style="color:var(--muted-text);">Official Practice Disclaimer</a></div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    let allExamsData = [];
+
+    async function loadExams() {
+      const container = document.getElementById('examsGridContainer');
+      try {
+        const res = await fetch('/api/exams');
+        const data = await res.json();
+        if (data.success && data.exams) {
+          allExamsData = data.exams;
+          renderExams(allExamsData);
+        }
+      } catch (err) {
+        container.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--danger);padding:30px;">Failed to load exams. Please refresh.</div>`;
+      }
+    }
+
+    function renderExams(exams) {
+      const container = document.getElementById('examsGridContainer');
+      if (exams.length === 0) {
+        container.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted-text);">No matching examinations found.</div>`;
+        return;
+      }
+
+      container.innerHTML = exams.map(e => `
+        <div class="category-card" data-exam-name="${escapeHTML(e.name)}">
+          <div class="card-top">
+            <div class="cat-icon-wrap"><i class="${e.icon || 'ri-book-open-line'}"></i></div>
+            <span class="cat-badge">${escapeHTML(e.badge || 'Practice Available')}</span>
+          </div>
+          <h3 class="card-title">${escapeHTML(e.name)}</h3>
+          <div class="card-np-title">${escapeHTML(e.nepali_title || '')}</div>
+          <p class="card-desc">${escapeHTML(e.description || '')}</p>
+          <div class="card-footer-meta">
+            <a href="/subject?slug=${e.slug}" class="btn btn-secondary btn-sm">
+              <i class="ri-folder-open-line"></i> View Subjects
+            </a>
+            <a href="/test?exam=${encodeURIComponent(e.name)}" class="btn btn-primary btn-sm">
+              <i class="ri-play-line"></i> Start Mock Test
+            </a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Filter pills
+    document.querySelectorAll('.filter-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-pill').forEach(b => {
+          b.classList.remove('btn-primary');
+          b.classList.add('btn-secondary');
+        });
+        btn.classList.remove('btn-secondary');
+        btn.classList.add('btn-primary');
+
+        const cat = btn.dataset.cat;
+        if (cat === 'all') {
+          renderExams(allExamsData);
+        } else {
+          const filtered = allExamsData.filter(e => e.name.toLowerCase().includes(cat.toLowerCase()));
+          renderExams(filtered);
+        }
+      });
+    });
+
+    // Search filter
+    const searchInput = document.getElementById('examSearchInput');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        const filtered = allExamsData.filter(ex =>
+          ex.name.toLowerCase().includes(query) ||
+          (ex.description && ex.description.toLowerCase().includes(query)) ||
+          (ex.nepali_title && ex.nepali_title.toLowerCase().includes(query))
+        );
+        renderExams(filtered);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadExams);
+  </script>
+</body>
+</html>

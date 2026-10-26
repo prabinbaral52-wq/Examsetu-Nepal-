@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subject Practice Sets - ExamSetu Nepal</title>
+  <meta name="description" content="Take chapter-wise and full-length MCQ tests. Review instant scorecards with explanations.">
+  <link rel="stylesheet" href="/css/remixicon.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon"><i class="ri-book-open-fill"></i></div>
+        <div class="brand-title"><span class="brand-name">ExamSetu <span>Nepal</span></span></div>
+      </a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/exams" class="nav-link">All Exams</a></li>
+          <li><a href="/subject?slug=general-knowledge" class="nav-link active">Subjects</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle dark mode"><i class="ri-moon-line"></i></button>
+        <div id="navAuthSlot">
+          <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+        </div>
+        <button class="nav-toggle" id="navToggle"><i class="ri-menu-line"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Breadcrumbs -->
+      <div style="font-size:0.85rem;color:var(--muted-text);margin-bottom:20px;">
+        <a href="/" style="color:var(--muted-text);"><i class="ri-home-4-line"></i> Home</a> /
+        <a href="/exams" style="color:var(--muted-text);">Exams</a> /
+        <span id="breadcrumbSubject" style="color:var(--text);font-weight:600;">Subject Sets</span>
+      </div>
+
+      <!-- Subject Hero Header -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:36px;box-shadow:var(--shadow-sm);margin-bottom:36px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+          <div style="max-width:680px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+              <span id="subjectExamBadge" class="tag-badge tag-badge-primary">Exam</span>
+              <span class="tag-badge" style="background:var(--success-light);color:var(--success);">Verified Questions</span>
+            </div>
+            <h1 id="subjectTitle" style="font-size:2.2rem;font-weight:800;margin-bottom:8px;">Subject Practice Hub</h1>
+            <p id="subjectDescription" style="color:var(--muted-text);font-size:1.05rem;">
+              Choose a practice set below. Tests are timed according to official exam patterns and include detailed answer keys with explanations.
+            </p>
+          </div>
+          <div>
+            <a id="quickStartBtn" href="/test" class="btn btn-primary btn-lg">
+              <i class="ri-flashlight-fill"></i> Quick Practice (10 Qs)
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sets Grid -->
+      <div class="section-header" style="text-align:left;margin-bottom:24px;">
+        <h2 style="font-size:1.6rem;font-weight:800;">Available Practice Sets & Mock Tests</h2>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:24px;" id="practiceSetsList">
+        <!-- Set Card 1 -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <span class="tag-badge tag-badge-primary">Model Set 01</span>
+            <span style="font-size:0.8rem;color:var(--muted-text);font-weight:600;"><i class="ri-timer-line"></i> 10 Mins</span>
+          </div>
+          <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">Standard Mock Test Set 1</h3>
+          <p style="font-size:0.9rem;color:var(--muted-text);margin-bottom:20px;flex-grow:1;">Complete balanced mock exam with high-yield questions, negative marking simulation, and timer.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--border);">
+            <span style="font-size:0.85rem;color:var(--muted-text);font-weight:600;"><i class="ri-check-line"></i> 10 Questions</span>
+            <a id="startSet1Link" href="/test" class="btn btn-primary btn-sm">Start Test</a>
+          </div>
+        </div>
+
+        <!-- Set Card 2 -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <span class="tag-badge tag-badge-warning">Model Set 02</span>
+            <span style="font-size:0.8rem;color:var(--muted-text);font-weight:600;"><i class="ri-timer-line"></i> 20 Mins</span>
+          </div>
+          <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">Comprehensive Practice Set 2</h3>
+          <p style="font-size:0.9rem;color:var(--muted-text);margin-bottom:20px;flex-grow:1;">Extended 20-question challenge designed to test endurance and deep conceptual mastery.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--border);">
+            <span style="font-size:0.85rem;color:var(--muted-text);font-weight:600;"><i class="ri-check-line"></i> 20 Questions</span>
+            <a id="startSet2Link" href="/test" class="btn btn-primary btn-sm">Start Test</a>
+          </div>
+        </div>
+
+        <!-- Set Card 3: Rapid Fire -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <span class="tag-badge" style="background:#fee2e2;color:#dc2626;">Speed Drill</span>
+            <span style="font-size:0.8rem;color:var(--muted-text);font-weight:600;"><i class="ri-timer-line"></i> 5 Mins</span>
+          </div>
+          <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">5-Minute Rapid Fire Drill</h3>
+          <p style="font-size:0.9rem;color:var(--muted-text);margin-bottom:20px;flex-grow:1;">Sharpen your instantaneous recall speed with 5 high-frequency questions under tight clock pressure.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--border);">
+            <span style="font-size:0.85rem;color:var(--muted-text);font-weight:600;"><i class="ri-check-line"></i> 5 Questions</span>
+            <a id="startSet3Link" href="/test" class="btn btn-primary btn-sm">Start Drill</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- In-Page Ad Container -->
+      <div class="ad-container" style="margin-top:40px;">
+        <div class="ad-label">Advertisement</div>
+        <div class="ad-slot-responsive">
+          <span>Responsive Ad Slot • ExamSetu Nepal Practice Sets</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 ExamSetu Nepal. All rights reserved.</div>
+      <div><a href="/disclaimer" style="color:var(--muted-text);">Practice Disclaimer</a></div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const slug = urlParams.get('slug') || 'general-knowledge';
+      const examName = urlParams.get('exam') || 'Lok Sewa';
+
+      // Friendly title formatting
+      let displaySubject = 'General Knowledge';
+      let displayExam = examName;
+
+      if (slug.includes('computer')) displaySubject = 'Computer/IT';
+      else if (slug.includes('science')) { displaySubject = 'Science'; displayExam = 'SEE'; }
+      else if (slug.includes('math')) { displaySubject = 'Mathematics'; displayExam = 'SEE'; }
+      else if (slug.includes('banking')) { displaySubject = 'Banking Law & Economy'; displayExam = 'Banking'; }
+      else if (slug.includes('tsc') || slug.includes('education')) { displaySubject = 'Education Pedagogy'; displayExam = 'TSC'; }
+
+      document.getElementById('subjectTitle').textContent = `${displaySubject} Practice Sets`;
+      document.getElementById('breadcrumbSubject').textContent = displaySubject;
+      document.getElementById('subjectExamBadge').textContent = displayExam;
+
+      const baseTestUrl = `/test?exam=${encodeURIComponent(displayExam)}&subject=${encodeURIComponent(displaySubject)}`;
+      document.getElementById('quickStartBtn').href = `${baseTestUrl}&count=10`;
+      document.getElementById('startSet1Link').href = `${baseTestUrl}&count=10`;
+      document.getElementById('startSet2Link').href = `${baseTestUrl}&count=20`;
+      document.getElementById('startSet3Link').href = `${baseTestUrl}&count=5`;
+    });
+  </script>
+</body>
+</html>

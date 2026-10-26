@@ -1,0 +1,104 @@
+{
+  "countries": [
+    {
+      "name": "Nepal",
+      "code": "NP",
+      "currency": "NPR",
+      "flag_emoji": "🇳🇵",
+      "is_active": 1,
+      "exams": [
+        {
+          "name": "Lok Sewa",
+          "slug": "lok-sewa",
+          "nepali_title": "लोक सेवा आयोग तयारी",
+          "subjects": [
+            {
+              "name": "General Knowledge (GK)",
+              "slug": "general-knowledge",
+              "topics": [
+                "Nepal Constitution",
+                "Geography of Nepal",
+                "History of Nepal",
+                "National Parks & Environment",
+                "River Systems of Nepal"
+              ]
+            },
+            {
+              "name": "Computer/IT",
+              "slug": "computer-it",
+              "topics": [
+                "Computer Fundamentals",
+                "Networking & Protocols",
+                "Cyber Law & Nepal IT Policy",
+                "Operating Systems",
+                "IP Addressing & Subnetting"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "SEE",
+          "slug": "see",
+          "nepali_title": "एसईई परीक्षा अभ्यास",
+          "subjects": [
+            {
+              "name": "Compulsory Science",
+              "slug": "science",
+              "topics": ["Optics & Light", "Force & Gravity", "Chemical Reactions", "Genetics & Heredity"]
+            },
+            {
+              "name": "Compulsory Mathematics",
+              "slug": "mathematics",
+              "topics": ["Compound Interest", "Trigonometry", "Quadratic Equations", "Sets & Venn Diagrams"]
+            }
+          ]
+        },
+        {
+          "name": "Banking",
+          "slug": "banking",
+          "nepali_title": "बैंकिङ परीक्षा तयारी",
+          "subjects": [
+            {
+              "name": "Banking Law & Economy",
+              "slug": "banking-law-economy",
+              "topics": ["Nepal Rastra Bank Act", "Monetary Policy & Inflation"]
+            }
+          ]
+        },
+        {
+          "name": "TSC",
+          "slug": "tsc",
+          "nepali_title": "शिक्षक सेवा आयोग",
+          "subjects": [
+            {
+              "name": "Education Pedagogy",
+              "slug": "education-pedagogy",
+              "topics": ["Teacher Service Commission Act", "Curriculum & Evaluation"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "India",
+      "code": "IN",
+      "currency": "INR",
+      "flag_emoji": "🇮🇳",
+      "is_active": 0,
+      "exams": [
+        { "name": "UPSC", "slug": "upsc", "nepali_title": "Union Public Service Commission" },
+        { "name": "SSC CGL", "slug": "ssc-cgl", "nepali_title": "Staff Selection Commission" }
+      ]
+    },
+    {
+      "name": "Bangladesh",
+      "code": "BD",
+      "currency": "BDT",
+      "flag_emoji": "🇧🇩",
+      "is_active": 0,
+      "exams": [
+        { "name": "BCS", "slug": "bcs", "nepali_title": "Bangladesh Civil Service" }
+      ]
+    }
+  ]
+}

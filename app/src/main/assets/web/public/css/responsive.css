@@ -1,0 +1,170 @@
+/* ==========================================================================
+   ExamSetu Nepal - Responsive Stylesheet
+   Mobile-First Breakpoints & Adaptive Layouts
+   ========================================================================== */
+
+/* Large Tablets & Small Laptops (Max 1024px) */
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .hero-visual {
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .test-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .palette-card {
+    position: static;
+    margin-top: 24px;
+  }
+}
+
+/* Tablets (Max 768px) */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 64px;
+  }
+
+  .hero-title {
+    font-size: 2.3rem;
+  }
+
+  .hero-subtitle-np {
+    font-size: 1.1rem;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    padding: 20px;
+    gap: 12px;
+    box-shadow: var(--shadow-lg);
+    display: none;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .test-main-card {
+    padding: 20px;
+  }
+
+  .question-text {
+    font-size: 1.1rem;
+  }
+
+  .test-actions-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action-left-group, .action-right-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .action-left-group button, .action-right-group button {
+    flex: 1;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .hero-stats-row {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
+
+/* Small Mobile Screens (Max 480px) */
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 1.9rem;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-cta-group .btn {
+    width: 100%;
+  }
+
+  .brand-nepali {
+    display: none;
+  }
+
+  .brand-name {
+    font-size: 1.2rem;
+  }
+
+  .option-btn {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .opt-key {
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
+  }
+
+  .opt-text {
+    font-size: 0.95rem;
+  }
+
+  .palette-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .result-hero-card {
+    padding: 24px 16px;
+  }
+
+  .auth-wrapper {
+    padding: 24px 16px;
+    margin: 20px auto;
+  }
+}

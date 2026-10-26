@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - ExamSetu Nepal</title>
+  <meta name="description" content="Get in touch with the ExamSetu Nepal support and editorial team for feedback, question suggestions, or inquiries.">
+  <link rel="stylesheet" href="/css/remixicon.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon"><i class="ri-book-open-fill"></i></div>
+        <div class="brand-title"><span class="brand-name">ExamSetu <span>Nepal</span></span></div>
+      </a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/exams" class="nav-link">All Exams</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+          <li><a href="/contact" class="nav-link active">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn"><i class="ri-moon-line"></i></button>
+        <div id="navAuthSlot"><a href="/login" class="btn btn-secondary btn-sm">Login</a></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container" style="max-width:920px;">
+
+      <div style="font-size:0.85rem;color:var(--muted-text);margin-bottom:20px;">
+        <a href="/" style="color:var(--muted-text);"><i class="ri-home-4-line"></i> Home</a> / <span style="color:var(--text);font-weight:600;">Contact</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:36px;" class="contact-grid">
+        <!-- Info Column -->
+        <div>
+          <div class="hero-badge"><i class="ri-mail-send-line"></i> Support & Editorial</div>
+          <h1 style="font-size:2.2rem;font-weight:800;line-height:1.2;margin-bottom:16px;">
+            We'd Love to Hear From You
+          </h1>
+          <p style="color:var(--muted-text);line-height:1.6;margin-bottom:28px;">
+            Have suggestions for new practice sets? Spotted a question correction? Or want to partner with ExamSetu Nepal? Send us a message and our team will get back to you promptly.
+          </p>
+
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="display:flex;align-items:flex-start;gap:14px;">
+              <div style="width:40px;height:40px;background:var(--primary-light);color:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">
+                <i class="ri-mail-line"></i>
+              </div>
+              <div>
+                <strong style="display:block;font-size:0.95rem;">Email Inquiries</strong>
+                <a href="mailto:prabinbaral52@gmail.com" style="color:var(--primary);font-size:0.9rem;font-weight:600;">prabinbaral52@gmail.com</a>
+                <span style="display:block;color:var(--muted-text);font-size:0.82rem;">contact@examsetu.com</span>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:14px;">
+              <div style="width:40px;height:40px;background:#e0f2fe;color:#0284c7;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">
+                <i class="ri-phone-line"></i>
+              </div>
+              <div>
+                <strong style="display:block;font-size:0.95rem;">Mobile / Direct Line</strong>
+                <a href="tel:+9779763332571" style="color:var(--text);font-size:0.92rem;font-weight:700;">+977 9763332571</a>
+                <span style="display:block;color:var(--muted-text);font-size:0.82rem;">Direct student help & inquiry</span>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:14px;">
+              <div style="width:40px;height:40px;background:#dcfce7;color:#16a34a;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">
+                <i class="ri-map-pin-line"></i>
+              </div>
+              <div>
+                <strong style="display:block;font-size:0.95rem;">Location</strong>
+                <span style="color:var(--muted-text);font-size:0.9rem;">Kathmandu, Bagmati Province, Nepal</span>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:14px;">
+              <div style="width:40px;height:40px;background:#fef3c7;color:#d97706;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">
+                <i class="ri-time-line"></i>
+              </div>
+              <div>
+                <strong style="display:block;font-size:0.95rem;">Operating Hours</strong>
+                <span style="color:var(--muted-text);font-size:0.9rem;">Sunday – Friday: 9:00 AM – 6:00 PM NPT</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:32px;box-shadow:var(--shadow-sm);">
+          <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:18px;">Send a Message</h2>
+          <form id="contactForm" onsubmit="event.preventDefault();ExamSetu.showToast('Thank you! Your message has been received.', 'success');this.reset();">
+            <div class="form-group">
+              <label for="cName" class="form-label">Your Name</label>
+              <input type="text" id="cName" class="form-input" placeholder="e.g. Aayush Shrestha" required>
+            </div>
+
+            <div class="form-group">
+              <label for="cEmail" class="form-label">Email Address</label>
+              <input type="email" id="cEmail" class="form-input" placeholder="your@email.com" required>
+            </div>
+
+            <div class="form-group">
+              <label for="cSubject" class="form-label">Topic / Subject</label>
+              <select id="cSubject" class="form-input" required>
+                <option value="General Inquiry">General Inquiry</option>
+                <option value="Question Correction">Question Correction / Feedback</option>
+                <option value="Feature Request">Feature Request</option>
+                <option value="Partnership">Institutional Partnership</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="cMessage" class="form-label">Message</label>
+              <textarea id="cMessage" class="form-input" rows="4" placeholder="How can we help you?" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+              <i class="ri-send-plane-fill"></i> Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 ExamSetu Nepal. All rights reserved.</div>
+      <div><a href="/privacy" style="color:var(--muted-text);">Privacy Policy</a></div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
