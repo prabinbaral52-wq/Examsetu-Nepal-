@@ -10,24 +10,44 @@ const PracticeEngine = {
   subjectName: 'General Knowledge',
   topicName: '',
 
+  questionCount: 50,
+
+  changeCount(newCount) {
+    this.questionCount = parseInt(newCount) || 50;
+    this.loadQuestions();
+  },
+
+  shuffleNewQuestions() {
+    this.loadQuestions(true);
+  },
+
   async init() {
     const urlParams = new URLSearchParams(window.location.search);
     this.examName = urlParams.get('exam') || 'Lok Sewa';
     this.subjectName = urlParams.get('subject') || '';
     this.topicName = urlParams.get('topic') || '';
+    this.questionCount = parseInt(urlParams.get('count') || urlParams.get('limit')) || 50;
 
-    // Update Header Text
+    const countSelect = document.getElementById('practiceCountSelect');
+    if (countSelect) {
+      countSelect.value = String(this.questionCount);
+    }
+
     const headerTitle = document.getElementById('practiceTitleInfo');
     if (headerTitle) {
       headerTitle.textContent = `${this.examName} • ${this.subjectName || 'Practice Drill'} ${this.topicName ? '(' + this.topicName + ')' : ''}`;
     }
 
+    await this.loadQuestions();
+  },
+
+  async loadQuestions(isShuffle = false) {
     const container = document.getElementById('practiceQuestionCard');
     if (container) {
       container.innerHTML = `
         <div style="text-align:center;padding:50px;">
           <i class="ri-loader-4-line ri-spin" style="font-size:2.5rem;color:var(--primary);"></i>
-          <p style="margin-top:12px;color:var(--muted-text);">Loading questions for practice mode...</p>
+          <p style="margin-top:12px;color:var(--muted-text);font-weight:600;">Generating ${this.questionCount} genuine questions...</p>
         </div>
       `;
     }
@@ -37,7 +57,8 @@ const PracticeEngine = {
         exam: this.examName,
         subject: this.subjectName,
         topic: this.topicName,
-        limit: '30'
+        limit: String(this.questionCount),
+        t: Date.now()
       });
 
       const res = await fetch(`/api/practice/questions?${query.toString()}`);
@@ -205,8 +226,10 @@ const PracticeEngine = {
       answeredKeys.forEach((k) => {
         if (this.userSelections[k].isCorrect) correct++;
       });
-      alert(`Practice session complete! You scored ${correct} out of ${this.questions.length} questions.`);
-      window.location.href = '/dashboard';
+      ExamSetu.showToast(`Practice complete! You scored ${correct} / ${this.questions.length}`, 'success');
+      setTimeout(() => {
+        ExamSetu.navigateTo('/dashboard');
+      }, 1200);
     }
   },
 

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcryptjs');
+const QuestionGenerator = require('./question-generator');
 
 let db = null;
 let useNodeSqlite = false;
@@ -212,6 +213,32 @@ function initDB() {
       details TEXT,
       ip_address TEXT,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS telegram_users (
+      telegram_id INTEGER PRIMARY KEY,
+      chat_id INTEGER NOT NULL,
+      username TEXT,
+      first_name TEXT,
+      score INTEGER DEFAULT 0,
+      total_quizzes INTEGER DEFAULT 0,
+      correct_answers INTEGER DEFAULT 0,
+      current_streak INTEGER DEFAULT 1,
+      total_xp INTEGER DEFAULT 10,
+      last_active_date TEXT,
+      preferred_category TEXT DEFAULT 'all',
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS telegram_quiz_history (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      telegram_id INTEGER NOT NULL,
+      question_id INTEGER NOT NULL,
+      poll_id TEXT,
+      selected_option INTEGER,
+      is_correct INTEGER DEFAULT 0,
+      answered_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY(telegram_id) REFERENCES telegram_users(telegram_id)
     );
   `);
 
@@ -552,8 +579,9 @@ const DB = {
     return db.prepare('SELECT * FROM questions WHERE id = ?').get(id);
   },
   getQuestionsByExamAndSubject: (examName, subjectName, limit = 20, topic = '') => {
+    let rows = [];
     if (topic && topic !== '') {
-      return db.prepare(`
+      rows = db.prepare(`
         SELECT * FROM questions
         WHERE status = 'published'
           AND (exam_name LIKE ? OR ? = '')
@@ -562,7 +590,7 @@ const DB = {
         ORDER BY RANDOM() LIMIT ?
       `).all(`%${examName}%`, examName, `%${subjectName}%`, subjectName, `%${topic}%`, topic, limit);
     } else if (examName && subjectName) {
-      return db.prepare(`
+      rows = db.prepare(`
         SELECT * FROM questions
         WHERE status = 'published'
           AND (exam_name LIKE ? OR ? = '')
@@ -570,12 +598,59 @@ const DB = {
         ORDER BY RANDOM() LIMIT ?
       `).all(`%${examName}%`, examName, `%${subjectName}%`, subjectName, limit);
     } else if (examName) {
-      return db.prepare(`
+      rows = db.prepare(`
         SELECT * FROM questions WHERE status = 'published' AND exam_name LIKE ? ORDER BY RANDOM() LIMIT ?
       `).all(`%${examName}%`, limit);
     } else {
-      return db.prepare("SELECT * FROM questions WHERE status = 'published' ORDER BY RANDOM() LIMIT ?").all(limit);
+      rows = db.prepare("SELECT * FROM questions WHERE status = 'published' ORDER BY RANDOM() LIMIT ?").all(limit);
     }
+
+    // Unlimited Dynamic Question Generation: If requested limit exceeds available DB questions, auto-generate syllabus questions!
+    if (rows.length < limit) {
+      const needed = limit - rows.length;
+      try {
+        const generated = QuestionGenerator.generateQuestionsBatch(needed, examName);
+        const insertStmt = db.prepare(`
+          INSERT INTO questions (
+            country_id, exam_name, subject_name, topic, difficulty,
+            language, question, option_a, option_b, option_c, option_d,
+            correct_answer, explanation, marks, status, created_by
+          )
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', 'generator')
+        `);
+
+        for (const g of generated) {
+          const res = insertStmt.run(
+            1,
+            examName || g.exam || 'Lok Sewa',
+            subjectName || g.subject || 'General Knowledge',
+            g.topic || 'General',
+            g.difficulty || 'medium',
+            'both',
+            g.question,
+            g.options.A,
+            g.options.B,
+            g.options.C,
+            g.options.D,
+            g.correct_answer,
+            g.explanation || '',
+            1
+          );
+          g.id = Number(res.lastInsertRowid);
+          g.exam_name = examName || g.exam;
+          g.subject_name = subjectName || g.subject;
+          g.option_a = g.options.A;
+          g.option_b = g.options.B;
+          g.option_c = g.options.C;
+          g.option_d = g.options.D;
+          rows.push(g);
+        }
+      } catch (genErr) {
+        console.warn('[DB Generator] Auto-generation notice:', genErr.message);
+      }
+    }
+
+    return rows;
   },
   createQuestion: (q) => {
     const stmt = db.prepare(`
@@ -797,6 +872,172 @@ const DB = {
       totalSubjects: subjectsCount,
       pendingReports: reportsCount
     };
+  },
+
+  // Telegram Bot Integration
+  upsertTelegramUser: ({ telegram_id, chat_id, username = '', first_name = '', preferred_category = 'all' }) => {
+    try {
+      const existing = db.prepare('SELECT * FROM telegram_users WHERE telegram_id = ?').get(telegram_id);
+      const today = new Date().toISOString().split('T')[0];
+
+      if (!existing) {
+        db.prepare(`
+          INSERT INTO telegram_users (telegram_id, chat_id, username, first_name, preferred_category, last_active_date, current_streak, total_xp)
+          VALUES (?, ?, ?, ?, ?, ?, 1, 10)
+        `).run(telegram_id, chat_id, username, first_name, preferred_category, today);
+        return db.prepare('SELECT * FROM telegram_users WHERE telegram_id = ?').get(telegram_id);
+      } else {
+        // Streak calculation
+        let streak = existing.current_streak || 1;
+        if (existing.last_active_date) {
+          const lastDate = new Date(existing.last_active_date);
+          const diffDays = Math.floor((new Date(today) - lastDate) / (1000 * 60 * 60 * 24));
+          if (diffDays === 1) {
+            streak += 1;
+          } else if (diffDays > 1) {
+            streak = 1;
+          }
+        }
+
+        db.prepare(`
+          UPDATE telegram_users
+          SET chat_id = ?, username = COALESCE(NULLIF(?, ''), username),
+              first_name = COALESCE(NULLIF(?, ''), first_name),
+              preferred_category = COALESCE(NULLIF(?, ''), preferred_category),
+              last_active_date = ?, current_streak = ?
+          WHERE telegram_id = ?
+        `).run(chat_id, username, first_name, preferred_category, today, streak, telegram_id);
+
+        return db.prepare('SELECT * FROM telegram_users WHERE telegram_id = ?').get(telegram_id);
+      }
+    } catch (e) {
+      console.error('[DB] upsertTelegramUser error:', e.message);
+      return null;
+    }
+  },
+
+  getTelegramUser: (telegramId) => {
+    try {
+      return db.prepare('SELECT * FROM telegram_users WHERE telegram_id = ?').get(telegramId);
+    } catch (e) {
+      return null;
+    }
+  },
+
+  setTelegramCategory: (telegramId, category) => {
+    try {
+      return db.prepare('UPDATE telegram_users SET preferred_category = ? WHERE telegram_id = ?').run(category, telegramId);
+    } catch (e) {
+      return null;
+    }
+  },
+
+  recordTelegramQuizAttempt: ({ telegram_id, question_id, poll_id, selected_option, is_correct }) => {
+    try {
+      // 1. Insert into history
+      db.prepare(`
+        INSERT INTO telegram_quiz_history (telegram_id, question_id, poll_id, selected_option, is_correct)
+        VALUES (?, ?, ?, ?, ?)
+      `).run(telegram_id, question_id, poll_id || '', selected_option, is_correct ? 1 : 0);
+
+      // 2. Update user stats and XP
+      const xpGain = is_correct ? 10 : 2;
+      const scoreGain = is_correct ? 1 : 0;
+      db.prepare(`
+        UPDATE telegram_users
+        SET total_quizzes = total_quizzes + 1,
+            correct_answers = correct_answers + ?,
+            score = score + ?,
+            total_xp = total_xp + ?,
+            last_active_date = date('now')
+        WHERE telegram_id = ?
+      `).run(scoreGain, scoreGain, xpGain, telegram_id);
+
+      return db.prepare('SELECT * FROM telegram_users WHERE telegram_id = ?').get(telegram_id);
+    } catch (e) {
+      console.error('[DB] recordTelegramQuizAttempt error:', e.message);
+      return null;
+    }
+  },
+
+  getRandomQuestionForTelegram: (category = 'all') => {
+    try {
+      let q = null;
+      if (category && category !== 'all' && category !== 'random') {
+        q = db.prepare(`
+          SELECT * FROM questions
+          WHERE status = 'published' AND (exam_name LIKE ? OR subject_name LIKE ?)
+          ORDER BY RANDOM() LIMIT 1
+        `).get(`%${category}%`, `%${category}%`);
+      }
+
+      if (!q) {
+        q = db.prepare("SELECT * FROM questions WHERE status = 'published' ORDER BY RANDOM() LIMIT 1").get();
+      }
+
+      if (!q) return null;
+
+      // Determine correct option index (0 for A, 1 for B, 2 for C, 3 for D)
+      const correctLetter = (q.correct_answer || 'A').toUpperCase().trim().replace(/OPTION\s*/i, '');
+      const map = { 'A': 0, '1': 0, 'B': 1, '2': 1, 'C': 2, '3': 2, 'D': 3, '4': 3 };
+      const correctIndex = map[correctLetter] !== undefined ? map[correctLetter] : 0;
+
+      const options = [
+        q.option_a_np || q.option_a || 'Option A',
+        q.option_b_np || q.option_b || 'Option B',
+        q.option_c_np || q.option_c || 'Option C',
+        q.option_d_np || q.option_d || 'Option D'
+      ];
+
+      const questionText = q.question_text_np || q.question || 'Question';
+      const explanation = q.explanation_np || q.explanation || 'No detailed explanation provided.';
+
+      return {
+        id: q.id,
+        exam_name: q.exam_name,
+        subject_name: q.subject_name,
+        topic: q.topic || 'General',
+        difficulty: q.difficulty || 'medium',
+        question: questionText,
+        options: options,
+        correct_option_id: correctIndex,
+        explanation: explanation.substring(0, 195) // Telegram poll explanation character limit is 200 chars
+      };
+    } catch (e) {
+      console.error('[DB] getRandomQuestionForTelegram error:', e.message);
+      return null;
+    }
+  },
+
+  getTelegramLeaderboard: (limit = 10) => {
+    try {
+      return db.prepare(`
+        SELECT telegram_id, username, first_name, score, total_quizzes, correct_answers, current_streak, total_xp
+        FROM telegram_users
+        ORDER BY score DESC, total_xp DESC
+        LIMIT ?
+      `).all(limit);
+    } catch (e) {
+      return [];
+    }
+  },
+
+  getTelegramBotStats: () => {
+    try {
+      const users = db.prepare('SELECT COUNT(*) as c FROM telegram_users').get().c;
+      const quizzes = db.prepare('SELECT COUNT(*) as c FROM telegram_quiz_history').get().c;
+      const correct = db.prepare('SELECT COUNT(*) as c FROM telegram_quiz_history WHERE is_correct = 1').get().c;
+      const accuracy = quizzes > 0 ? Math.round((correct / quizzes) * 100) : 0;
+
+      return {
+        totalTelegramUsers: users,
+        totalQuizzesAnswered: quizzes,
+        totalCorrectAnswers: correct,
+        overallAccuracy: `${accuracy}%`
+      };
+    } catch (e) {
+      return { totalTelegramUsers: 0, totalQuizzesAnswered: 0, totalCorrectAnswers: 0, overallAccuracy: '0%' };
+    }
   }
 };
 

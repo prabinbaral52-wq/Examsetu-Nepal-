@@ -16,6 +16,14 @@ class ExampleRobolectricTest {
   fun `read string from context`() {
     val context = ApplicationProvider.getApplicationContext<Context>()
     val appName = context.getString(R.string.app_name)
-    assertEquals("My Application", appName)
+    assertEquals("ExamSetu Nepal", appName)
+  }
+
+  @Test
+  fun `verify web assets exist`() {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    val indexHtml = context.assets.open("web/index.html")
+    assert(indexHtml.available() > 0)
+    indexHtml.close()
   }
 }

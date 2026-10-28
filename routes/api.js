@@ -240,7 +240,8 @@ router.post('/tests/start', (req, res) => {
       }
     }));
 
-    const duration = durationMinutes || (qCount <= 10 ? 10 : qCount <= 20 ? 20 : 45);
+    // Dynamically scale duration based on count (approx 50-60 seconds per question, min 10m)
+    const duration = durationMinutes || Math.max(10, Math.round(qCount * 0.9));
 
     return res.json({
       success: true,
@@ -640,4 +641,29 @@ router.get('/admin/users', isAuthenticated, isAdmin, (req, res) => {
   }
 });
 
+// Telegram Bot Endpoints
+router.get('/telegram/stats', (req, res) => {
+  try {
+    const stats = DB.getTelegramBotStats();
+    const isConfigured = Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_BOT_TOKEN !== 'your_telegram_bot_token_here');
+    return res.json({
+      success: true,
+      stats,
+      configured: isConfigured
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.get('/telegram/leaderboard', (req, res) => {
+  try {
+    const leaderboard = DB.getTelegramLeaderboard(15);
+    return res.json({ success: true, leaderboard });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 module.exports = router;
+

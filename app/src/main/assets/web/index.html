@@ -29,12 +29,23 @@
         </div>
       </a>
 
+      <!-- Country Selector Dropdown -->
+      <div style="display:flex;align-items:center;gap:6px;background:var(--surface-alt);padding:4px 10px;border-radius:var(--radius-pill);border:1px solid var(--border);">
+        <i class="ri-global-line" style="color:var(--primary);font-size:0.95rem;"></i>
+        <select id="globalCountrySelect" style="background:transparent;border:none;font-size:0.85rem;font-weight:700;color:var(--text);cursor:pointer;" onchange="handleCountryChange(this.value)">
+          <option value="NP" selected>🇳🇵 Nepal</option>
+          <option value="IN" disabled>🇮🇳 India (Coming Soon)</option>
+          <option value="BD" disabled>🇧🇩 Bangladesh (Coming Soon)</option>
+        </select>
+      </div>
+
       <nav>
         <ul class="nav-links" id="navLinks">
           <li><a href="/" class="nav-link active">Home</a></li>
           <li><a href="/exams" class="nav-link">All Exams</a></li>
-          <li><a href="/subject?slug=general-knowledge" class="nav-link">Lok Sewa GK</a></li>
-          <li><a href="/subject?slug=science" class="nav-link">SEE Science</a></li>
+          <li><a href="/practice?exam=Lok+Sewa" class="nav-link">Practice Mode</a></li>
+          <li><a href="/test?exam=Lok+Sewa" class="nav-link">Mock Tests</a></li>
+          <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
           <li><a href="/about" class="nav-link">About</a></li>
         </ul>
       </nav>
@@ -63,12 +74,32 @@
         <i class="ri-information-line"></i> <strong>Practice Disclaimer:</strong> ExamSetu Nepal provides educational practice tests created for candidate preparation. We are an independent educational platform and not an official government publication of Lok Sewa Aayog, NEB, or SEE.
       </div>
 
+      <!-- Telegram Quiz Bot Announcement Banner -->
+      <div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; padding: 14px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="background: rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0;">
+            <i class="ri-telegram-fill"></i>
+          </div>
+          <div>
+            <div style="font-weight: 700; font-size: 1rem; letter-spacing: 0.2px;">
+              🤖 ExamSetu Telegram Bot: AI Tutor & Quiz Polls (@Examsetuquizbot)
+            </div>
+            <div style="font-size: 0.85rem; opacity: 0.92;">
+              दैनिक क्विज, AI प्रश्न-उत्तर, Model Selection (Gemini/Lok Sewa Guru) र समूह छलफल टेलिग्राममै!
+            </div>
+          </div>
+        </div>
+        <a href="https://t.me/Examsetuquizbot" target="_blank" rel="noopener noreferrer" style="background: #ffffff; color: #0284c7; padding: 8px 18px; border-radius: 9999px; font-weight: 700; font-size: 0.88rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: transform 0.15s ease;">
+          <i class="ri-robot-2-line"></i> Open AI &amp; Quiz Bot
+        </a>
+      </div>
+
       <!-- Hero Section -->
       <section class="hero-section">
         <div class="hero-grid">
           <div class="hero-content">
             <div class="hero-badge">
-              <i class="ri-checkbox-circle-fill"></i> #1 Online MCQ Exam Practice in Nepal
+              <i class="ri-checkbox-circle-fill"></i> #1 Online MCQ Exam Practice Platform
             </div>
             <h1 class="hero-title">
               Practice. Prepare. <span>Pass.</span>
@@ -79,12 +110,23 @@
             <p class="hero-description">
               Boost your confidence with realistic timed mock exams, comprehensive chapter-wise questions, and instant detailed solutions tailored for Nepal's most competitive examinations.
             </p>
+
+            <!-- Live Search Bar for Exams, Subjects & Topics -->
+            <div style="background:var(--surface);border:2px solid var(--border);border-radius:var(--radius-pill);padding:6px 8px 6px 18px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-sm);margin-bottom:28px;max-width:540px;">
+              <i class="ri-search-line" style="color:var(--primary);font-size:1.2rem;"></i>
+              <input type="text" id="homeSearchInput" placeholder="Search exams, subjects, or topics (e.g. Constitution, Optics, IT)..." style="border:none;background:transparent;width:100%;font-size:0.95rem;color:var(--text);outline:none;">
+              <button class="btn btn-primary btn-sm" onclick="handleHomeSearch()" style="border-radius:var(--radius-pill);padding:8px 18px;">
+                Search
+              </button>
+            </div>
+
+            <!-- Dual Mode CTAs -->
             <div class="hero-cta-group">
-              <a href="/exams" class="btn btn-primary btn-lg">
-                <i class="ri-play-circle-fill"></i> Start Practice Now
+              <a href="/practice?exam=Lok+Sewa" class="btn btn-primary btn-lg">
+                <i class="ri-flashlight-fill"></i> Practice Mode (Instant Answers)
               </a>
               <a href="/test?exam=Lok+Sewa&subject=General+Knowledge&count=10" class="btn btn-secondary btn-lg">
-                <i class="ri-flashlight-line"></i> Quick 10-Q Test
+                <i class="ri-timer-line"></i> Timed Mock Test
               </a>
             </div>
 
@@ -106,14 +148,32 @@
 
           <!-- Hero Visual Preview Card -->
           <div class="hero-visual">
+            <!-- Daily Streak & XP Incentive Card -->
+            <div style="background:linear-gradient(135deg, #1e40af, #2563eb);color:#fff;border-radius:var(--radius-xl);padding:24px;box-shadow:var(--shadow-lg);margin-bottom:20px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:24px;">
+                    🔥
+                  </div>
+                  <div>
+                    <h4 style="font-size:1.1rem;font-weight:800;color:#fff;">Daily Study Streak</h4>
+                    <span style="font-size:0.85rem;color:#bfdbfe;">Practice 10 questions daily to earn +50 XP bonus</span>
+                  </div>
+                </div>
+                <div style="text-align:right;">
+                  <span style="font-size:1.6rem;font-weight:900;color:#fde047;">Day 3</span>
+                </div>
+              </div>
+            </div>
+
             <div class="mock-test-preview-card">
               <div class="preview-card-header">
                 <div>
                   <span class="tag-badge tag-badge-primary">Live Practice Preview</span>
-                  <h4 style="margin-top:4px;font-size:1.05rem;">Lok Sewa GK • Model Set 1</h4>
+                  <h4 style="margin-top:4px;font-size:1.05rem;">Lok Sewa GK • Constitution</h4>
                 </div>
                 <div class="timer-pill">
-                  <i class="ri-time-line" style="color:var(--primary);"></i> 18:42
+                  <i class="ri-flashlight-line" style="color:var(--success);"></i> Instant Mode
                 </div>
               </div>
 
@@ -128,7 +188,7 @@
                   </div>
                   <div class="sample-option-item active">
                     <span class="option-badge-key">B</span>
-                    <span>31 Fundamental Rights (Part 3)</span>
+                    <span>31 Fundamental Rights (Part 3) ✓</span>
                   </div>
                   <div class="sample-option-item">
                     <span class="option-badge-key">C</span>
@@ -142,8 +202,8 @@
               </div>
 
               <div style="display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--border);">
-                <span style="font-size:0.85rem;color:var(--muted-text);font-weight:600;"><i class="ri-check-line" style="color:var(--success);"></i> Instant Explanation</span>
-                <a href="/test?exam=Lok+Sewa&subject=General+Knowledge" class="btn btn-primary btn-sm">Try Full Mock Test</a>
+                <span style="font-size:0.85rem;color:var(--muted-text);font-weight:600;"><i class="ri-check-line" style="color:var(--success);"></i> Article 16 to 46</span>
+                <a href="/practice?exam=Lok+Sewa" class="btn btn-primary btn-sm">Start Practice</a>
               </div>
             </div>
           </div>
@@ -179,8 +239,8 @@
             <div class="card-np-title">लोक सेवा आयोग परीक्षा</div>
             <p class="card-desc">Comprehensive MCQ preparation for Section Officer (Sakha Adhikrit), Nayab Subba (NaSu), Kharidar, and technical positions.</p>
             <div class="card-footer-meta">
-              <span class="meta-stats"><i class="ri-questionnaire-line"></i> 500+ MCQs</span>
-              <a href="/exams" class="btn btn-outline btn-sm">Explore Sets</a>
+              <a href="/practice?exam=Lok+Sewa" class="btn btn-secondary btn-sm"><i class="ri-flashlight-line"></i> Practice</a>
+              <a href="/test?exam=Lok+Sewa" class="btn btn-primary btn-sm"><i class="ri-timer-line"></i> Mock Test</a>
             </div>
           </div>
 
@@ -194,8 +254,8 @@
             <div class="card-np-title">एसईई परीक्षा अभ्यास</div>
             <p class="card-desc">Secondary Education Examination practice for Compulsory Science, Compulsory Mathematics, English, and Social Studies.</p>
             <div class="card-footer-meta">
-              <span class="meta-stats"><i class="ri-questionnaire-line"></i> 400+ MCQs</span>
-              <a href="/exams" class="btn btn-outline btn-sm">Explore Sets</a>
+              <a href="/practice?exam=SEE" class="btn btn-secondary btn-sm"><i class="ri-flashlight-line"></i> Practice</a>
+              <a href="/test?exam=SEE" class="btn btn-primary btn-sm"><i class="ri-timer-line"></i> Mock Test</a>
             </div>
           </div>
 
@@ -209,8 +269,8 @@
             <div class="card-np-title">राष्ट्रिय परीक्षा बोर्ड (+२)</div>
             <p class="card-desc">Grade 11 and 12 objective model questions for Science, Management, and Humanities faculties according to the latest CDC curriculum.</p>
             <div class="card-footer-meta">
-              <span class="meta-stats"><i class="ri-questionnaire-line"></i> 300+ MCQs</span>
-              <a href="/exams" class="btn btn-outline btn-sm">Explore Sets</a>
+              <a href="/practice?exam=NEB" class="btn btn-secondary btn-sm"><i class="ri-flashlight-line"></i> Practice</a>
+              <a href="/test?exam=NEB" class="btn btn-primary btn-sm"><i class="ri-timer-line"></i> Mock Test</a>
             </div>
           </div>
 
@@ -224,8 +284,8 @@
             <div class="card-np-title">बैंकिङ परीक्षा तयारी</div>
             <p class="card-desc">Preparation for Nepal Rastra Bank (NRB), Rastriya Banijya Bank (RBB), Agricultural Development Bank (ADBL), and Nepal Bank Limited.</p>
             <div class="card-footer-meta">
-              <span class="meta-stats"><i class="ri-questionnaire-line"></i> 350+ MCQs</span>
-              <a href="/exams" class="btn btn-outline btn-sm">Explore Sets</a>
+              <a href="/practice?exam=Banking" class="btn btn-secondary btn-sm"><i class="ri-flashlight-line"></i> Practice</a>
+              <a href="/test?exam=Banking" class="btn btn-primary btn-sm"><i class="ri-timer-line"></i> Mock Test</a>
             </div>
           </div>
 
@@ -239,8 +299,8 @@
             <div class="card-np-title">शिक्षक सेवा आयोग</div>
             <p class="card-desc">Teachers Service Commission license examination and permanent appointment practice tests for Primary, Lower Secondary, and Secondary levels.</p>
             <div class="card-footer-meta">
-              <span class="meta-stats"><i class="ri-questionnaire-line"></i> 250+ MCQs</span>
-              <a href="/exams" class="btn btn-outline btn-sm">Explore Sets</a>
+              <a href="/practice?exam=TSC" class="btn btn-secondary btn-sm"><i class="ri-flashlight-line"></i> Practice</a>
+              <a href="/test?exam=TSC" class="btn btn-primary btn-sm"><i class="ri-timer-line"></i> Mock Test</a>
             </div>
           </div>
 
@@ -254,8 +314,8 @@
             <div class="card-np-title">इन्जिनियरिङ र मेडिकल प्रवेश परीक्षा</div>
             <p class="card-desc">Aptitude and subject mock tests for IOE Pulchowk Engineering, CEE Medical Entrance, CMAT Management, and KUUMAT exams.</p>
             <div class="card-footer-meta">
-              <span class="meta-stats"><i class="ri-questionnaire-line"></i> 200+ MCQs</span>
-              <a href="/exams" class="btn btn-outline btn-sm">Explore Sets</a>
+              <a href="/practice?exam=Entrance" class="btn btn-secondary btn-sm"><i class="ri-flashlight-line"></i> Practice</a>
+              <a href="/test?exam=Entrance" class="btn btn-primary btn-sm"><i class="ri-timer-line"></i> Mock Test</a>
             </div>
           </div>
         </div>
@@ -280,9 +340,14 @@
             </div>
             <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:6px;">Nepal Constitution & GK</h3>
             <p style="font-size:0.88rem;color:var(--muted-text);margin-bottom:18px;">Fundamental rights, governance, geography, and historic treaties of Nepal.</p>
-            <a href="/test?exam=Lok+Sewa&subject=General+Knowledge&count=10" class="btn btn-primary btn-block">
-              <i class="ri-play-line"></i> Start Test (10 Qs)
-            </a>
+            <div style="display:flex;gap:8px;">
+              <a href="/practice?exam=Lok+Sewa&subject=General+Knowledge" class="btn btn-secondary btn-sm" style="flex:1;">
+                <i class="ri-flashlight-line"></i> Practice
+              </a>
+              <a href="/test?exam=Lok+Sewa&subject=General+Knowledge&count=10" class="btn btn-primary btn-sm" style="flex:1;">
+                <i class="ri-timer-line"></i> Mock Test
+              </a>
+            </div>
           </div>
 
           <!-- Set 2 -->
@@ -293,9 +358,14 @@
             </div>
             <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:6px;">Computer Operator & IT</h3>
             <p style="font-size:0.88rem;color:var(--muted-text);margin-bottom:18px;">Hardware, OSI networking, Cyber Law (ETA 2063), and database systems.</p>
-            <a href="/test?exam=Lok+Sewa&subject=Computer/IT&count=10" class="btn btn-primary btn-block">
-              <i class="ri-play-line"></i> Start Test (10 Qs)
-            </a>
+            <div style="display:flex;gap:8px;">
+              <a href="/practice?exam=Lok+Sewa&subject=Computer/IT" class="btn btn-secondary btn-sm" style="flex:1;">
+                <i class="ri-flashlight-line"></i> Practice
+              </a>
+              <a href="/test?exam=Lok+Sewa&subject=Computer/IT&count=10" class="btn btn-primary btn-sm" style="flex:1;">
+                <i class="ri-timer-line"></i> Mock Test
+              </a>
+            </div>
           </div>
 
           <!-- Set 3 -->
@@ -306,9 +376,14 @@
             </div>
             <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:6px;">SEE Science & Mathematics</h3>
             <p style="font-size:0.88rem;color:var(--muted-text);margin-bottom:18px;">Optics, chemical reactions, genetics, Pythagoras theorem, and interest.</p>
-            <a href="/test?exam=SEE&subject=Science&count=10" class="btn btn-primary btn-block">
-              <i class="ri-play-line"></i> Start Test (10 Qs)
-            </a>
+            <div style="display:flex;gap:8px;">
+              <a href="/practice?exam=SEE&subject=Science" class="btn btn-secondary btn-sm" style="flex:1;">
+                <i class="ri-flashlight-line"></i> Practice
+              </a>
+              <a href="/test?exam=SEE&subject=Science&count=10" class="btn btn-primary btn-sm" style="flex:1;">
+                <i class="ri-timer-line"></i> Mock Test
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -350,7 +425,7 @@
               <i class="ri-shield-check-line"></i>
             </div>
             <h4 style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">100% Free & Open</h4>
-            <p style="font-size:0.9rem;color:var(--muted-text);">No mandatory paywalls or subscriptions. Free practice for every Nepali student.</p>
+            <p style="font-size:0.9rem;color:var(--muted-text);">No mandatory paywalls or subscriptions. Free practice for every student.</p>
           </div>
         </div>
       </section>
@@ -378,7 +453,7 @@
             </div>
           </a>
           <p class="footer-text">
-            ExamSetu Nepal is an independent online learning platform helping students and job seekers throughout Nepal practice MCQ examinations for Lok Sewa, SEE, NEB, Banking, and TSC.
+            ExamSetu Nepal is an independent online learning platform helping students and job seekers practice MCQ examinations for Lok Sewa, SEE, NEB, Banking, and TSC.
           </p>
         </div>
 
@@ -394,12 +469,12 @@
         </div>
 
         <div>
-          <h4 class="footer-heading">Quick Links</h4>
+          <h4 class="footer-heading">Modes & Links</h4>
           <ul class="footer-links">
-            <li><a href="/exams" class="footer-link">All Practice Sets</a></li>
+            <li><a href="/practice?exam=Lok+Sewa" class="footer-link">Practice Mode</a></li>
+            <li><a href="/exams" class="footer-link">Timed Mock Tests</a></li>
+            <li><a href="/dashboard" class="footer-link">Student Dashboard</a></li>
             <li><a href="/login" class="footer-link">Student Login</a></li>
-            <li><a href="/register" class="footer-link">Register Free</a></li>
-            <li><a href="/dashboard" class="footer-link">My Dashboard</a></li>
             <li><a href="/admin" class="footer-link">Admin Portal</a></li>
           </ul>
         </div>
@@ -421,12 +496,31 @@
           &copy; 2026 ExamSetu Nepal. All rights reserved. Practice. Prepare. Pass.
         </div>
         <div>
-          Made with <i class="ri-heart-fill" style="color:var(--danger);"></i> for Nepali students & aspirants.
+          Helpline: <a href="tel:+9779763332571" style="color:var(--text);font-weight:700;">+977 9763332571</a> • <a href="mailto:prabinbaral52@gmail.com" style="color:var(--primary);">prabinbaral52@gmail.com</a>
         </div>
       </div>
     </div>
   </footer>
 
   <script src="/js/main.js"></script>
+  <script>
+    function handleCountryChange(code) {
+      if (code !== 'NP') {
+        alert('International syllabi for India and Bangladesh are currently in preparation.');
+        document.getElementById('globalCountrySelect').value = 'NP';
+      }
+    }
+
+    function handleHomeSearch() {
+      const q = document.getElementById('homeSearchInput').value.trim();
+      if (q) {
+        window.location.href = `/exams?search=${encodeURIComponent(q)}`;
+      }
+    }
+
+    document.getElementById('homeSearchInput')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleHomeSearch();
+    });
+  </script>
 </body>
 </html>

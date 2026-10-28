@@ -117,6 +117,51 @@ const ExamSetu = {
       toast.style.transition = 'all 0.3s ease';
       setTimeout(() => toast.remove(), 300);
     }, 3500);
+  },
+
+  // Seamless Native-like Page Navigation for both Web and Android WebView (file:)
+  navigateTo(url) {
+    if (!url) return;
+    const isFileProto = window.location.protocol === 'file:';
+
+    if (!isFileProto) {
+      window.location.href = url;
+      return;
+    }
+
+    const parts = url.split('?');
+    const path = parts[0];
+    const query = parts[1] ? '?' + parts[1] : '';
+
+    let target = 'index.html';
+    const clean = path.replace(/^\//, '').replace(/\.html$/, '');
+
+    if (clean === '' || clean === 'index') {
+      target = 'index.html';
+    } else if (clean === 'about' || clean === 'legal/about') {
+      target = 'legal/about.html';
+    } else if (clean === 'contact' || clean === 'legal/contact') {
+      target = 'legal/contact.html';
+    } else if (clean === 'privacy' || clean === 'legal/privacy') {
+      target = 'legal/privacy.html';
+    } else if (clean === 'terms' || clean === 'legal/terms') {
+      target = 'legal/terms.html';
+    } else if (clean === 'disclaimer' || clean === 'legal/disclaimer') {
+      target = 'legal/disclaimer.html';
+    } else {
+      target = clean + '.html';
+    }
+
+    // Determine relative directory depth
+    const currentLoc = window.location.pathname;
+    let prefix = '';
+    if (currentLoc.includes('/legal/') && !target.startsWith('legal/')) {
+      prefix = '../';
+    } else if (!currentLoc.includes('/legal/') && target.startsWith('legal/')) {
+      prefix = '';
+    }
+
+    window.location.href = prefix + target + query;
   }
 };
 
@@ -130,6 +175,21 @@ function escapeHTML(str) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
+
+// Global Instant Link Interceptor for Smooth Mobile Transition
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('a');
+  if (!link) return;
+  const href = link.getAttribute('href');
+  if (!href) return;
+  if (href.startsWith('#') || href.startsWith('javascript:') || href.startsWith('mailto:') || href.startsWith('tel:') || link.target === '_blank') return;
+  if (href.startsWith('http://') || href.startsWith('https://')) return;
+
+  if (window.location.protocol === 'file:') {
+    e.preventDefault();
+    ExamSetu.navigateTo(href);
+  }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   ExamSetu.init();

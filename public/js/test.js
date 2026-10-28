@@ -14,15 +14,38 @@ const TestEngine = {
   examName: 'Lok Sewa',
   subjectName: 'General Knowledge',
 
+  changeTestCount(newCount) {
+    const storageKey = `examsetu_active_${this.examName}_${this.subjectName}`;
+    localStorage.removeItem(storageKey);
+    const url = new URL(window.location.href);
+    url.searchParams.set('count', newCount);
+    url.searchParams.set('shuffle', Date.now());
+    ExamSetu.navigateTo(url.pathname + url.search);
+  },
+
+  shuffleNewTest() {
+    const storageKey = `examsetu_active_${this.examName}_${this.subjectName}`;
+    localStorage.removeItem(storageKey);
+    const url = new URL(window.location.href);
+    url.searchParams.set('shuffle', Date.now());
+    ExamSetu.navigateTo(url.pathname + url.search);
+  },
+
   // Initialize Test
   async init() {
     const urlParams = new URLSearchParams(window.location.search);
     const examParam = urlParams.get('exam') || 'Lok Sewa';
     const subjectParam = urlParams.get('subject') || '';
     const countParam = urlParams.get('count') || '10';
+    const isShuffle = Boolean(urlParams.get('shuffle'));
 
     this.examName = examParam;
     this.subjectName = subjectParam || 'General Practice';
+
+    const countSelect = document.getElementById('testCountSelect');
+    if (countSelect) {
+      countSelect.value = String(countParam);
+    }
 
     // Show loading state
     const questionContainer = document.getElementById('questionDisplayArea');
@@ -30,16 +53,19 @@ const TestEngine = {
       questionContainer.innerHTML = `
         <div style="text-align:center;padding:60px 20px;">
           <i class="ri-loader-4-line ri-spin" style="font-size:3rem;color:var(--primary);"></i>
-          <h3 style="margin-top:16px;">Preparing your practice set...</h3>
-          <p style="color:var(--muted-text);">Loading questions and setting up timer</p>
+          <h3 style="margin-top:16px;">Preparing your ${countParam} questions...</h3>
+          <p style="color:var(--muted-text);">Generating fresh syllabus questions & setting timer</p>
         </div>
       `;
     }
 
     try {
-      // Check for local storage backup
+      // Check for local storage backup (skip if shuffle was requested)
       const storageKey = `examsetu_active_${this.examName}_${this.subjectName}`;
-      const savedSession = localStorage.getItem(storageKey);
+      if (isShuffle) {
+        localStorage.removeItem(storageKey);
+      }
+      const savedSession = isShuffle ? null : localStorage.getItem(storageKey);
 
       let testData = null;
 
@@ -417,9 +443,8 @@ const TestEngine = {
           result: data.result
         }));
 
-        setTimeout(() => {
-          window.location.href = `/result?id=${data.attemptId}`;
-        }, 1000);
+        overlay.remove();
+        ExamSetu.navigateTo(`/result?id=${data.attemptId}`);
       } else {
         overlay.remove();
         ExamSetu.showToast(data.message || 'Submission failed. Please try again.', 'danger');

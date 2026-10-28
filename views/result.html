@@ -37,8 +37,21 @@
   <main class="main-content">
     <div class="container">
 
+      <!-- Printable Exam Header -->
+      <div class="print-header print-only">
+        <h1>ExamSetu Nepal • Model Examination Paper</h1>
+        <p>Public Service Commission (Lok Sewa) / Competitive Entrance Mock Assessment</p>
+        <div class="print-candidate-bar" id="printCandidateBar">
+          <span><strong>Subject:</strong> <span id="printSubjectName">-</span></span>
+          <span><strong>Questions:</strong> <span id="printQCount">-</span></span>
+          <span><strong>Time:</strong> <span id="printTime">-</span></span>
+          <span><strong>Candidate Name:</strong> ______________________</span>
+          <span><strong>Roll No:</strong> _________________</span>
+        </div>
+      </div>
+
       <!-- Breadcrumbs -->
-      <div style="font-size:0.85rem;color:var(--muted-text);margin-bottom:20px;">
+      <div class="breadcrumbs" style="font-size:0.85rem;color:var(--muted-text);margin-bottom:20px;">
         <a href="/" style="color:var(--muted-text);"><i class="ri-home-4-line"></i> Home</a> /
         <a href="/exams" style="color:var(--muted-text);">Exams</a> /
         <span style="color:var(--text);font-weight:600;">Test Result</span>
@@ -52,10 +65,29 @@
         </div>
       </div>
 
-      <!-- In-Page Ad Container -->
+      <!-- Quick Action Toolbar -->
+      <div style="display:flex;justify-content:center;gap:12px;margin:20px 0;flex-wrap:wrap;">
+        <button onclick="window.print()" class="btn btn-secondary btn-sm" id="printBtn" title="Print this exam model paper with OMR sheet or save as PDF">
+          <i class="ri-printer-line"></i> 🖨️ Print / Save as PDF (With OMR Sheet)
+        </button>
+        <a id="drillWeakBtn" href="#" class="btn btn-primary btn-sm" style="display:none;">
+          <i class="ri-flashlight-line"></i> 🎯 Drill Weak Topics (Instant Revision)
+        </a>
+      </div>
+
+      <!-- Topic Mastery & Weakness Diagnostic -->
+      <div id="topicDiagnosticArea"></div>
+
+      <!-- In-Page Responsive Ad Unit -->
       <div class="ad-container">
         <div class="ad-label">Advertisement</div>
         <div class="ad-slot-responsive">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-9100822829000000"
+               data-ad-slot="1234567890"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
           <span>728x90 Performance Report Ad Unit • ExamSetu Nepal</span>
         </div>
       </div>
@@ -80,6 +112,17 @@
           <!-- Injected dynamically -->
         </div>
       </section>
+
+      <!-- Printable OMR Sheet Section -->
+      <div class="omr-print-section print-only" id="omrPrintSection">
+        <div class="omr-header-box">
+          <h2 style="font-size:14pt;font-weight:800;margin-bottom:4px;">OFFICIAL OMR ANSWER SHEET</h2>
+          <p style="font-size:8pt;color:#374151;">Use blue/black ballpoint pen only. Completely shade the circle corresponding to your chosen option.</p>
+        </div>
+        <div class="omr-grid-container" id="omrGridContainer">
+          <!-- Dynamically populated with bubbles -->
+        </div>
+      </div>
 
       <!-- Bottom Actions -->
       <div style="display:flex;justify-content:center;gap:16px;margin:50px 0;flex-wrap:wrap;">
@@ -164,6 +207,14 @@
       const m = Math.floor((r.timeTakenSeconds || 0) / 60);
       const s = (r.timeTakenSeconds || 0) % 60;
 
+      // Update Print Header Details
+      const pSub = document.getElementById('printSubjectName');
+      const pQC = document.getElementById('printQCount');
+      const pTime = document.getElementById('printTime');
+      if (pSub) pSub.textContent = `${data.examName} • ${data.subjectName}`;
+      if (pQC) pQC.textContent = `${r.totalQuestions} Questions`;
+      if (pTime) pTime.textContent = `${m}m ${s}s`;
+
       document.getElementById('retryTestBtn').href = `/test?exam=${encodeURIComponent(data.examName)}&subject=${encodeURIComponent(data.subjectName)}`;
 
       document.getElementById('resultHeroArea').innerHTML = `
@@ -205,6 +256,137 @@
           </div>
         </div>
       `;
+
+      // Topic Mastery & Weakness Diagnostic Analysis
+      const questions = r.detailedResults || [];
+      const topicStats = {};
+      questions.forEach(q => {
+        const top = q.topic || 'General Knowledge';
+        if (!topicStats[top]) {
+          topicStats[top] = { total: 0, correct: 0, wrong: 0, skipped: 0 };
+        }
+        topicStats[top].total++;
+        if (q.isCorrect) topicStats[top].correct++;
+        else if (q.userAnswer) topicStats[top].wrong++;
+        else topicStats[top].skipped++;
+      });
+
+      const weakTopics = [];
+      const topicCardsHtml = Object.entries(topicStats).map(([topic, stat]) => {
+        const acc = Math.round((stat.correct / stat.total) * 100);
+        let badgeClass = 'badge-strong';
+        let fillClass = 'fill-strong';
+        let badgeText = 'Strong';
+        let isWeak = false;
+
+        if (acc < 50 || (stat.wrong > stat.correct)) {
+          badgeClass = 'badge-weak';
+          fillClass = 'fill-weak';
+          badgeText = 'Weak Area';
+          isWeak = true;
+          weakTopics.push(topic);
+        } else if (acc < 75) {
+          badgeClass = 'badge-moderate';
+          fillClass = 'fill-moderate';
+          badgeText = 'Moderate';
+        }
+
+        return `
+          <div class="topic-diag-item ${isWeak ? 'is-weak' : ''}">
+            <div class="topic-diag-top">
+              <span class="topic-diag-name">
+                <i class="${isWeak ? 'ri-error-warning-line' : 'ri-checkbox-circle-line'}" style="color:${isWeak ? 'var(--danger)' : 'var(--success)'};"></i>
+                ${escapeHTML(topic)}
+              </span>
+              <span class="topic-diag-badge ${badgeClass}">${badgeText} (${acc}%)</span>
+            </div>
+            <div class="topic-progress-track">
+              <div class="topic-progress-fill ${fillClass}" style="width: ${acc}%;"></div>
+            </div>
+            <div class="topic-diag-footer">
+              <span>${stat.correct}/${stat.total} Correct • ${stat.wrong} Wrong</span>
+              <a href="/practice?exam=${encodeURIComponent(data.examName)}&topic=${encodeURIComponent(topic)}" class="btn btn-secondary btn-sm" style="padding:2px 10px;font-size:0.75rem;">
+                <i class="ri-play-line"></i> Drill
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const diagArea = document.getElementById('topicDiagnosticArea');
+      if (diagArea && Object.keys(topicStats).length > 0) {
+        diagArea.innerHTML = `
+          <div class="diagnostic-card">
+            <div class="diagnostic-header">
+              <div>
+                <div class="diagnostic-title">
+                  <i class="ri-radar-line" style="color:var(--primary);"></i>
+                  Topic Mastery & Weak-Area Diagnostic
+                </div>
+                <p style="font-size:0.85rem;color:var(--muted-text);margin-top:4px;">
+                  Real-time cognitive analytics across question categories. Immediate revision drills boost retention by 3.4x.
+                </p>
+              </div>
+              ${weakTopics.length > 0 ? `
+                <a href="/practice?exam=${encodeURIComponent(data.examName)}&topic=${encodeURIComponent(weakTopics[0])}" class="btn btn-primary btn-sm">
+                  <i class="ri-flashlight-line"></i> Instant Drill (${escapeHTML(weakTopics[0])})
+                </a>
+              ` : ''}
+            </div>
+            <div class="diagnostic-grid">
+              ${topicCardsHtml}
+            </div>
+          </div>
+        `;
+      }
+
+      // Configure Instant Weak Areas Action Button
+      const drillWeakBtn = document.getElementById('drillWeakBtn');
+      if (drillWeakBtn) {
+        if (weakTopics.length > 0) {
+          drillWeakBtn.href = `/practice?exam=${encodeURIComponent(data.examName)}&topic=${encodeURIComponent(weakTopics[0])}`;
+          drillWeakBtn.style.display = 'inline-flex';
+        } else {
+          drillWeakBtn.style.display = 'none';
+        }
+      }
+
+      // Populate Printable OMR Sheet Grid
+      renderOMRGrid(questions.length || 50);
+    }
+
+    function renderOMRGrid(totalCount) {
+      const omrContainer = document.getElementById('omrGridContainer');
+      if (!omrContainer) return;
+
+      const cols = 4;
+      const perCol = Math.ceil(totalCount / cols);
+      let gridHtml = '';
+
+      for (let c = 0; c < cols; c++) {
+        let colItems = '';
+        const start = c * perCol + 1;
+        const end = Math.min((c + 1) * perCol, totalCount);
+
+        for (let i = start; i <= end; i++) {
+          colItems += `
+            <div class="omr-row">
+              <span style="font-weight:700;width:24px;">${i}.</span>
+              <div class="omr-bubbles">
+                <span class="omr-circle">A</span>
+                <span class="omr-circle">B</span>
+                <span class="omr-circle">C</span>
+                <span class="omr-circle">D</span>
+              </div>
+            </div>
+          `;
+        }
+
+        if (colItems) {
+          gridHtml += `<div class="omr-column">${colItems}</div>`;
+        }
+      }
+      omrContainer.innerHTML = gridHtml;
     }
 
     function renderReviewList(items) {
@@ -214,7 +396,8 @@
         return;
       }
 
-      container.innerHTML = items.map((q, idx) => {
+      let html = '';
+      items.forEach((q, idx) => {
         let cardClass = 'skipped-item';
         let statusBadge = '<span class="tag-badge" style="background:var(--surface-alt);color:var(--muted-text);">Skipped</span>';
 
@@ -228,7 +411,7 @@
           }
         }
 
-        return `
+        html += `
           <div class="review-item-card ${cardClass}">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
               <div style="display:flex;align-items:center;gap:10px;">
@@ -247,8 +430,8 @@
 
             <div class="review-opt-list">
               ${['A', 'B', 'C', 'D'].map(key => {
-                const optText = q.options[key];
-                const isCorrectAnswer = key.toUpperCase() === q.correctAnswer.toUpperCase();
+                const optText = q.options ? q.options[key] : '';
+                const isCorrectAnswer = q.correctAnswer && key.toUpperCase() === q.correctAnswer.toUpperCase();
                 const isUserChoice = q.userAnswer && key.toUpperCase() === q.userAnswer.toUpperCase();
 
                 let rowClass = '';
@@ -266,7 +449,7 @@
                   <div class="review-opt-row ${rowClass}">
                     <div style="display:flex;align-items:center;gap:10px;">
                       <span class="opt-key" style="width:26px;height:26px;font-size:0.8rem;">${key}</span>
-                      <span>${escapeHTML(optText)}</span>
+                      <span>${escapeHTML(optText || '')}</span>
                     </div>
                     <div>${markIcon}</div>
                   </div>
@@ -280,7 +463,27 @@
             </div>
           </div>
         `;
-      }).join('');
+
+        // High-RPM In-Review Ad Unit every 5 questions
+        if ((idx + 1) % 5 === 0 && (idx + 1) < items.length) {
+          html += `
+            <div class="in-review-ad-card">
+              <div class="in-review-ad-label"><i class="ri-advertisement-line"></i> Sponsored Educational Resource</div>
+              <div class="ad-slot-responsive" style="min-height:90px;background:rgba(148,163,184,0.06);display:flex;align-items:center;justify-content:center;border-radius:8px;">
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-layout="in-article"
+                     data-ad-format="fluid"
+                     data-ad-client="ca-pub-9100822829000000"
+                     data-ad-slot="9876543210"></ins>
+                <span style="font-size:0.82rem;color:var(--muted-text);">Nepal PSC & Bank Exam Coaching Study Packages</span>
+              </div>
+            </div>
+          `;
+        }
+      });
+
+      container.innerHTML = html;
     }
 
     // Filter Buttons logic

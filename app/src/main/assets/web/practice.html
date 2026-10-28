@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practice Mode (Instant Feedback) - ExamSetu Nepal</title>
+  <meta name="description" content="Self-paced MCQ practice with instant answer checking, detailed solutions, bookmarking, and question reporting on ExamSetu Nepal.">
+  <link rel="stylesheet" href="/css/remixicon.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body id="practicePageIdentifier">
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon"><i class="ri-book-open-fill"></i></div>
+        <div class="brand-title"><span class="brand-name">ExamSetu <span>Nepal</span></span></div>
+      </a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/exams" class="nav-link">All Exams</a></li>
+          <li><a href="/practice?exam=Lok+Sewa" class="nav-link active">Practice Mode</a></li>
+          <li><a href="/test?exam=Lok+Sewa" class="nav-link">Mock Tests</a></li>
+          <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn"><i class="ri-moon-line"></i></button>
+        <div id="navAuthSlot"></div>
+        <button class="nav-toggle" id="navToggle"><i class="ri-menu-line"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container" style="max-width:960px;">
+
+      <!-- Breadcrumbs -->
+      <div style="font-size:0.85rem;color:var(--muted-text);margin-bottom:16px;">
+        <a href="/" style="color:var(--muted-text);"><i class="ri-home-4-line"></i> Home</a> /
+        <a href="/exams" style="color:var(--muted-text);">Exams</a> /
+        <span style="color:var(--text);font-weight:600;">Self-Paced Practice</span>
+      </div>
+
+      <!-- Practice Mode Header Bar -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px;box-shadow:var(--shadow-sm);margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="tag-badge" style="background:#dcfce7;color:#16a34a;font-weight:700;"><i class="ri-flashlight-line"></i> Practice Mode</span>
+            <span style="font-size:0.8rem;color:var(--muted-text);">No timer • Instant feedback & explanations</span>
+          </div>
+          <h1 id="practiceTitleInfo" style="font-size:1.35rem;font-weight:800;margin-top:4px;">Lok Sewa • General Practice</h1>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:18px;">
+          <div style="text-align:right;">
+            <div style="font-size:0.75rem;color:var(--muted-text);text-transform:uppercase;font-weight:700;">Progress</div>
+            <div id="practiceStatAttempted" style="font-size:1.15rem;font-weight:800;color:var(--primary);">0 / 0</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.75rem;color:var(--muted-text);text-transform:uppercase;font-weight:700;">Correct</div>
+            <div id="practiceStatCorrect" style="font-size:1.15rem;font-weight:800;color:var(--success);">0</div>
+          </div>
+          <a href="/test?exam=Lok+Sewa" class="btn btn-outline btn-sm" title="Switch to Timed Mock Test with countdown timer">
+            <i class="ri-timer-line"></i> Timed Mock Mode
+          </a>
+        </div>
+      </div>
+
+      <!-- Unlimited Question Generator & Count Controls -->
+      <div style="background:var(--glass-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;box-shadow:var(--clay-shadow);">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <label for="practiceCountSelect" style="font-size:0.88rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;">
+            <i class="ri-list-check-2" style="color:var(--primary);font-size:1.1rem;"></i> Question Count:
+          </label>
+          <select id="practiceCountSelect" onchange="PracticeEngine.changeCount(this.value)" style="padding:8px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);font-weight:700;color:var(--text);outline:none;cursor:pointer;">
+            <option value="10">10 Questions (Quick)</option>
+            <option value="25">25 Questions</option>
+            <option value="50" selected>50 Questions (Standard)</option>
+            <option value="100">100 Questions (Paper 1 Full)</option>
+            <option value="150">150 Questions</option>
+            <option value="200">200 Questions</option>
+            <option value="299">299 Questions (Marathon Practice)</option>
+          </select>
+        </div>
+
+        <button onclick="PracticeEngine.shuffleNewQuestions()" class="btn btn-secondary btn-sm" title="Generate and shuffle fresh genuine questions">
+          <i class="ri-refresh-line"></i> 🎲 Shuffle & Generate New Questions
+        </button>
+      </div>
+
+      <!-- Practice Progress Bar -->
+      <div class="progress-bar-track" style="margin-bottom:24px;">
+        <div id="practiceProgressFill" class="progress-bar-fill" style="width: 0%;"></div>
+      </div>
+
+      <!-- Practice Question Card -->
+      <div class="test-main-card" id="practiceQuestionCard">
+        <!-- Dynamic Question, Options, and Instant Explanation injected by practice.js -->
+      </div>
+
+      <!-- Navigation Bar -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;">
+        <button id="practicePrevBtn" class="btn btn-secondary" disabled>
+          <i class="ri-arrow-left-line"></i> Previous
+        </button>
+        <button id="practiceNextBtn" class="btn btn-primary">
+          Next Question <i class="ri-arrow-right-line"></i>
+        </button>
+      </div>
+
+      <!-- In-Page Ad Container -->
+      <div class="ad-container" style="margin-top:40px;">
+        <div class="ad-label">Advertisement</div>
+        <div class="ad-slot-responsive">
+          <span>728x90 In-Feed Practice Ad Slot • ExamSetu Nepal</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 ExamSetu Nepal. All rights reserved.</div>
+      <div><a href="/disclaimer" style="color:var(--muted-text);">Educational Disclaimer</a></div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/practice.js"></script>
+</body>
+</html>

@@ -40,6 +40,33 @@
   <main class="main-content">
     <div class="container">
 
+      <!-- Test Configuration Bar: Custom Count & Shuffle -->
+      <div style="background:var(--glass-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:12px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;box-shadow:var(--clay-shadow);">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <label for="testCountSelect" style="font-size:0.88rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;">
+            <i class="ri-list-check-2" style="color:var(--primary);font-size:1.1rem;"></i> Test Length:
+          </label>
+          <select id="testCountSelect" onchange="TestEngine.changeTestCount(this.value)" style="padding:6px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);font-weight:700;color:var(--text);outline:none;cursor:pointer;">
+            <option value="10">10 Questions (10 Mins)</option>
+            <option value="25">25 Questions (25 Mins)</option>
+            <option value="50">50 Questions (45 Mins)</option>
+            <option value="100">100 Questions (90 Mins)</option>
+            <option value="150">150 Questions (135 Mins)</option>
+            <option value="200">200 Questions (180 Mins)</option>
+            <option value="299">299 Questions (Full Mock Marathon)</option>
+          </select>
+        </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button onclick="window.print()" class="btn btn-secondary btn-sm" title="Print this mock paper or save as PDF">
+            <i class="ri-printer-line"></i> 🖨️ Print Exam
+          </button>
+          <button onclick="TestEngine.shuffleNewTest()" class="btn btn-secondary btn-sm" title="Generate a fresh random mock test with new questions">
+            <i class="ri-refresh-line"></i> 🎲 Generate New Questions (Shuffle)
+          </button>
+        </div>
+      </div>
+
       <!-- Test Header Details -->
       <div class="progress-container">
         <div class="progress-header">

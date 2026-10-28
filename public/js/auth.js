@@ -35,8 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
           const urlParams = new URLSearchParams(window.location.search);
           const redirect = urlParams.get('redirect') || (data.user.role === 'admin' ? '/admin' : '/dashboard');
           setTimeout(() => {
-            window.location.href = redirect;
-          }, 800);
+            ExamSetu.navigateTo(redirect);
+          }, 400);
         } else {
           ExamSetu.showToast(data.message || 'Login failed', 'danger');
           submitBtn.disabled = false;
@@ -83,8 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.success) {
           ExamSetu.showToast('Account created successfully! Welcome.', 'success');
           setTimeout(() => {
-            window.location.href = '/dashboard';
-          }, 800);
+            ExamSetu.navigateTo('/dashboard');
+          }, 400);
         } else {
           ExamSetu.showToast(data.message || 'Registration failed.', 'danger');
           submitBtn.disabled = false;
