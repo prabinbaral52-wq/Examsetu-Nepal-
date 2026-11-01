@@ -250,6 +250,7 @@ private fun resolveHtmlRoute(rawPath: String): String? {
     clean == "/register" -> "register.html"
     clean == "/dashboard" -> "dashboard.html"
     clean == "/admin" -> "admin.html"
+    clean == "/guru" -> "guru.html"
     clean == "/about" || clean == "/legal/about" -> "legal/about.html"
     clean == "/contact" || clean == "/legal/contact" -> "legal/contact.html"
     clean == "/privacy" || clean == "/legal/privacy" -> "legal/privacy.html"
@@ -260,7 +261,7 @@ private fun resolveHtmlRoute(rawPath: String): String? {
   }
 }
 
-// Local mock API responder to provide instant standalone response in Android Emulator
+// Offline API responder: only published question content is available without a server.
 private fun handleLocalApiRequest(context: Context, uri: Uri): WebResourceResponse {
   val path = uri.path ?: ""
   val jsonResponse: String = when {
@@ -278,13 +279,13 @@ private fun handleLocalApiRequest(context: Context, uri: Uri): WebResourceRespon
       }"""
     }
     path == "/api/auth/me" -> {
-      """{"success":true,"user":{"id":1,"name":"Prabin Baral","email":"prabinbaral52@gmail.com","role":"student","streak":3,"xp":450}}"""
+      """{"success":false,"user":null}"""
     }
     path == "/api/auth/login" -> {
-      """{"success":true,"user":{"id":1,"name":"Prabin Baral","email":"prabinbaral52@gmail.com","role":"student","streak":3,"xp":450}}"""
+      """{"success":false,"message":"Online sign-in is required. Connect the app to the ExamSetu server."}"""
     }
     path == "/api/auth/register" -> {
-      """{"success":true,"user":{"id":1,"name":"Prabin Baral","email":"prabinbaral52@gmail.com","role":"student","streak":1,"xp":100}}"""
+      """{"success":false,"message":"Online registration is required. Connect the app to the ExamSetu server."}"""
     }
     path == "/api/auth/logout" -> {
       """{"success":true,"message":"Logged out"}"""
@@ -321,110 +322,19 @@ private fun handleLocalApiRequest(context: Context, uri: Uri): WebResourceRespon
       }
     }
     path.contains("/submit") || (path.contains("/tests/") && path.endsWith("/result")) -> {
-      """{
-        "success": true,
-        "attemptId": 1,
-        "attempt": {
-          "id": 1,
-          "exam_name": "Lok Sewa",
-          "subject_name": "General Knowledge",
-          "total_questions": 5,
-          "attempted_count": 5,
-          "correct_count": 4,
-          "wrong_count": 1,
-          "skipped_count": 0,
-          "percentage": 80,
-          "is_passed": true,
-          "time_taken_seconds": 180,
-          "created_at": "2026-10-27T12:00:00Z"
-        },
-        "result": {
-          "totalQuestions": 5,
-          "attemptedCount": 5,
-          "correctCount": 4,
-          "wrongCount": 1,
-          "skippedCount": 0,
-          "percentage": 80,
-          "isPassed": true,
-          "timeTakenSeconds": 180,
-          "detailedResults": [
-            {
-              "questionId": 1,
-              "question": "According to the Constitution of Nepal (2072), how many fundamental rights are guaranteed to citizens?",
-              "options": {"A":"25","B":"31","C":"35","D":"21"},
-              "userAnswer": "B",
-              "correctAnswer": "B",
-              "isCorrect": true,
-              "explanation": "Part 3 (Articles 16 to 46) of the Constitution of Nepal 2072 guarantees 31 fundamental rights to citizens.",
-              "topic": "Nepal Constitution"
-            },
-            {
-              "questionId": 2,
-              "question": "Which province of Nepal has the longest international border with the Tibet Autonomous Region of China?",
-              "options": {"A":"Koshi Province","B":"Bagmati Province","C":"Gandaki Province","D":"Karnali Province"},
-              "userAnswer": "D",
-              "correctAnswer": "D",
-              "isCorrect": true,
-              "explanation": "Karnali Province (containing districts like Humla, Dolpa, and Mugu) shares the longest northern border with China.",
-              "topic": "Geography of Nepal"
-            },
-            {
-              "questionId": 3,
-              "question": "Who chairs the Constitutional Council of Nepal according to Article 284 of the Constitution?",
-              "options": {"A":"President of Nepal","B":"Chief Justice of Supreme Court","C":"Prime Minister of Nepal","D":"Speaker of the House of Representatives"},
-              "userAnswer": "C",
-              "correctAnswer": "C",
-              "isCorrect": true,
-              "explanation": "As per Article 284 of the Constitution of Nepal, the Prime Minister acts as the Chairperson of the Constitutional Council.",
-              "topic": "Nepal Constitution"
-            },
-            {
-              "questionId": 4,
-              "question": "What is the largest national park of Nepal by area?",
-              "options": {"A":"Chitwan National Park","B":"Sagarmatha National Park","C":"Shey Phoksundo National Park","D":"Bardiya National Park"},
-              "userAnswer": "C",
-              "correctAnswer": "C",
-              "isCorrect": true,
-              "explanation": "Shey Phoksundo National Park covers an area of 3,555 sq. km located in Dolpa and Mugu districts.",
-              "topic": "National Parks & Environment"
-            },
-            {
-              "questionId": 5,
-              "question": "During whose reign was the first legal code of Nepal (Muluki Ain 1910 BS) promulgated?",
-              "options": {"A":"King Prithvi Narayan Shah","B":"King Surendra Bikram Shah","C":"King Tribhuvan","D":"King Mahendra"},
-              "userAnswer": "A",
-              "correctAnswer": "B",
-              "isCorrect": false,
-              "explanation": "Muluki Ain was enacted in 1910 BS during the reign of King Surendra Bikram Shah under Prime Minister Jung Bahadur Rana.",
-              "topic": "History of Nepal"
-            }
-          ]
-        }
-      }"""
+      """{"success":false,"message":"Online submission is required to save attempts and results."}"""
     }
     path == "/api/user/dashboard" -> {
-      """{
-        "success": true,
-        "user": {"id":1,"name":"Prabin Baral","email":"prabinbaral52@gmail.com","role":"student","streak":3,"xp":450},
-        "stats": {"testsTaken":3,"averageScore":85,"bestScore":90,"bookmarksCount":2,"streak":3,"xp":450},
-        "recentTests": [
-          {"id":1,"exam_name":"Lok Sewa","subject_name":"General Knowledge","percentage":90,"score":9,"total_questions":10,"time_taken_seconds":320,"created_at":"2026-10-25"},
-          {"id":2,"exam_name":"SEE","subject_name":"Science","percentage":80,"score":8,"total_questions":10,"time_taken_seconds":410,"created_at":"2026-10-24"}
-        ],
-        "bookmarks": [
-          {"id":1,"exam_name":"Lok Sewa","question":"According to the Constitution of Nepal (2072), how many fundamental rights are guaranteed to citizens?","correct_answer":"B"},
-          {"id":2,"exam_name":"Lok Sewa","question":"Which province of Nepal has the longest international border with China?","correct_answer":"D"}
-        ]
-      }"""
+      """{"success":false,"message":"Online sign-in is required to view your dashboard."}"""
     }
     path.startsWith("/api/user/bookmarks") -> {
-      """{"success":true,"message":"OK"}"""
+      """{"success":false,"message":"Online sign-in is required to save bookmarks."}"""
     }
     path == "/api/admin/stats" -> {
-      """{"success":true,"stats":{"totalQuestions":30,"totalAttempts":24,"totalUsers":142,"totalExams":6}}"""
+      """{"success":false,"message":"The admin portal requires the online server."}"""
     }
     else -> {
-      """{"success":true,"message":"OK"}"""
+      """{"success":false,"message":"This feature requires a connection to the ExamSetu server."}"""
     }
   }
 
