@@ -25,7 +25,7 @@ ExamSetu Nepal is a complete, production-ready full-stack online MCQ examination
    - Saved bookmarks for focused revision.
 
 4. **Comprehensive Admin Portal**:
-   - Admin-only access gate (`admin@examsetu.com` / `admin123`).
+   - Admin-only access gate configured through `ADMIN_EMAIL` and `ADMIN_PASSWORD`.
    - Add, edit, and delete questions with options, answers, and explanations.
    - Bulk question import from JSON.
    - Candidate test attempt audit log.
@@ -40,6 +40,11 @@ ExamSetu Nepal is a complete, production-ready full-stack online MCQ examination
 6. **Mobile-First & Fast**:
    - Responsive design tailored for Android smartphones, tablets, and desktop computers.
    - Dark mode toggle with persisted preference.
+
+7. **Guru AI**:
+   - Real Gemini-backed tutoring endpoint at `/api/guru/ask` and web interface at `/guru`.
+   - Uses published question-bank context without fabricating fallback questions.
+   - Requires `GEMINI_API_KEY`; unavailable AI is reported explicitly instead of returning placeholder answers.
 
 ---
 
@@ -72,21 +77,16 @@ http://localhost:3000
 
 ---
 
-## 🔑 Pre-Configured Demo Accounts
+## 🔐 Account Setup
 
-For immediate evaluation without manual sign-up, the login screen provides 1-click autofill for both accounts:
-
-| Role | Email | Password |
-|---|---|---|
-| **Admin** | `admin@examsetu.com` | `admin123` |
-| **Student** | `student@examsetu.com` | `student123` |
+Create a student account through `/register`. Configure an administrator with `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `ADMIN_NAME` in `.env` before starting the server. No demo accounts are created automatically.
 
 ---
 
 ## 📝 How to Add / Import Questions
 
 ### Option A: Via Admin Web Interface
-1. Log in as `admin@examsetu.com`.
+1. Log in with the administrator credentials configured in `.env`.
 2. Go to **Admin Portal** (`/admin`).
 3. Click the **Manage Questions** tab to use the GUI question builder.
 4. Or click **Import Questions** and paste a JSON array of questions.

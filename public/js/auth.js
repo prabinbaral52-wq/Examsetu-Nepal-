@@ -98,14 +98,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-
-// Quick-fill credentials for testing
-function fillCredentials(email, password) {
-  const emailInput = document.getElementById('email');
-  const passwordInput = document.getElementById('password');
-  if (emailInput && passwordInput) {
-    emailInput.value = email;
-    passwordInput.value = password;
-    ExamSetu.showToast(`Auto-filled ${email}`, 'info');
-  }
-}

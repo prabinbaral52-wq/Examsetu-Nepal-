@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guru AI - ExamSetu Nepal</title>
+  <meta name="description" content="Ask ExamSetu Guru AI for careful exam explanations and study guidance.">
+  <link rel="stylesheet" href="/css/remixicon.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="brand"><div class="brand-icon"><i class="ri-book-open-fill"></i></div><div class="brand-title"><span class="brand-name">ExamSetu <span>Nepal</span></span></div></a>
+      <div class="nav-actions">
+        <a href="/exams" class="btn btn-secondary btn-sm">Exams</a>
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle dark mode"><i class="ri-moon-line"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container" style="max-width:900px;">
+      <section style="text-align:center;margin:20px 0 28px;">
+        <div class="hero-badge"><i class="ri-robot-2-line"></i> ExamSetu Guru AI</div>
+        <h1 class="hero-title" style="font-size:2.4rem;margin-top:12px;">Your careful study companion</h1>
+        <p style="color:var(--muted-text);max-width:680px;margin:12px auto;">Ask in English or Nepali. Guru uses the published ExamSetu question bank as context, explains step by step, and clearly says when an official source must be checked.</p>
+      </section>
+
+      <section class="card" style="padding:24px;">
+        <div id="guruStatus" style="font-size:.85rem;color:var(--muted-text);margin-bottom:16px;"><i class="ri-loader-4-line ri-spin"></i> Checking Guru AI availability...</div>
+        <div id="guruMessages" style="min-height:320px;max-height:520px;overflow:auto;padding:4px;">
+          <div class="explanation-box"><strong>Guru:</strong> Ask me about a syllabus topic, a question, a formula, or how to study it.</div>
+        </div>
+        <form id="guruForm" style="display:flex;gap:10px;margin-top:18px;align-items:flex-end;">
+          <textarea id="guruInput" class="form-input" rows="2" maxlength="2000" required placeholder="Example: नेपालको संविधानको धारा ३१ सरल भाषामा बुझाउनुहोस्।"></textarea>
+          <button id="guruSubmit" type="submit" class="btn btn-primary" style="height:46px;white-space:nowrap;"><i class="ri-send-plane-fill"></i> Ask Guru</button>
+        </form>
+        <p style="font-size:.78rem;color:var(--muted-text);margin-top:10px;">Do not enter passwords or private information. AI answers can be wrong; verify laws, notices, and current facts with official sources.</p>
+      </section>
+    </div>
+  </main>
+  <script src="/js/main.js"></script>
+  <script src="/js/guru.js"></script>
+</body>
+</html>

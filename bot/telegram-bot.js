@@ -29,8 +29,8 @@ if (fs.existsSync(envPath)) {
   } catch (e) {}
 }
 
-const TOKEN = (process.env.TELEGRAM_BOT_TOKEN || '9100822829:AAHxuYYTQ8eI6yPqlxWgTU_fI-oviQjv6wM').trim();
-const API_BASE = `https://api.telegram.org/bot${TOKEN}`;
+const TOKEN = (process.env.TELEGRAM_BOT_TOKEN || '').trim();
+const API_BASE = TOKEN ? `https://api.telegram.org/bot${TOKEN}` : '';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 
 // 2. AI Models & Personas Catalog
@@ -90,37 +90,8 @@ try {
   console.warn('[ExamSetu Bot] Questions load note:', e.message);
 }
 
-// Fallback questions if questions.json was empty or missing
 if (!questions || questions.length === 0) {
-  questions = [
-    {
-      id: 1,
-      exam: "Lok Sewa",
-      subject: "General Knowledge",
-      question: "नेपालको संविधान (२०७२) अनुसार कतिवटा मौलिक हकको व्यवस्था गरिएको छ?",
-      options: { A: "२५ वटा", B: "३१ वटा", C: "३५ वटा", D: "२१ वटा" },
-      correct_answer: "B",
-      explanation: "नेपालको संविधान २०७२ को भाग ३ अन्तर्गत धारा १६ देखि ४६ सम्म जम्मा ३१ वटा मौलिक हकहरूको व्यवस्था छ।"
-    },
-    {
-      id: 2,
-      exam: "Lok Sewa",
-      subject: "General Knowledge",
-      question: "क्षेत्रफलको आधारमा नेपालको सबैभन्दा ठूलो राष्ट्रिय निकुञ्ज कुन हो?",
-      options: { A: "चितवन राष्ट्रिय निकुञ्ज", B: "सगरमाथा राष्ट्रिय निकुञ्ज", C: "शे-फोक्सुण्डो राष्ट्रिय निकुञ्ज", D: "बर्दिया राष्ट्रिय निकुञ्ज" },
-      correct_answer: "C",
-      explanation: "शे-फोक्सुण्डो राष्ट्रिय निकुञ्ज डोल्पा र मुगु जिल्लामा फैलिएको ३,५५५ वर्ग कि.मी. क्षेत्रफल ओगटेको सबैभन्दा ठूलो निकुञ्ज हो।"
-    },
-    {
-      id: 3,
-      exam: "Banking",
-      subject: "Banking & Economics",
-      question: "नेपाल राष्ट्र बैंक ऐन कहिले जारी भएको हो?",
-      options: { A: "२०१२", B: "२०५८", C: "२०४८", D: "२०६३" },
-      correct_answer: "B",
-      explanation: "नेपाल राष्ट्र बैंक ऐन २०५८ अनुसार नेपाल राष्ट्र बैंक एक स्वायत्त र संगठित संस्थाको रूपमा स्थापित छ।"
-    }
-  ];
+  console.warn('[ExamSetu Bot] No question bank available; quiz commands will report an empty bank.');
 }
 
 // 4. User profile & model settings database
@@ -154,6 +125,9 @@ function setUserModel(userId, modelKey) {
 
 // 5. Telegram API Helpers
 async function callTelegram(method, payload) {
+  if (!API_BASE) {
+    return { ok: false, error: 'TELEGRAM_BOT_TOKEN is not configured.' };
+  }
   try {
     const res = await fetch(`${API_BASE}/${method}`, {
       method: 'POST',

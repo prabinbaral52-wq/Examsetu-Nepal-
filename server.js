@@ -62,6 +62,7 @@ app.get('/login', (req, res) => sendView(res, 'login.html'));
 app.get('/register', (req, res) => sendView(res, 'register.html'));
 app.get('/dashboard', (req, res) => sendView(res, 'dashboard.html'));
 app.get('/admin', (req, res) => sendView(res, 'admin.html'));
+app.get('/guru', (req, res) => sendView(res, 'guru.html'));
 
 // Legal & Information Pages
 app.get('/about', (req, res) => sendView(res, 'legal/about.html'));
@@ -99,7 +100,6 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`====================================================`);
   console.log(`🇳🇵 ExamSetu Nepal Server running on http://localhost:${PORT}`);
   console.log(`Tagline: Practice. Prepare. Pass.`);
-  console.log(`Default Admin: admin@examsetu.com / admin123`);
-  console.log(`Default Student: student@examsetu.com / student123`);
+  console.log(`Configured administrator: ${process.env.ADMIN_EMAIL ? 'yes' : 'no'}`);
   console.log(`====================================================`);
 });

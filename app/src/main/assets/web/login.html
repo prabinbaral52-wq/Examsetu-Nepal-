@@ -45,7 +45,7 @@
           <div class="form-group">
             <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
               <label for="password" class="form-label" style="margin-bottom:0;">Password</label>
-              <a href="#" onclick="alert('For testing, please use the 1-Click Demo accounts below.');return false;" style="font-size:0.8rem;">Forgot password?</a>
+              <a href="/contact" style="font-size:0.8rem;">Need help signing in?</a>
             </div>
             <input type="password" id="password" class="form-input" placeholder="Enter your password" required autocomplete="current-password">
           </div>
@@ -54,20 +54,6 @@
             Sign In to ExamSetu
           </button>
         </form>
-
-        <!-- 1-Click Demo Accounts for Test Evaluation -->
-        <div class="demo-account-box">
-          <div style="font-weight:700;color:var(--text);margin-bottom:6px;"><i class="ri-flashlight-line" style="color:var(--accent);"></i> Quick-Fill Demo Logins</div>
-          <p style="color:var(--muted-text);font-size:0.8rem;margin-bottom:10px;">Click either button to autofill credentials instantly:</p>
-          <div class="demo-btn-group">
-            <button type="button" class="btn btn-secondary btn-sm" onclick="fillCredentials('student@examsetu.com', 'student123')" style="flex:1;">
-              <i class="ri-user-line"></i> Student Account
-            </button>
-            <button type="button" class="btn btn-secondary btn-sm" onclick="fillCredentials('admin@examsetu.com', 'ChangeThisStrongPassword123')" style="flex:1;">
-              <i class="ri-shield-user-line"></i> Admin Account
-            </button>
-          </div>
-        </div>
 
         <div style="text-align:center;margin-top:24px;font-size:0.9rem;color:var(--muted-text);">
           Don't have an account yet? <a href="/register" style="font-weight:700;">Create free account</a>
@@ -84,31 +70,6 @@
     </div>
   </footer>
 
-  <!-- Mobile Bottom Navigation Bar -->
-  <nav class="mobile-bottom-nav">
-    <a href="/" class="bottom-nav-item">
-      <i class="ri-home-5-line"></i>
-      <span>Home</span>
-    </a>
-    <a href="/exams" class="bottom-nav-item">
-      <i class="ri-book-read-line"></i>
-      <span>Exams</span>
-    </a>
-    <a href="/practice?exam=Lok+Sewa" class="bottom-nav-item">
-      <i class="ri-flashlight-line"></i>
-      <span>Practice</span>
-    </a>
-    <a href="/test?exam=Lok+Sewa&subject=General+Knowledge" class="bottom-nav-item">
-      <i class="ri-timer-line"></i>
-      <span>Mock Test</span>
-    </a>
-    <a href="/dashboard" class="bottom-nav-item">
-      <i class="ri-user-smile-line"></i>
-      <span>Dashboard</span>
-    </a>
-  </nav>
-
-  <script src="/js/examsetu-data.js"></script>
   <script src="/js/main.js"></script>
   <script src="/js/auth.js"></script>
 </body>

@@ -128,20 +128,23 @@
               <a href="/test?exam=Lok+Sewa&subject=General+Knowledge&count=10" class="btn btn-secondary btn-lg">
                 <i class="ri-timer-line"></i> Timed Mock Test
               </a>
+              <a href="/guru" class="btn btn-secondary btn-lg">
+                <i class="ri-robot-2-line"></i> Ask Guru AI
+              </a>
             </div>
 
             <div class="hero-stats-row">
               <div class="stat-item">
-                <span class="stat-number">1,500+</span>
-                <span class="stat-label">Curated Questions</span>
+                <span class="stat-number" id="homeQuestionCount">—</span>
+                <span class="stat-label">Published Questions</span>
               </div>
               <div class="stat-item">
-                <span class="stat-number">50+</span>
-                <span class="stat-label">Mock Test Sets</span>
+                <span class="stat-number" id="homeExamCount">—</span>
+                <span class="stat-label">Active Exam Categories</span>
               </div>
               <div class="stat-item">
-                <span class="stat-number">12,400+</span>
-                <span class="stat-label">Tests Completed</span>
+                <span class="stat-number" id="homeAttemptCount">—</span>
+                <span class="stat-label">Completed Attempts</span>
               </div>
             </div>
           </div>
@@ -157,11 +160,11 @@
                   </div>
                   <div>
                     <h4 style="font-size:1.1rem;font-weight:800;color:#fff;">Daily Study Streak</h4>
-                    <span style="font-size:0.85rem;color:#bfdbfe;">Practice 10 questions daily to earn +50 XP bonus</span>
+                    <span style="font-size:0.85rem;color:#bfdbfe;">Track your real progress after signing in</span>
                   </div>
                 </div>
                 <div style="text-align:right;">
-                  <span style="font-size:1.6rem;font-weight:900;color:#fde047;">Day 3</span>
+                  <span style="font-size:1.6rem;font-weight:900;color:#fde047;">—</span>
                 </div>
               </div>
             </div>
@@ -506,7 +509,7 @@
   <script>
     function handleCountryChange(code) {
       if (code !== 'NP') {
-        alert('International syllabi for India and Bangladesh are currently in preparation.');
+        ExamSetu.showToast('Only Nepal syllabi are currently published.', 'warning');
         document.getElementById('globalCountrySelect').value = 'NP';
       }
     }
@@ -521,6 +524,17 @@
     document.getElementById('homeSearchInput')?.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') handleHomeSearch();
     });
+
+    fetch('/api/exams')
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data.success) return;
+        const stats = data.stats || {};
+        document.getElementById('homeQuestionCount').textContent = stats.totalQuestions ?? '0';
+        document.getElementById('homeExamCount').textContent = data.exams?.length ?? '0';
+        document.getElementById('homeAttemptCount').textContent = stats.totalAttempts ?? '0';
+      })
+      .catch(() => {});
   </script>
 </body>
 </html>

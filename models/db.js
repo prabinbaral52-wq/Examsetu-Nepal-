@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcryptjs');
-const QuestionGenerator = require('./question-generator');
 
 let db = null;
 let useNodeSqlite = false;
@@ -394,42 +393,30 @@ function initDB() {
     }
   }
 
-  // Seed or sync admin and default users
-  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@examsetu.com').toLowerCase().trim();
-  const adminPassword = process.env.ADMIN_PASSWORD || 'ChangeThisStrongPassword123';
+  // Create or synchronize the administrator only when production credentials are configured.
+  const adminEmail = (process.env.ADMIN_EMAIL || '').toLowerCase().trim();
+  const adminPassword = process.env.ADMIN_PASSWORD || '';
   const adminName = process.env.ADMIN_NAME || 'ExamSetu Admin';
-
-  const existingAdmin = db.prepare('SELECT * FROM users WHERE email = ?').get(adminEmail);
-  if (!existingAdmin) {
+  if (adminEmail && adminPassword) {
+    const existingAdmin = db.prepare('SELECT * FROM users WHERE email = ?').get(adminEmail);
     const adminHash = bcrypt.hashSync(adminPassword, 10);
-    db.prepare('INSERT INTO users (name, email, password_hash, role, total_xp, current_streak) VALUES (?, ?, ?, ?, 500, 7)').run(
-      adminName,
-      adminEmail,
-      adminHash,
-      'admin'
-    );
-    console.log(`[DB] Created admin account: ${adminEmail}`);
+    if (!existingAdmin) {
+      db.prepare('INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)').run(
+        adminName,
+        adminEmail,
+        adminHash,
+        'admin'
+      );
+      console.log(`[DB] Created configured administrator: ${adminEmail}`);
+    } else {
+      db.prepare("UPDATE users SET name = ?, password_hash = ?, role = 'admin' WHERE email = ?").run(
+        adminName,
+        adminHash,
+        adminEmail
+      );
+    }
   } else {
-    const adminHash = bcrypt.hashSync(adminPassword, 10);
-    db.prepare("UPDATE users SET name = ?, password_hash = ?, role = 'admin' WHERE email = ?").run(
-      adminName,
-      adminHash,
-      adminEmail
-    );
-  }
-
-  // Ensure default student account exists
-  const studentEmail = 'student@examsetu.com';
-  const existingStudent = db.prepare('SELECT * FROM users WHERE email = ?').get(studentEmail);
-  if (!existingStudent) {
-    const studentHash = bcrypt.hashSync('student123', 10);
-    db.prepare('INSERT INTO users (name, email, password_hash, role, total_xp, current_streak) VALUES (?, ?, ?, ?, 120, 3)').run(
-      'Aayush Shrestha (Student)',
-      studentEmail,
-      studentHash,
-      'student'
-    );
-    console.log(`[DB] Created demo student account: ${studentEmail}`);
+    console.warn('[DB] ADMIN_EMAIL and ADMIN_PASSWORD are not configured; no administrator was created.');
   }
 
   // Seed questions if empty
@@ -605,52 +592,18 @@ const DB = {
       rows = db.prepare("SELECT * FROM questions WHERE status = 'published' ORDER BY RANDOM() LIMIT ?").all(limit);
     }
 
-    // Unlimited Dynamic Question Generation: If requested limit exceeds available DB questions, auto-generate syllabus questions!
-    if (rows.length < limit) {
-      const needed = limit - rows.length;
-      try {
-        const generated = QuestionGenerator.generateQuestionsBatch(needed, examName);
-        const insertStmt = db.prepare(`
-          INSERT INTO questions (
-            country_id, exam_name, subject_name, topic, difficulty,
-            language, question, option_a, option_b, option_c, option_d,
-            correct_answer, explanation, marks, status, created_by
-          )
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', 'generator')
-        `);
-
-        for (const g of generated) {
-          const res = insertStmt.run(
-            1,
-            examName || g.exam || 'Lok Sewa',
-            subjectName || g.subject || 'General Knowledge',
-            g.topic || 'General',
-            g.difficulty || 'medium',
-            'both',
-            g.question,
-            g.options.A,
-            g.options.B,
-            g.options.C,
-            g.options.D,
-            g.correct_answer,
-            g.explanation || '',
-            1
-          );
-          g.id = Number(res.lastInsertRowid);
-          g.exam_name = examName || g.exam;
-          g.subject_name = subjectName || g.subject;
-          g.option_a = g.options.A;
-          g.option_b = g.options.B;
-          g.option_c = g.options.C;
-          g.option_d = g.options.D;
-          rows.push(g);
-        }
-      } catch (genErr) {
-        console.warn('[DB Generator] Auto-generation notice:', genErr.message);
-      }
-    }
-
     return rows;
+  },
+  searchQuestions: (search, limit = 8) => {
+    const term = `%${String(search || '').trim()}%`;
+    return db.prepare(`
+      SELECT id, exam_name, subject_name, topic, question, explanation
+      FROM questions
+      WHERE status = 'published'
+        AND (question LIKE ? OR explanation LIKE ? OR topic LIKE ? OR subject_name LIKE ?)
+      ORDER BY id DESC
+      LIMIT ?
+    `).all(term, term, term, term, limit);
   },
   createQuestion: (q) => {
     const stmt = db.prepare(`
