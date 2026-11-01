@@ -75,6 +75,37 @@ Then open your browser and navigate to:
 http://localhost:3000
 ```
 
+### Next.js foundation
+
+The production rebuild is being developed alongside the existing Express prototype:
+
+```bash
+npm install
+DATABASE_URL='postgresql://user:password@localhost:5432/examsetu' npm run db:validate
+npm run db:generate
+npm run web:dev
+```
+
+The Next.js app is available at `http://localhost:3000` and its health endpoint is
+`http://localhost:3000/api/health`. Use a real PostgreSQL URL and a 32-character
+`AUTH_SECRET` before enabling production authentication or database access.
+
+### Container deployment
+
+The production web build also supports a standalone Docker image:
+
+```bash
+docker build --build-arg DATABASE_URL='postgresql://user:password@host:5432/examsetu' -t examsetu-web .
+docker run --rm -p 3000:3000 \
+  -e DATABASE_URL='postgresql://user:password@host:5432/examsetu' \
+  -e AUTH_SECRET='replace-with-a-long-random-secret' \
+  examsetu-web
+```
+
+Attach a managed PostgreSQL database and configure an R2/S3-compatible storage
+provider before enabling book uploads in production. The upload API intentionally
+returns a clear configuration error while storage is unset.
+
 ---
 
 ## 🔐 Account Setup

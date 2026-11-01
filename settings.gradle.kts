@@ -24,4 +24,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "ExamSetu"
 
-include(":app")
+include(":android")
+project(":android").projectDir = file("android")

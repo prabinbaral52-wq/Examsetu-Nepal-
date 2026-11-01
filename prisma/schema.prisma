@@ -1,0 +1,461 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum AIGenerationStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AIGenerationJob {
+  id          String             @id @default(cuid())
+  collegeId   String
+  bookId      String?
+  requestedBy String
+  status      AIGenerationStatus @default(QUEUED)
+  input       Json
+  error       String?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  college     College            @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  book        Book?              @relation(fields: [bookId], references: [id], onDelete: SetNull)
+  requester   User               @relation(fields: [requestedBy], references: [id])
+  @@index([collegeId, status, createdAt])
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  COLLEGE_ADMIN
+  TEACHER
+  REVIEWER
+  STUDENT
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  PENDING
+}
+
+enum QuestionStatus {
+  DRAFT
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  ARCHIVED
+}
+
+model College {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]
+  books     Book[]
+  questions Question[]
+  exams     Exam[]
+  examPatterns ExamPattern[]
+  auditLogs AuditLog[]
+  subscriptions Subscription[]
+  aiJobs AIGenerationJob[]
+  aiCredits AICredit?
+  announcements Announcement[]
+  @@index([isActive])
+}
+
+model User {
+  id           String     @id @default(cuid())
+  collegeId    String?
+  college      College?   @relation(fields: [collegeId], references: [id])
+  name         String
+  email        String     @unique
+  passwordHash String?
+  role         UserRole   @default(STUDENT)
+  status       UserStatus @default(PENDING)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  questions    Question[] @relation("QuestionAuthor")
+  reviews      QuestionReview[]
+  attempts     StudentAttempt[]
+  accounts     Account[]
+  sessions     Session[]
+  bookmarks    Bookmark[]
+  wrongAnswers WrongAnswerNotebook[]
+  streak       Streak?
+  badges       UserBadge[]
+  notifications Notification[]
+  auditLogs    AuditLog[] @relation("AuditActor")
+  subscriptions Subscription[]
+  generationJobs AIGenerationJob[]
+  @@index([collegeId, role, status])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  @@unique([identifier, token])
+}
+
+model Book {
+  id          String   @id @default(cuid())
+  collegeId   String
+  college     College  @relation(fields: [collegeId], references: [id])
+  title       String
+  storageKey  String
+  mimeType    String
+  status      String   @default("PROCESSING")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  chunks      BookChunk[]
+  questions   Question[]
+  aiJobs      AIGenerationJob[]
+  @@index([collegeId, status])
+}
+
+model BookChunk {
+  id        String   @id @default(cuid())
+  bookId    String
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  content   String
+  page      Int?
+  embedding Unsupported("vector")?
+  createdAt DateTime @default(now())
+  @@index([bookId, page])
+}
+
+model Question {
+  id            String         @id @default(cuid())
+  collegeId     String
+  college       College        @relation(fields: [collegeId], references: [id])
+  bookId        String?
+  book          Book?          @relation(fields: [bookId], references: [id])
+  authorId      String?
+  author        User?          @relation("QuestionAuthor", fields: [authorId], references: [id])
+  text          String
+  explanation   String
+  difficulty    String
+  topic         String
+  sourcePage    Int?
+  sourceText    String
+  status        QuestionStatus @default(PENDING_REVIEW)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  options       QuestionOption[]
+  reviews       QuestionReview[]
+  exams         ExamQuestion[]
+  answers       StudentAnswer[]
+  bookmarks     Bookmark[]
+  wrongAnswers  WrongAnswerNotebook[]
+  @@index([collegeId, status, topic])
+}
+
+model QuestionOption {
+  id         String   @id @default(cuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  text       String
+  position   Int
+  isCorrect  Boolean  @default(false)
+  @@unique([questionId, position])
+}
+
+model QuestionReview {
+  id         String   @id @default(cuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  reviewerId String
+  reviewer   User     @relation(fields: [reviewerId], references: [id])
+  decision   String
+  notes      String?
+  createdAt  DateTime @default(now())
+  @@index([questionId, reviewerId])
+}
+
+model Exam {
+  id        String   @id @default(cuid())
+  collegeId String
+  college   College  @relation(fields: [collegeId], references: [id])
+  patternId String?
+  pattern   ExamPattern? @relation(fields: [patternId], references: [id], onDelete: SetNull)
+  name      String
+  duration  Int
+  totalMarks Float @default(0)
+  negativeMarking Float @default(0)
+  createdAt DateTime @default(now())
+  questions ExamQuestion[]
+  attempts  StudentAttempt[]
+  sections  ExamSection[]
+  @@index([collegeId, createdAt])
+}
+
+model ExamPattern {
+  id              String   @id @default(cuid())
+  collegeId       String
+  name            String
+  language        String   @default("en")
+  durationMinutes Int
+  totalMarks      Float
+  negativeMarking Float    @default(0)
+  chapterWeightage Json?
+  difficultyMix   Json?
+  createdAt       DateTime @default(now())
+  college         College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  exams           Exam[]
+  sections        ExamSection[]
+  @@index([collegeId, createdAt])
+}
+
+model ExamSection {
+  id          String      @id @default(cuid())
+  examId      String?
+  patternId   String?
+  name        String
+  questionType String
+  questionCount Int
+  marksEach   Float
+  internalChoice Boolean @default(false)
+  exam        Exam?       @relation(fields: [examId], references: [id], onDelete: Cascade)
+  pattern     ExamPattern? @relation(fields: [patternId], references: [id], onDelete: Cascade)
+  @@index([examId])
+  @@index([patternId])
+}
+
+model ExamQuestion {
+  examId     String
+  questionId String
+  exam       Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  question   Question @relation(fields: [questionId], references: [id])
+  position   Int
+  @@id([examId, questionId])
+}
+
+model StudentAttempt {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  examId    String
+  exam      Exam     @relation(fields: [examId], references: [id])
+  score     Float    @default(0)
+  startedAt DateTime @default(now())
+  finishedAt DateTime?
+  answers   StudentAnswer[]
+  result    Result?
+  @@index([userId, examId])
+}
+
+model StudentAnswer {
+  id         String         @id @default(cuid())
+  attemptId  String
+  questionId String
+  optionId   String?
+  isCorrect  Boolean        @default(false)
+  attempt    StudentAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question   Question       @relation(fields: [questionId], references: [id])
+  @@unique([attemptId, questionId])
+}
+
+model Result {
+  id          String         @id @default(cuid())
+  attemptId   String         @unique
+  score       Float
+  total       Float
+  percentage  Float
+  correct     Int
+  incorrect   Int
+  skipped     Int
+  createdAt   DateTime       @default(now())
+  attempt     StudentAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+}
+
+model Bookmark {
+  id         String   @id @default(cuid())
+  userId     String
+  questionId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  @@unique([userId, questionId])
+}
+
+model WrongAnswerNotebook {
+  id         String   @id @default(cuid())
+  userId     String
+  questionId String
+  note       String?
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  @@unique([userId, questionId])
+}
+
+model Streak {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  currentDays       Int      @default(0)
+  longestDays       Int      @default(0)
+  lastActivityDate  DateTime?
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Badge {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  awards      UserBadge[]
+}
+
+model UserBadge {
+  userId     String
+  badgeId    String
+  awardedAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge      Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  @@id([userId, badgeId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, readAt, createdAt])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  collegeId  String?
+  action     String
+  entityType String
+  entityId   String?
+  metadata   Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+  actor      User?    @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+  college    College? @relation(fields: [collegeId], references: [id], onDelete: SetNull)
+  @@index([collegeId, createdAt])
+  @@index([actorId, createdAt])
+}
+
+model Subscription {
+  id         String   @id @default(cuid())
+  collegeId  String?
+  userId     String?
+  plan       String
+  status     String   @default("ACTIVE")
+  startsAt   DateTime @default(now())
+  endsAt     DateTime?
+  college    College? @relation(fields: [collegeId], references: [id], onDelete: SetNull)
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  payments   Payment[]
+  @@index([collegeId, status])
+  @@index([userId, status])
+}
+
+model Payment {
+  id             String        @id @default(cuid())
+  subscriptionId String?
+  provider       String
+  providerRef    String?
+  amount         Decimal       @db.Decimal(12, 2)
+  currency       String        @default("NPR")
+  status         String        @default("PENDING")
+  createdAt      DateTime      @default(now())
+  subscription   Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  @@index([provider, providerRef])
+  @@index([status, createdAt])
+}
+
+model AICredit {
+  id         String   @id @default(cuid())
+  collegeId  String
+  balance    Int      @default(0)
+  used       Int      @default(0)
+  updatedAt  DateTime @updatedAt
+  college    College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  @@unique([collegeId])
+}
+
+model Announcement {
+  id         String   @id @default(cuid())
+  collegeId  String
+  title      String
+  body       String
+  publishedAt DateTime?
+  createdAt  DateTime @default(now())
+  college    College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  @@index([collegeId, publishedAt])
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  body        String
+  language    String   @default("en")
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@index([language, publishedAt])
+}
+
+model SeoPage {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  body        String
+  isPublished Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+}
+
+model AdsSetting {
+  id          String   @id @default(cuid())
+  pageType    String   @unique
+  isApproved  Boolean  @default(false)
+  clientId    String?
+  slotId      String?
+  updatedAt   DateTime @updatedAt
+}
