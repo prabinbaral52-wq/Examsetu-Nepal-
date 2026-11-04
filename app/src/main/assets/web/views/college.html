@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <title>College Examination Portals - ExamSetu Nepal</title>
+  <meta name="description" content="Dedicated institutional examination portals for colleges in Nepal. Students can access their college's custom tests and question banks.">
+  <link rel="stylesheet" href="/css/remixicon.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/guru.css">
+  <style>
+    /* College Portal Customized Theming */
+    .college-hero-card {
+      position: relative;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      border-radius: var(--radius-xl);
+      padding: 36px 32px;
+      margin-bottom: 30px;
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .college-hero-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .college-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .college-portal-tabs {
+      display: flex;
+      gap: 12px;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 28px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .college-tab-btn {
+      padding: 12px 20px;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--muted-text);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .college-tab-btn:hover {
+      color: var(--primary);
+      background: var(--surface-alt);
+    }
+    .college-tab-btn.active {
+      color: var(--primary);
+      border-bottom: 3px solid var(--primary);
+      background: var(--surface);
+    }
+    .college-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 22px;
+    }
+    .college-test-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+    }
+    .college-test-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-focus);
+    }
+    .code-input-box {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 32px;
+    }
+    .code-input-box:focus-within {
+      border-color: var(--primary);
+    }
+    .demo-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text);
+      transition: all 0.15s ease;
+    }
+    .demo-pill:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    /* Faculty Studio Panels */
+    .studio-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+    }
+    .form-group-custom {
+      margin-bottom: 16px;
+    }
+    .form-group-custom label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .form-control-custom {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface-alt);
+      color: var(--text);
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .form-control-custom:focus {
+      border-color: var(--primary);
+      background: var(--surface);
+    }
+    /* Test Engine Modal */
+    .test-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(6px);
+      z-index: 99999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .test-modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      max-width: 840px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      padding: 32px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon"><i class="ri-book-open-fill"></i></div>
+        <div class="brand-title">
+          <span class="brand-name">ExamSetu <span>Nepal</span></span>
+          <span class="brand-nepali">कलेज पोर्टल • Institutional MCQ Portal</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/exams" class="nav-link">All Exams</a></li>
+          <li><a href="/practice?exam=Lok+Sewa" class="nav-link">Practice</a></li>
+          <li><a href="/test?exam=Lok+Sewa" class="nav-link">Mock Tests</a></li>
+          <li><a href="/guru" class="nav-link"><i class="ri-sparkling-fill" style="color:#6366f1;"></i> Guru AI</a></li>
+          <li><a href="/college" class="nav-link active"><i class="ri-government-line"></i> College Portal</a></li>
+          <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <i class="ri-moon-line"></i>
+        </button>
+        <div id="navAuthSlot">
+          <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+          <a href="/register" class="btn btn-primary btn-sm">Join Free</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content" style="padding-top:calc(var(--header-height) + 24px); min-height: 80vh;">
+    <div class="container">
+
+      <!-- SECTION 1: College Search Bar / Code Input -->
+      <div class="code-input-box">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px;">
+          <div>
+            <h2 style="font-size:1.3rem;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;">
+              <i class="ri-building-4-fill" style="color:var(--primary);"></i> Find or Access Your College Portal
+            </h2>
+            <p style="font-size:0.9rem;color:var(--muted-text);margin-top:2px;">
+              Enter your college name or access code to view MCQs, question papers, and mock exams added by your college.
+            </p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button id="registerCollegeBtn" class="btn btn-secondary btn-sm" onclick="openCollegeRegisterModal()">
+              <i class="ri-add-box-line"></i> Register College
+            </button>
+            <button id="facultyToggleBtn" class="btn btn-outline btn-sm" onclick="toggleFacultyStudio()">
+              <i class="ri-file-add-line"></i> Faculty Studio
+            </button>
+          </div>
+        </div>
+
+        <form id="codeUnlockForm" onsubmit="handleCodeUnlock(event)" style="display:flex;flex-wrap:wrap;gap:12px;">
+          <input type="text" id="specialCodeInput" class="form-control-custom" style="flex:1;min-width:240px;font-weight:700;" placeholder="Enter College Name (e.g. Kathmandu University, Apex, etc.) or Special Code" required>
+          <button type="submit" class="btn btn-primary" style="padding:10px 24px;">
+            <i class="ri-search-line"></i> Open College Portal
+          </button>
+        </form>
+
+        <div id="quickCollegeListRow" style="margin-top:14px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+          <span style="font-size:0.82rem;font-weight:700;color:var(--muted-text);">Registered Colleges:</span>
+          <div id="quickCollegesPills" style="display:inline-flex;flex-wrap:wrap;gap:6px;">
+            <span style="font-size:0.82rem;color:var(--muted-text);font-style:italic;">Loading colleges...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: Dynamic College Header & Branding -->
+      <div id="collegeHeroCard" class="college-hero-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:20px;">
+          <div style="max-width:760px;">
+            <div class="college-badge-tag" id="collegeVerificationBadge">
+              <i class="ri-building-line" style="color:#38bdf8;"></i> Institutional Portal
+            </div>
+            <h1 id="collegeNameTitle" style="font-size:2.2rem;font-weight:900;margin-bottom:8px;line-height:1.2;">
+              Select a College
+            </h1>
+            <p id="collegeMottoText" style="font-size:1.05rem;font-style:italic;opacity:0.9;margin-bottom:12px;">
+              Enter your college name above to view exams and question banks.
+            </p>
+            <p id="collegeDescText" style="font-size:0.95rem;opacity:0.85;line-height:1.5;">
+              Colleges can upload question papers here to automatically convert them to interactive MCQs with Gemini AI explanations for their students.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:18px;margin-top:16px;font-size:0.88rem;opacity:0.9;">
+              <span id="collegeLocation"><i class="ri-map-pin-2-line"></i> Location</span>
+              <span id="collegeCodeBadge"><i class="ri-key-2-line"></i> Code: <strong id="activeAccessCodeLabel">-</strong></span>
+              <span id="collegeContact"><i class="ri-mail-line"></i> -</span>
+            </div>
+          </div>
+
+          <!-- Real Dynamic College Database Stats -->
+          <div style="background:rgba(255,255,255,0.1);padding:18px 24px;border-radius:var(--radius-lg);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.15);min-width:200px;">
+            <div style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;opacity:0.8;margin-bottom:8px;">Portal Database</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:center;">
+              <div>
+                <div id="statTestCount" style="font-size:1.6rem;font-weight:900;">0</div>
+                <div style="font-size:0.75rem;opacity:0.8;">Custom Tests</div>
+              </div>
+              <div>
+                <div id="statQCount" style="font-size:1.6rem;font-weight:900;">0</div>
+                <div style="font-size:0.75rem;opacity:0.8;">MCQs</div>
+              </div>
+              <div>
+                <div id="statStudentCount" style="font-size:1.6rem;font-weight:900;">0</div>
+                <div style="font-size:0.75rem;opacity:0.8;">Students</div>
+              </div>
+              <div>
+                <div id="statAttemptsCount" style="font-size:1.6rem;font-weight:900;">0</div>
+                <div style="font-size:0.75rem;opacity:0.8;">Attempts</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: Portal Navigation Tabs -->
+      <div class="college-portal-tabs">
+        <button id="tabBtnTests" class="college-tab-btn active" onclick="switchCollegeTab('tests')">
+          <i class="ri-file-list-3-line"></i> College Tests & Mock Exams (<span id="testTabCount">1</span>)
+        </button>
+        <button id="tabBtnBank" class="college-tab-btn" onclick="switchCollegeTab('bank')">
+          <i class="ri-database-2-line"></i> College Question Bank (<span id="qTabCount">5</span>)
+        </button>
+        <button id="tabBtnRank" class="college-tab-btn" onclick="switchCollegeTab('rank')">
+          <i class="ri-trophy-line"></i> Campus Leaderboard
+        </button>
+        <button id="tabBtnFaculty" class="college-tab-btn" onclick="switchCollegeTab('faculty')">
+          <i class="ri-edit-2-line"></i> Faculty & Staff Studio (Add Questions & Tests)
+        </button>
+      </div>
+
+      <!-- TAB 1: COLLEGE TESTS -->
+      <div id="tabPaneTests" class="college-tab-pane">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <div>
+            <h2 style="font-size:1.3rem;font-weight:800;">Scheduled & Model Examinations</h2>
+            <p style="font-size:0.9rem;color:var(--muted-text);">Exams authored by your college professors specifically for your syllabus.</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="switchCollegeTab('faculty')">
+            <i class="ri-add-line"></i> Create New Test
+          </button>
+        </div>
+
+        <div id="collegeTestsGrid" class="college-card-grid">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- TAB 2: COLLEGE QUESTION BANK -->
+      <div id="tabPaneBank" class="college-tab-pane" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <div>
+            <h2 style="font-size:1.3rem;font-weight:800;">Isolated College Question Bank</h2>
+            <p style="font-size:0.9rem;color:var(--muted-text);">Explore all MCQs stored exclusively inside this college's database.</p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="switchCollegeTab('faculty')">
+            <i class="ri-add-circle-line"></i> Add New Question
+          </button>
+        </div>
+
+        <div id="collegeQuestionsList" style="display:flex;flex-direction:column;gap:16px;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- TAB 3: CAMPUS LEADERBOARD -->
+      <div id="tabPaneRank" class="college-tab-pane" style="display:none;">
+        <div class="studio-panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <div>
+              <h2 style="font-size:1.3rem;font-weight:800;display:flex;align-items:center;gap:8px;">
+                <i class="ri-medal-fill" style="color:#eab308;"></i> Internal College Rankings
+              </h2>
+              <p style="font-size:0.9rem;color:var(--muted-text);">Real-time performance standings of students enrolled in this institution.</p>
+            </div>
+            <span class="tag-badge tag-badge-primary"><i class="ri-refresh-line"></i> Auto-synced</span>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:0.92rem;text-align:left;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--border);color:var(--muted-text);">
+                  <th style="padding:12px;">Rank</th>
+                  <th style="padding:12px;">Student Candidate</th>
+                  <th style="padding:12px;">Tests Taken</th>
+                  <th style="padding:12px;">High Score</th>
+                  <th style="padding:12px;">Average %</th>
+                  <th style="padding:12px;">Streak</th>
+                </tr>
+              </thead>
+              <tbody id="collegeLeaderboardBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: FACULTY STUDIO (ADD QUESTIONS & CREATE TESTS) -->
+      <div id="tabPaneFaculty" class="college-tab-pane" style="display:none;">
+        
+        <!-- HERO TOOL: Gemini AI Question Paper Auto-Converter -->
+        <div class="studio-panel" style="border: 2px solid #6366f1; background: linear-gradient(135deg, rgba(99,102,241,0.06) 0%, rgba(168,85,247,0.06) 100%); margin-bottom: 28px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+            <div>
+              <h2 style="font-size:1.35rem;font-weight:900;display:flex;align-items:center;gap:8px;color:#4f46e5;">
+                <i class="ri-sparkling-fill" style="color:#6366f1;"></i> AI Question Paper Auto-Converter (Google Gemini API)
+              </h2>
+              <p style="font-size:0.9rem;color:var(--muted-text);margin-top:2px;">
+                Paste your college's raw exam paper text. Gemini AI will automatically convert it into standard MCQs with 4 options, deduce the answer key, and generate detailed academic explanations!
+              </p>
+            </div>
+            <span style="background:linear-gradient(135deg, #6366f1 0%, #a855f7 100%);color:#fff;font-size:0.75rem;padding:4px 12px;border-radius:9999px;font-weight:800;letter-spacing:0.5px;">
+              ⚡ GEMINI API
+            </span>
+          </div>
+
+          <div class="form-group-custom">
+            <label for="aiRawPaper">Paste College Question Paper Text *</label>
+            <textarea id="aiRawPaper" class="form-control-custom" rows="6" placeholder="Paste questions from your exam paper here... e.g.:
+1. What is the fundamental unit of electric charge?
+A) Coulomb B) Ampere C) Volt D) Ohm
+Ans: A
+
+2. Explain why water expands upon freezing?
+(Gemini will generate 4 MCQ choices and a full scientific explanation)"></textarea>
+          </div>
+
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+            <input type="text" id="aiPaperSubject" class="form-control-custom" style="max-width:240px;" placeholder="Subject (e.g. Physics, Law)">
+            <button type="button" id="btnRunAiConvert" class="btn btn-primary" onclick="convertRawPaperWithAI()" style="background:linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
+              <i class="ri-sparkling-fill"></i> Convert Paper with Gemini AI
+            </button>
+            <span id="aiConvertStatus" style="font-size:0.85rem;color:#6366f1;font-weight:700;display:none;">
+              <i class="ri-loader-4-line ri-spin"></i> Gemini AI is analyzing and generating explanations...
+            </span>
+          </div>
+
+          <!-- AI Parsed Questions Preview Section -->
+          <div id="aiConvertedPreview" style="display:none;margin-top:22px;padding-top:18px;border-top:1px dashed var(--border);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+              <h3 style="font-size:1.15rem;font-weight:800;color:var(--text);display:flex;align-items:center;gap:6px;">
+                <i class="ri-check-double-line" style="color:var(--success);"></i> Extracted Questions (<span id="aiParsedCount">0</span>)
+              </h3>
+              <button type="button" id="btnSaveAllAi" class="btn btn-primary btn-sm" onclick="saveAllAiConvertedQuestions()">
+                <i class="ri-save-3-line"></i> Save All to College Question Bank
+              </button>
+            </div>
+            <div id="aiParsedCardsContainer" style="display:flex;flex-direction:column;gap:12px;max-height:420px;overflow-y:auto;padding-right:6px;"></div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          
+          <!-- Add Question Form -->
+          <div class="studio-panel">
+            <h2 style="font-size:1.25rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px;">
+              <i class="ri-questionnaire-line" style="color:var(--primary);"></i> Add MCQ to College Database
+            </h2>
+            <p style="font-size:0.88rem;color:var(--muted-text);margin-bottom:20px;">
+              Questions added here are isolated to your college's syllabus and practice pool.
+            </p>
+
+            <form id="addQuestionForm" onsubmit="submitFacultyQuestion(event)">
+              <div class="form-group-custom">
+                <label for="fqSubject">Subject / Course Name *</label>
+                <input type="text" id="fqSubject" class="form-control-custom" placeholder="e.g. Electrical Circuits or Organic Chemistry" required>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div class="form-group-custom">
+                  <label for="fqTopic">Topic / Chapter</label>
+                  <input type="text" id="fqTopic" class="form-control-custom" placeholder="e.g. Thermodynamics">
+                </div>
+                <div class="form-group-custom">
+                  <label for="fqDifficulty">Difficulty</label>
+                  <select id="fqDifficulty" class="form-control-custom">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group-custom">
+                <label for="fqQuestion">Question Text *</label>
+                <textarea id="fqQuestion" class="form-control-custom" rows="3" placeholder="Enter clear MCQ question text..." required></textarea>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div class="form-group-custom">
+                  <label for="fqOptA">Option A *</label>
+                  <input type="text" id="fqOptA" class="form-control-custom" placeholder="Choice A" required>
+                </div>
+                <div class="form-group-custom">
+                  <label for="fqOptB">Option B *</label>
+                  <input type="text" id="fqOptB" class="form-control-custom" placeholder="Choice B" required>
+                </div>
+                <div class="form-group-custom">
+                  <label for="fqOptC">Option C *</label>
+                  <input type="text" id="fqOptC" class="form-control-custom" placeholder="Choice C" required>
+                </div>
+                <div class="form-group-custom">
+                  <label for="fqOptD">Option D *</label>
+                  <input type="text" id="fqOptD" class="form-control-custom" placeholder="Choice D" required>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div class="form-group-custom">
+                  <label for="fqCorrect">Correct Answer *</label>
+                  <select id="fqCorrect" class="form-control-custom" required>
+                    <option value="A">Option A</option>
+                    <option value="B">Option B</option>
+                    <option value="C">Option C</option>
+                    <option value="D">Option D</option>
+                  </select>
+                </div>
+                <div class="form-group-custom">
+                  <label for="fqAuthor">Author / Faculty Title</label>
+                  <input type="text" id="fqAuthor" class="form-control-custom" placeholder="e.g. Prof. Sharma">
+                </div>
+              </div>
+
+              <div class="form-group-custom">
+                <label for="fqExplanation">Explanation & Reference</label>
+                <textarea id="fqExplanation" class="form-control-custom" rows="2" placeholder="Explain why the answer is correct..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
+                <i class="ri-save-line"></i> Save Question to College Database
+              </button>
+            </form>
+          </div>
+
+          <!-- Create Test Form -->
+          <div class="studio-panel">
+            <h2 style="font-size:1.25rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px;">
+              <i class="ri-alarm-warning-line" style="color:var(--accent);"></i> Create Custom Model Test
+            </h2>
+            <p style="font-size:0.88rem;color:var(--muted-text);margin-bottom:20px;">
+              Publish scheduled timed mock tests that your students can take directly.
+            </p>
+
+            <form id="createTestForm" onsubmit="submitFacultyTest(event)">
+              <div class="form-group-custom">
+                <label for="ftTitle">Test Title *</label>
+                <input type="text" id="ftTitle" class="form-control-custom" placeholder="e.g. First Term Mid-Board Simulation" required>
+              </div>
+
+              <div class="form-group-custom">
+                <label for="ftSubject">Subject Focus *</label>
+                <input type="text" id="ftSubject" class="form-control-custom" placeholder="e.g. Engineering Mathematics or CMAT Mock" required>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div class="form-group-custom">
+                  <label for="ftDuration">Duration (Minutes)</label>
+                  <input type="number" id="ftDuration" class="form-control-custom" value="20" min="5" max="180">
+                </div>
+                <div class="form-group-custom">
+                  <label for="ftPassMarks">Pass Percentage (%)</label>
+                  <input type="number" id="ftPassMarks" class="form-control-custom" value="40" min="20" max="90">
+                </div>
+              </div>
+
+              <div class="form-group-custom">
+                <label for="ftDesc">Instructions for Students</label>
+                <textarea id="ftDesc" class="form-control-custom" rows="3" placeholder="Provide test guidelines, negative marking rules, or scope..."></textarea>
+              </div>
+
+              <div style="background:var(--surface-alt);border:1px dashed var(--border);border-radius:var(--radius-md);padding:14px;margin-bottom:18px;">
+                <div style="font-size:0.85rem;font-weight:700;margin-bottom:4px;">
+                  <i class="ri-information-line" style="color:var(--primary);"></i> Automatic Database Linking
+                </div>
+                <p style="font-size:0.8rem;color:var(--muted-text);margin:0;">
+                  This test will automatically draw questions from this college's verified question pool and compile an interactive exam for your students.
+                </p>
+              </div>
+
+              <button type="submit" class="btn btn-secondary" style="width:100%;justify-content:center;">
+                <i class="ri-rocket-line"></i> Publish Test to Student Portal
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Interactive Test Taking Modal -->
+  <div id="testTakingModal" class="test-modal-overlay">
+    <div class="test-modal-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:20px;">
+        <div>
+          <span class="tag-badge tag-badge-primary" id="modalTestSubject">Engineering Sciences</span>
+          <h2 id="modalTestTitle" style="font-size:1.4rem;font-weight:800;margin-top:4px;">IOE Mock Test</h2>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="background:var(--danger-light);color:var(--danger);padding:6px 14px;border-radius:var(--radius-pill);font-weight:800;font-size:1rem;display:flex;align-items:center;gap:6px;">
+            <i class="ri-timer-line"></i> <span id="modalTimerDisplay">20:00</span>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeTestModal()" title="Close test">
+            <i class="ri-close-line"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Test Body Container -->
+      <div id="modalTestContent">
+        <!-- Render questions here -->
+      </div>
+
+      <!-- Modal Footer Actions -->
+      <div id="modalTestFooter" style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:18px;margin-top:24px;">
+        <button type="button" class="btn btn-outline" onclick="closeTestModal()">Quit Test</button>
+        <button type="button" id="submitTestBtn" class="btn btn-primary" onclick="submitCurrentTest()">
+          <i class="ri-send-plane-fill"></i> Submit Exam & Get Score
+        </button>
+      </div>
+
+      <!-- Scorecard View (Replaces questions on submit) -->
+      <div id="modalScorecardView" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Register College -->
+  <div id="collegeRegisterModal" class="test-modal-overlay">
+    <div class="test-modal-box" style="max-width:540px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:18px;">
+        <h2 style="font-size:1.3rem;font-weight:800;display:flex;align-items:center;gap:8px;">
+          <i class="ri-building-4-line" style="color:var(--primary);"></i> Register College Portal
+        </h2>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeCollegeRegisterModal()"><i class="ri-close-line"></i></button>
+      </div>
+      <form onsubmit="submitModalCollegeRegister(event)">
+        <div class="form-group-custom">
+          <label>College Full Name *</label>
+          <input type="text" id="mColName" class="form-control-custom" placeholder="e.g. Kathmandu University" required>
+        </div>
+        <div class="form-group-custom">
+          <label>Location / City</label>
+          <input type="text" id="mColLocation" class="form-control-custom" placeholder="e.g. Dhulikhel, Kavre">
+        </div>
+        <div class="form-group-custom">
+          <label>Faculty / Admin Contact Email *</label>
+          <input type="email" id="mColEmail" class="form-control-custom" placeholder="exam@college.edu.np" required>
+        </div>
+        <div class="form-group-custom">
+          <label>Create Faculty Password *</label>
+          <input type="password" id="mColPass" class="form-control-custom" placeholder="At least 6 characters" minlength="6" required>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px;">
+          <button type="button" class="btn btn-outline" onclick="closeCollegeRegisterModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i class="ri-shield-check-line"></i> Create College Portal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 ExamSetu Nepal. Institutional College Portal.</div>
+      <div>Dedicated to Nepalese civil service and academic aspirants.</div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    let activeCollege = null;
+    let activeTests = [];
+    let activeQuestions = [];
+    let currentTakingTest = null;
+    let currentQuestions = [];
+    let userAnswers = {};
+    let testTimerInterval = null;
+    let testTimeSecondsRemaining = 0;
+    let testElapsedSeconds = 0;
+    window.tempAiParsedQuestions = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAllRegisteredColleges();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const codeParam = urlParams.get('code') || urlParams.get('special_code');
+      const savedCode = localStorage.getItem('examsetu_college_code');
+
+      if (urlParams.get('faculty') === 'true') {
+        switchCollegeTab('faculty');
+      }
+
+      if (codeParam) {
+        loadCollegeByCode(codeParam);
+      } else if (savedCode) {
+        loadCollegeByCode(savedCode);
+      } else {
+        // Fetch colleges and load first one or empty state
+        fetch('/api/colleges')
+          .then(res => res.json())
+          .then(data => {
+            if (data.success && data.colleges && data.colleges.length > 0) {
+              loadCollegeByCode(data.colleges[0].special_access_code || data.colleges[0].code);
+            } else {
+              renderCollegeEmptyState();
+            }
+          })
+          .catch(() => renderCollegeEmptyState());
+      }
+    });
+
+    async function loadAllRegisteredColleges() {
+      const container = document.getElementById('quickCollegesPills');
+      if (!container) return;
+      try {
+        const res = await fetch('/api/colleges');
+        const data = await res.json();
+        if (data.success && data.colleges && data.colleges.length > 0) {
+          container.innerHTML = data.colleges.map(c => `
+            <button type="button" class="demo-pill" onclick="loadCollegeByCode('${escapeHTML(c.special_access_code)}')">
+              <i class="ri-building-line" style="color:${escapeHTML(c.theme_color || '#2563eb')};"></i>
+              ${escapeHTML(c.name)}
+            </button>
+          `).join('');
+        } else {
+          container.innerHTML = '<span style="font-size:0.82rem;color:var(--muted-text);font-style:italic;">No colleges registered yet. Register yours above!</span>';
+        }
+      } catch (e) {
+        container.innerHTML = '<span style="font-size:0.82rem;color:var(--muted-text);">Offline mode</span>';
+      }
+    }
+
+    async function loadCollegeByCode(query) {
+      if (!query || !query.trim()) return renderCollegeEmptyState();
+      try {
+        const clean = query.trim();
+        const isAccessCode = clean.toUpperCase().startsWith('EXAMSETU-');
+        const param = isAccessCode ? `special_code=${encodeURIComponent(clean)}` : `code=${encodeURIComponent(clean)}`;
+        const res = await fetch(`/api/colleges/lookup?${param}`);
+        const data = await res.json();
+
+        if (data.success && data.college) {
+          activeCollege = data.college;
+          localStorage.setItem('examsetu_college_code', activeCollege.special_access_code);
+          renderCollegePortal(data.college, data.stats);
+          loadPortalDetails(data.college.id);
+        } else {
+          ExamSetu.showToast('College not found. Please register or verify the name.', 'warning');
+          renderCollegeEmptyState();
+        }
+      } catch (err) {
+        console.error('Error loading college:', err);
+      }
+    }
+
+    function renderCollegeEmptyState() {
+      activeCollege = null;
+      document.getElementById('collegeNameTitle').textContent = 'No College Selected';
+      document.getElementById('collegeMottoText').textContent = 'Enter your college name or code above to open your portal';
+      document.getElementById('collegeDescText').textContent = 'Colleges can upload question papers here to automatically convert them to interactive MCQs with Gemini AI explanations for their students.';
+      document.getElementById('collegeLocation').innerHTML = '<i class="ri-map-pin-2-line"></i> Nepal';
+      document.getElementById('activeAccessCodeLabel').textContent = 'None';
+      document.getElementById('collegeContact').innerHTML = '<i class="ri-mail-line"></i> -';
+
+      document.getElementById('statTestCount').textContent = '0';
+      document.getElementById('statQCount').textContent = '0';
+      document.getElementById('statStudentCount').textContent = '0';
+      document.getElementById('statAttemptsCount').textContent = '0';
+
+      document.getElementById('testTabCount').textContent = '0';
+      document.getElementById('qTabCount').textContent = '0';
+
+      document.getElementById('collegeTestsGrid').innerHTML = `
+        <div style="grid-column:1/-1;text-align:center;padding:40px;background:var(--surface);border-radius:var(--radius-lg);border:1px dashed var(--border);">
+          <i class="ri-building-4-line" style="font-size:2.8rem;color:var(--muted-text);display:block;margin-bottom:12px;"></i>
+          <h3 style="font-weight:700;">No College Selected</h3>
+          <p style="color:var(--muted-text);margin-bottom:16px;">Search for your college above or register your college to start adding question papers.</p>
+          <button class="btn btn-primary btn-sm" onclick="openCollegeRegisterModal()">Register Your College</button>
+        </div>
+      `;
+
+      document.getElementById('collegeQuestionsList').innerHTML = `
+        <div style="text-align:center;padding:40px;background:var(--surface);border-radius:var(--radius-lg);border:1px dashed var(--border);">
+          <p style="color:var(--muted-text);">Please select a college to view its question bank.</p>
+        </div>
+      `;
+    }
+
+    function renderCollegePortal(c, stats) {
+      document.getElementById('specialCodeInput').value = c.name;
+      document.getElementById('collegeNameTitle').textContent = c.name;
+      document.getElementById('collegeMottoText').textContent = c.motto ? `"${c.motto}"` : '';
+      document.getElementById('collegeDescText').textContent = c.description || '';
+      document.getElementById('collegeLocation').innerHTML = `<i class="ri-map-pin-2-line"></i> ${escapeHTML(c.location || 'Nepal')}`;
+      document.getElementById('activeAccessCodeLabel').textContent = c.special_access_code;
+      document.getElementById('collegeContact').innerHTML = `<i class="ri-mail-line"></i> ${escapeHTML(c.contact_email || 'portal@examsetu.np')}`;
+
+      const hero = document.getElementById('collegeHeroCard');
+      if (c.banner_gradient) {
+        hero.style.background = c.banner_gradient;
+      } else if (c.theme_color) {
+        hero.style.background = `linear-gradient(135deg, ${c.theme_color} 0%, #0f172a 100%)`;
+      }
+
+      if (stats) {
+        document.getElementById('statTestCount').textContent = stats.testCount || 0;
+        document.getElementById('statQCount').textContent = stats.questionCount || 0;
+        document.getElementById('statStudentCount').textContent = stats.studentCount || 0;
+        document.getElementById('statAttemptsCount').textContent = stats.attemptCount || 0;
+      }
+    }
+
+    async function loadPortalDetails(collegeId) {
+      try {
+        const res = await fetch(`/api/colleges/${collegeId}/portal`);
+        const data = await res.json();
+        if (data.success) {
+          activeTests = data.tests || [];
+          activeQuestions = data.questions || [];
+          document.getElementById('testTabCount').textContent = activeTests.length;
+          document.getElementById('qTabCount').textContent = data.questionCount || activeQuestions.length || 0;
+
+          renderTestsList(activeTests);
+          renderQuestionsList(collegeId);
+          renderLeaderboard(data.leaderboard || []);
+        }
+      } catch (e) {
+        console.warn('Failed to load portal details:', e);
+      }
+    }
+
+    // Modal Registration
+    function openCollegeRegisterModal() {
+      document.getElementById('collegeRegisterModal').style.display = 'flex';
+    }
+    function closeCollegeRegisterModal() {
+      document.getElementById('collegeRegisterModal').style.display = 'none';
+    }
+
+    async function submitModalCollegeRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('mColName').value.trim();
+      const location = document.getElementById('mColLocation').value.trim();
+      const contactEmail = document.getElementById('mColEmail').value.trim();
+      const password = document.getElementById('mColPass').value;
+
+      try {
+        const res = await fetch('/api/colleges/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, location, contactEmail, password })
+        });
+        const data = await res.json();
+        if (data.success) {
+          closeCollegeRegisterModal();
+          alert(`College "${name}" created!\nSpecial Access Code: ${data.accessCode}`);
+          loadAllRegisteredColleges();
+          loadCollegeByCode(data.accessCode);
+          switchCollegeTab('faculty');
+        } else {
+          alert(data.message || 'Failed to register college.');
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    // AI Question Paper Auto-Converter (Powered by Google Gemini API)
+    async function convertRawPaperWithAI() {
+      if (!activeCollege) {
+        alert('Please select or register your college first before converting question papers.');
+        return;
+      }
+
+      const paperText = document.getElementById('aiRawPaper').value.trim();
+      const subject = document.getElementById('aiPaperSubject').value.trim();
+
+      if (!paperText) {
+        alert('Please paste the raw question paper text into the box.');
+        return;
+      }
+
+      const statusEl = document.getElementById('aiConvertStatus');
+      const btn = document.getElementById('btnRunAiConvert');
+      const preview = document.getElementById('aiConvertedPreview');
+      const container = document.getElementById('aiParsedCardsContainer');
+
+      statusEl.style.display = 'inline-block';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/colleges/ai-convert-paper', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            paperText,
+            defaultSubject: subject || 'General',
+            collegeId: activeCollege.id
+          })
+        });
+
+        const data = await res.json();
+        if (data.success && data.questions && data.questions.length > 0) {
+          window.tempAiParsedQuestions = data.questions;
+          document.getElementById('aiParsedCount').textContent = data.questions.length;
+          preview.style.display = 'block';
+
+          container.innerHTML = data.questions.map((q, i) => `
+            <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid #6366f1;border-radius:var(--radius-md);padding:16px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <span style="font-weight:700;font-size:0.85rem;color:#6366f1;">#${i + 1} • ${escapeHTML(q.subject || 'General')} (${escapeHTML(q.topic || 'General')})</span>
+                <span class="tag-badge tag-badge-success">Ans: ${q.correct_answer}</span>
+              </div>
+              <div style="font-weight:700;font-size:0.98rem;margin-bottom:10px;">${escapeHTML(q.question)}</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.88rem;margin-bottom:10px;">
+                <div style="padding:4px 8px;background:var(--surface-alt);border-radius:4px;">A) ${escapeHTML(q.option_a)}</div>
+                <div style="padding:4px 8px;background:var(--surface-alt);border-radius:4px;">B) ${escapeHTML(q.option_b)}</div>
+                <div style="padding:4px 8px;background:var(--surface-alt);border-radius:4px;">C) ${escapeHTML(q.option_c)}</div>
+                <div style="padding:4px 8px;background:var(--surface-alt);border-radius:4px;">D) ${escapeHTML(q.option_d)}</div>
+              </div>
+              <div style="font-size:0.82rem;color:var(--muted-text);background:rgba(99,102,241,0.06);padding:8px 10px;border-radius:4px;">
+                <i class="ri-sparkling-fill" style="color:#6366f1;"></i> <strong>Gemini Explanation:</strong> ${escapeHTML(q.explanation)}
+              </div>
+            </div>
+          `).join('');
+
+          if (window.ExamSetu && window.ExamSetu.showToast) {
+            window.ExamSetu.showToast(`Converted ${data.questions.length} questions with Gemini AI!`, 'success');
+          }
+        } else {
+          alert('Could not parse questions from the text. Please check the format and try again.');
+        }
+      } catch (err) {
+        alert('AI Conversion Error: ' + err.message);
+      } finally {
+        statusEl.style.display = 'none';
+        btn.disabled = false;
+      }
+    }
+
+    // Bulk Save Converted MCQs to College Database
+    async function saveAllAiConvertedQuestions() {
+      if (!activeCollege) {
+        alert('No active college selected.');
+        return;
+      }
+      if (!window.tempAiParsedQuestions || window.tempAiParsedQuestions.length === 0) {
+        alert('No questions to save.');
+        return;
+      }
+
+      const btn = document.getElementById('btnSaveAllAi');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Saving to Database...';
+
+      try {
+        const res = await fetch(`/api/colleges/${activeCollege.id}/bulk-questions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            questions: window.tempAiParsedQuestions,
+            created_by: `${activeCollege.name} Faculty`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert(`Successfully saved ${data.savedCount} MCQs into ${activeCollege.name}'s Question Bank!`);
+          document.getElementById('aiRawPaper').value = '';
+          document.getElementById('aiConvertedPreview').style.display = 'none';
+          window.tempAiParsedQuestions = [];
+          loadPortalDetails(activeCollege.id);
+          switchCollegeTab('bank');
+        } else {
+          alert(data.message || 'Failed to save questions');
+        }
+      } catch (err) {
+        alert('Error saving questions: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ri-save-3-line"></i> Save All to College Question Bank';
+      }
+    }
+
+    function renderTestsList(tests) {
+      const container = document.getElementById('collegeTestsGrid');
+      if (!tests || tests.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:40px;background:var(--surface);border-radius:var(--radius-lg);border:1px dashed var(--border);">
+            <i class="ri-file-list-3-line" style="font-size:2.5rem;color:var(--muted-text);display:block;margin-bottom:10px;"></i>
+            <h3 style="font-weight:700;">No Tests Published Yet</h3>
+            <p style="color:var(--muted-text);margin-bottom:16px;">Faculty has not posted any active exams for this college.</p>
+            <button class="btn btn-primary btn-sm" onclick="switchCollegeTab('faculty')">Create First Test</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = tests.map(t => `
+        <div class="college-test-card">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+              <span class="tag-badge tag-badge-primary">${escapeHTML(t.subject_name || 'General')}</span>
+              <span style="font-size:0.8rem;color:var(--muted-text);font-weight:600;">
+                <i class="ri-timer-line"></i> ${t.duration_minutes || 20} Mins
+              </span>
+            </div>
+            <h3 style="font-size:1.18rem;font-weight:800;margin-bottom:8px;line-height:1.3;">${escapeHTML(t.title)}</h3>
+            <p style="font-size:0.88rem;color:var(--muted-text);margin-bottom:18px;line-height:1.5;">
+              ${escapeHTML(t.description || 'Standard examination drill provided by college faculty.')}
+            </p>
+          </div>
+
+          <div style="padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-size:0.82rem;color:var(--muted-text);">
+              <strong>${t.question_count || t.total_questions || 5}</strong> Questions • Pass: ${t.pass_marks || 40}%
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openTestModal(${t.id})">
+              <i class="ri-play-fill"></i> Start Test
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function renderQuestionsList(collegeId) {
+      const container = document.getElementById('collegeQuestionsList');
+      try {
+        const res = await fetch(`/api/colleges/${collegeId}/portal`);
+        const data = await res.json();
+        const questions = await (await fetch(`/api/colleges/${collegeId}/tests`)).json();
+        
+        // Fetch raw questions directly
+        const qRes = await fetch(`/api/colleges/${collegeId}/tests/${activeTests[0]?.id || 1}`);
+        const qData = await qRes.json();
+        const list = qData.questions || [];
+
+        if (list.length === 0) {
+          container.innerHTML = `<div style="text-align:center;padding:30px;color:var(--muted-text);">No questions loaded yet in this bank.</div>`;
+          return;
+        }
+
+        container.innerHTML = list.map((q, idx) => `
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-sm);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <span class="tag-badge tag-badge-secondary">Q${idx + 1} • ${escapeHTML(q.subject_name || 'Subject')}</span>
+              <span class="tag-badge" style="background:var(--surface-alt);">${escapeHTML(q.difficulty || 'medium')}</span>
+            </div>
+            <h4 style="font-size:1.05rem;font-weight:700;margin-bottom:12px;line-height:1.4;">${escapeHTML(q.question)}</h4>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.9rem;margin-bottom:12px;">
+              <div style="padding:8px 12px;background:var(--surface-alt);border-radius:var(--radius-sm);"><strong>A:</strong> ${escapeHTML(q.option_a)}</div>
+              <div style="padding:8px 12px;background:var(--surface-alt);border-radius:var(--radius-sm);"><strong>B:</strong> ${escapeHTML(q.option_b)}</div>
+              <div style="padding:8px 12px;background:var(--surface-alt);border-radius:var(--radius-sm);"><strong>C:</strong> ${escapeHTML(q.option_c)}</div>
+              <div style="padding:8px 12px;background:var(--surface-alt);border-radius:var(--radius-sm);"><strong>D:</strong> ${escapeHTML(q.option_d)}</div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        container.innerHTML = `<div style="text-align:center;padding:20px;color:var(--muted-text);">Question catalog accessible.</div>`;
+      }
+    }
+
+    function renderLeaderboard(ranks) {
+      const tbody = document.getElementById('collegeLeaderboardBody');
+      if (!ranks || ranks.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center;padding:24px;color:var(--muted-text);">
+              No mock tests submitted yet by candidates of this college. Take a test to claim Rank #1!
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = ranks.map((r, i) => {
+        const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`;
+        return `
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:12px;font-weight:800;font-size:1.05rem;">${medal}</td>
+            <td style="padding:12px;font-weight:700;">${escapeHTML(r.student_name)}</td>
+            <td style="padding:12px;color:var(--muted-text);">${r.total_tests_taken || 1}</td>
+            <td style="padding:12px;font-weight:700;color:var(--primary);">${r.highest_score || 0}</td>
+            <td style="padding:12px;font-weight:700;color:var(--success);">${r.avg_percentage || 0}%</td>
+            <td style="padding:12px;color:var(--accent);font-weight:600;"><i class="ri-fire-line"></i> ${r.current_streak || 1}d</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function switchCollegeTab(tabKey) {
+      ['tests', 'bank', 'rank', 'faculty'].forEach(k => {
+        const pane = document.getElementById(`tabPane${k.charAt(0).toUpperCase() + k.slice(1)}`);
+        const btn = document.getElementById(`tabBtn${k.charAt(0).toUpperCase() + k.slice(1)}`);
+        if (pane) pane.style.display = (k === tabKey) ? 'block' : 'none';
+        if (btn) btn.classList.toggle('active', k === tabKey);
+      });
+    }
+
+    function handleCodeUnlock(e) {
+      e.preventDefault();
+      const code = document.getElementById('specialCodeInput').value.trim();
+      if (!code) return;
+      loadCollegeByCode(code);
+    }
+
+    function applyDemoCode(code) {
+      document.getElementById('specialCodeInput').value = code;
+      loadCollegeByCode(code);
+    }
+
+    function toggleFacultyStudio() {
+      switchCollegeTab('faculty');
+      document.getElementById('tabPaneFaculty').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Faculty: Add Question
+    async function submitFacultyQuestion(e) {
+      e.preventDefault();
+      if (!activeCollege) return;
+
+      const payload = {
+        subject_name: document.getElementById('fqSubject').value.trim(),
+        topic: document.getElementById('fqTopic').value.trim(),
+        difficulty: document.getElementById('fqDifficulty').value,
+        question: document.getElementById('fqQuestion').value.trim(),
+        option_a: document.getElementById('fqOptA').value.trim(),
+        option_b: document.getElementById('fqOptB').value.trim(),
+        option_c: document.getElementById('fqOptC').value.trim(),
+        option_d: document.getElementById('fqOptD').value.trim(),
+        correct_answer: document.getElementById('fqCorrect').value,
+        created_by: document.getElementById('fqAuthor').value.trim() || 'College Faculty',
+        explanation: document.getElementById('fqExplanation').value.trim()
+      };
+
+      try {
+        const res = await fetch(`/api/colleges/${activeCollege.id}/questions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          ExamSetu.showToast('Question added to your college database!', 'success');
+          document.getElementById('addQuestionForm').reset();
+          loadPortalDetails(activeCollege.id);
+        } else {
+          ExamSetu.showToast(data.message || 'Failed to add question', 'danger');
+        }
+      } catch (err) {
+        ExamSetu.showToast('Server error adding question', 'danger');
+      }
+    }
+
+    // Faculty: Create Test
+    async function submitFacultyTest(e) {
+      e.preventDefault();
+      if (!activeCollege) return;
+
+      const payload = {
+        title: document.getElementById('ftTitle').value.trim(),
+        subject_name: document.getElementById('ftSubject').value.trim(),
+        duration_minutes: parseInt(document.getElementById('ftDuration').value, 10) || 20,
+        pass_marks: parseInt(document.getElementById('ftPassMarks').value, 10) || 40,
+        description: document.getElementById('ftDesc').value.trim()
+      };
+
+      try {
+        const res = await fetch(`/api/colleges/${activeCollege.id}/tests`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          ExamSetu.showToast('Model Test published to your student portal!', 'success');
+          document.getElementById('createTestForm').reset();
+          loadPortalDetails(activeCollege.id);
+          switchCollegeTab('tests');
+        } else {
+          ExamSetu.showToast(data.message || 'Failed to publish test', 'danger');
+        }
+      } catch (err) {
+        ExamSetu.showToast('Server error creating test', 'danger');
+      }
+    }
+
+    // --- Interactive Test Taking Engine ---
+    async function openTestModal(testId) {
+      if (!activeCollege) return;
+      try {
+        const res = await fetch(`/api/colleges/${activeCollege.id}/tests/${testId}`);
+        const data = await res.json();
+        if (!data.success || !data.questions || data.questions.length === 0) {
+          ExamSetu.showToast('This test has no questions yet.', 'warning');
+          return;
+        }
+
+        currentTakingTest = data.test;
+        currentQuestions = data.questions;
+        userAnswers = {};
+        testElapsedSeconds = 0;
+
+        document.getElementById('modalTestSubject').textContent = currentTakingTest.subject_name;
+        document.getElementById('modalTestTitle').textContent = currentTakingTest.title;
+
+        // Reset views
+        document.getElementById('modalTestContent').style.display = 'block';
+        document.getElementById('modalTestFooter').style.display = 'flex';
+        document.getElementById('modalScorecardView').style.display = 'none';
+
+        renderModalQuestions();
+
+        // Start Timer
+        testTimeSecondsRemaining = (currentTakingTest.duration_minutes || 20) * 60;
+        updateTimerDisplay();
+        clearInterval(testTimerInterval);
+        testTimerInterval = setInterval(() => {
+          testTimeSecondsRemaining--;
+          testElapsedSeconds++;
+          updateTimerDisplay();
+          if (testTimeSecondsRemaining <= 0) {
+            clearInterval(testTimerInterval);
+            submitCurrentTest();
+          }
+        }, 1000);
+
+        document.getElementById('testTakingModal').style.display = 'flex';
+      } catch (err) {
+        console.error('Error starting test:', err);
+      }
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(testTimeSecondsRemaining / 60);
+      const secs = testTimeSecondsRemaining % 60;
+      document.getElementById('modalTimerDisplay').textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function renderModalQuestions() {
+      const container = document.getElementById('modalTestContent');
+      container.innerHTML = currentQuestions.map((q, idx) => `
+        <div style="background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px;">
+          <div style="font-size:0.85rem;font-weight:700;color:var(--primary);margin-bottom:6px;">Question ${idx + 1} of ${currentQuestions.length}</div>
+          <div style="font-size:1.1rem;font-weight:700;margin-bottom:14px;line-height:1.4;">${escapeHTML(q.question)}</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            ${['A', 'B', 'C', 'D'].map(opt => `
+              <label style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-md);cursor:pointer;transition:all 0.15s ease;"
+                     onclick="selectTestAnswer(${q.id}, '${opt}', this)">
+                <input type="radio" name="q_${q.id}" value="${opt}" style="width:18px;height:18px;accent-color:var(--primary);">
+                <strong style="width:24px;font-size:0.95rem;">${opt}.</strong>
+                <span style="font-size:0.95rem;">${escapeHTML(q['option_' + opt.toLowerCase()])}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectTestAnswer(qId, option, labelElem) {
+      userAnswers[qId] = option;
+      // Visual feedback
+      const parent = labelElem.closest('div');
+      parent.querySelectorAll('label').forEach(l => {
+        l.style.borderColor = 'var(--border)';
+        l.style.background = 'var(--surface)';
+      });
+      labelElem.style.borderColor = 'var(--primary)';
+      labelElem.style.background = 'var(--primary-light)';
+    }
+
+    async function submitCurrentTest() {
+      clearInterval(testTimerInterval);
+      if (!currentTakingTest || !activeCollege) return;
+
+      try {
+        const res = await fetch(`/api/colleges/${activeCollege.id}/tests/${currentTakingTest.id}/submit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            answers: userAnswers,
+            time_taken_seconds: testElapsedSeconds
+          })
+        });
+
+        const data = await res.json();
+        if (data.success && data.result) {
+          renderScorecard(data.result);
+          loadPortalDetails(activeCollege.id);
+        } else {
+          ExamSetu.showToast('Error recording test result.', 'danger');
+        }
+      } catch (err) {
+        console.error('Submit test error:', err);
+      }
+    }
+
+    function renderScorecard(res) {
+      document.getElementById('modalTestContent').style.display = 'none';
+      document.getElementById('modalTestFooter').style.display = 'none';
+
+      const scorecard = document.getElementById('modalScorecardView');
+      scorecard.style.display = 'block';
+
+      const isPass = res.passed;
+      scorecard.innerHTML = `
+        <div style="text-align:center;padding:24px 0 32px 0;">
+          <div style="font-size:3.5rem;margin-bottom:8px;">${isPass ? '🎉' : '📚'}</div>
+          <h2 style="font-size:1.8rem;font-weight:900;color:${isPass ? 'var(--success)' : 'var(--danger)'};margin-bottom:6px;">
+            ${isPass ? 'Exam Passed!' : 'Exam Completed'}
+          </h2>
+          <p style="color:var(--muted-text);font-size:0.95rem;">
+            Official Score for ${escapeHTML(res.testTitle)} (${escapeHTML(res.collegeName)})
+          </p>
+
+          <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:12px;margin:28px 0;text-align:center;">
+            <div style="background:var(--surface-alt);padding:14px;border-radius:var(--radius-md);">
+              <div style="font-size:1.8rem;font-weight:900;color:var(--primary);">${res.score} / ${res.totalQuestions}</div>
+              <div style="font-size:0.78rem;color:var(--muted-text);text-transform:uppercase;">Score</div>
+            </div>
+            <div style="background:var(--surface-alt);padding:14px;border-radius:var(--radius-md);">
+              <div style="font-size:1.8rem;font-weight:900;color:${isPass ? 'var(--success)' : 'var(--danger)'};">${res.percentage}%</div>
+              <div style="font-size:0.78rem;color:var(--muted-text);text-transform:uppercase;">Percentage</div>
+            </div>
+            <div style="background:var(--surface-alt);padding:14px;border-radius:var(--radius-md);">
+              <div style="font-size:1.8rem;font-weight:900;color:var(--success);">${res.correctCount}</div>
+              <div style="font-size:0.78rem;color:var(--muted-text);text-transform:uppercase;">Correct</div>
+            </div>
+            <div style="background:var(--surface-alt);padding:14px;border-radius:var(--radius-md);">
+              <div style="font-size:1.8rem;font-weight:900;color:var(--danger);">${res.wrongCount}</div>
+              <div style="font-size:0.78rem;color:var(--muted-text);text-transform:uppercase;">Wrong</div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" onclick="closeTestModal()" style="margin-right:10px;">
+            <i class="ri-check-line"></i> Return to College Portal
+          </button>
+        </div>
+      `;
+    }
+
+    function closeTestModal() {
+      clearInterval(testTimerInterval);
+      document.getElementById('testTakingModal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

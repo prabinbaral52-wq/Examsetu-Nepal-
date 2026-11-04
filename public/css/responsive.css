@@ -1,0 +1,200 @@
+/* ==========================================================================
+   ExamSetu Nepal - Desktop Web First Stylesheet
+   Guarantees 100% full desktop web application layout everywhere.
+   Removes mobile app frames, collapsed drawers, phone wrappers & narrow columns.
+   ========================================================================== */
+
+/* Universal Web-First Foundation */
+html, body {
+  min-width: 1024px;
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Eliminate any mobile app bottom navigation bars */
+.mobile-bottom-nav,
+.mobile-nav-bar,
+.phone-frame,
+.mobile-wrapper {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  overflow: hidden !important;
+}
+
+/* Top Navbar: Always Full Horizontal Desktop Navigation */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height, 72px);
+  min-width: 1024px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border-bottom: 1px solid var(--glass-border-dark);
+  z-index: 1000;
+}
+
+.nav-links {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 20px !important;
+  position: static !important;
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  list-style: none !important;
+}
+
+.nav-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  padding: 8px 14px !important;
+  border-radius: var(--radius-sm) !important;
+  white-space: nowrap !important;
+}
+
+/* Hide Mobile Hamburger Menu Forever */
+.nav-toggle {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Desktop Web Hero Section */
+.hero-grid {
+  display: grid !important;
+  grid-template-columns: 1.25fr 0.95fr !important;
+  gap: clamp(32px, 4vw, 64px) !important;
+  align-items: center !important;
+}
+
+.hero-cta-group {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 16px !important;
+  flex-wrap: wrap !important;
+}
+
+.hero-cta-group .btn {
+  width: auto !important;
+  min-width: 160px !important;
+}
+
+/* Multi-Column Desktop Grid for Examination Categories */
+.categories-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  gap: 24px !important;
+}
+
+@media (min-width: 1200px) {
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  .categories-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* Practice & Mock Test: Side-by-Side Desktop Layout */
+.test-layout {
+  display: grid !important;
+  grid-template-columns: 1fr 360px !important;
+  gap: 32px !important;
+  align-items: flex-start !important;
+}
+
+.palette-card {
+  position: sticky !important;
+  top: calc(var(--header-height) + 20px) !important;
+}
+
+.test-actions-bar {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+}
+
+.action-left-group, .action-right-group {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.action-left-group button, .action-right-group button {
+  width: auto !important;
+}
+
+/* Student Dashboard Desktop Layout */
+.dashboard-stats-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 22px !important;
+}
+
+/* Guru AI Mentor Desktop Grid */
+.guru-layout-grid {
+  display: grid !important;
+  grid-template-columns: 360px 1fr !important;
+  gap: 32px !important;
+  align-items: flex-start !important;
+}
+
+/* Faculty Studio Split Layout */
+.faculty-split-layout {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 28px !important;
+  align-items: flex-start !important;
+}
+
+/* Footer: Multi-Column Desktop Layout */
+.footer-grid {
+  display: grid !important;
+  grid-template-columns: 2fr 1fr 1fr 1.2fr !important;
+  gap: 40px !important;
+}
+
+.footer-bottom {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+/* Full-Width Desktop Containers */
+.container {
+  width: 100% !important;
+  max-width: 1600px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: clamp(24px, 3vw, 48px) !important;
+  padding-right: clamp(24px, 3vw, 48px) !important;
+}
+
+.container-fluid {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: clamp(20px, 2.5vw, 40px) !important;
+  padding-right: clamp(20px, 2.5vw, 40px) !important;
+}

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <title>AI Exam Guru - Gemini Powered Leaderboard Mentor | ExamSetu Nepal</title>
+  <meta name="description" content="Personalized AI Exam Guru powered by Google Gemini. Get custom study plans, instant syllabus clarifications, and strategic advice tailored to your competitive leaderboard rank in Lok Sewa, Banking, and SEE.">
+  <link rel="stylesheet" href="/css/remixicon.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/guru.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon">
+          <i class="ri-book-open-fill"></i>
+        </div>
+        <div class="brand-title">
+          <span class="brand-name">ExamSetu <span>Nepal</span></span>
+          <span class="brand-nepali">अभ्यास गर्नुहोस्। तयारी गर्नुहोस्। सफल हुनुहोस्।</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/curriculum" class="nav-link"><i class="ri-git-merge-line" style="color:var(--primary);"></i> Curriculum</a></li>
+          <li><a href="/planner" class="nav-link"><i class="ri-calendar-schedule-line" style="color:#d97706;"></i> Study Planner</a></li>
+          <li><a href="/exams" class="nav-link">All Exams</a></li>
+          <li><a href="/practice?exam=see" class="nav-link">Practice</a></li>
+          <li><a href="/test?exam=see" class="nav-link">Mock Tests</a></li>
+          <li><a href="/guru" class="nav-link active"><i class="ri-sparkling-fill" style="color:#6366f1;"></i> AI Tutor</a></li>
+          <li><a href="/college" class="nav-link">College Portal</a></li>
+          <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <i class="ri-moon-line"></i>
+        </button>
+        <div id="navAuthSlot">
+          <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+          <a href="/register" class="btn btn-primary btn-sm">Join Free</a>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Open mobile menu">
+          <i class="ri-menu-line"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Hero Header -->
+      <div style="background:linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4338ca 100%); color:#ffffff; border-radius:var(--radius-lg); padding:28px 24px; margin-bottom:28px; box-shadow:0 8px 24px rgba(49, 46, 129, 0.25); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px;">
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div style="width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); display:flex; align-items:center; justify-content:center; font-size:1.8rem; box-shadow:0 4px 16px rgba(99, 102, 241, 0.4); flex-shrink:0;">
+            <i class="ri-sparkling-fill"></i>
+          </div>
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+              <h1 style="font-size:1.6rem; font-weight:900; margin:0; color:#ffffff;">
+                AI Exam Guru <span style="font-size:1rem; font-weight:700; color:#fbbf24;">(परीक्षा गुरु)</span>
+              </h1>
+              <span style="background:rgba(255,255,255,0.2); font-size:0.75rem; padding:2px 8px; border-radius:999px; font-weight:700; letter-spacing:0.3px;">
+                ⚡ Gemini Powered
+              </span>
+            </div>
+            <p style="margin:0; font-size:0.9rem; opacity:0.9; max-width:620px;">
+              Your 24/7 personal academic mentor. Guru analyzes your competitive leaderboard rank, streaks, and test performance to give you high-yield syllabus tips!
+            </p>
+          </div>
+        </div>
+
+        <!-- Model Selector Dropdown -->
+        <div style="background:rgba(255,255,255,0.12); backdrop-filter:blur(10px); padding:8px 14px; border-radius:var(--radius-pill); border:1px solid rgba(255,255,255,0.2); display:flex; align-items:center; gap:8px;">
+          <i class="ri-cpu-line" style="color:#fbbf24; font-size:1.1rem;"></i>
+          <span style="font-size:0.8rem; font-weight:600; opacity:0.85;">Model:</span>
+          <select id="guruModelSelect" style="background:transparent; border:none; color:#ffffff; font-weight:700; font-size:0.88rem; outline:none; cursor:pointer;" onchange="handleModelChange()">
+            <option value="gemini-3.5-flash-lite" style="background:#1e1b4b; color:#ffffff;" selected>⚡ Gemini 3.5 Flash Lite (Live Active)</option>
+            <option value="gemini-3.1-flash-lite" style="background:#1e1b4b; color:#ffffff;">🚀 Gemini 3.1 Flash Lite (Ultra Fast)</option>
+            <option value="gemini-3.8-flash" style="background:#1e1b4b; color:#ffffff;">🧠 Gemini 3.8 Flash (High Intelligence)</option>
+            <option value="loksewa-specialist" style="background:#1e1b4b; color:#ffffff;">🇳🇵 Lok Sewa Specialist (Gemini 3.5)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Main Guru Layout: Left = Leaderboard Standing, Right = Chat Interface -->
+      <div class="guru-layout-grid">
+
+        <!-- Left: Leaderboard Intelligence & Rank Coaching -->
+        <div class="guru-leaderboard-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h2 style="font-size:1.15rem; font-weight:800; margin:0; display:flex; align-items:center; gap:8px;">
+              <i class="ri-trophy-fill" style="color:#f59e0b;"></i> Your Standing
+            </h2>
+            <span id="guruStatusLiveBadge" class="tag-badge tag-badge-success" style="font-size:0.72rem;">Live Leaderboard</span>
+          </div>
+
+          <!-- Rank Banner -->
+          <div class="guru-rank-banner">
+            <div style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.5px; opacity:0.85; margin-bottom:4px;">
+              Competitive Position
+            </div>
+            <div style="display:flex; align-items:baseline; gap:8px;">
+              <span class="guru-rank-number" id="guruUserRank">#3</span>
+              <span style="font-size:1rem; opacity:0.9;">in Nepal (<span id="guruTotalStudents">142</span> aspirants)</span>
+            </div>
+            <div style="display:flex; gap:12px; margin-top:12px; font-size:0.82rem; font-weight:700;">
+              <span style="display:flex; align-items:center; gap:4px; color:#fbbf24;">
+                <i class="ri-copper-coin-fill"></i> <span id="guruUserXp">450</span> XP
+              </span>
+              <span style="display:flex; align-items:center; gap:4px; color:#f87171;">
+                <i class="ri-fire-fill"></i> <span id="guruUserStreak">3</span> Day Streak
+              </span>
+            </div>
+          </div>
+
+          <!-- Competitors Leaderboard Shelf -->
+          <div style="margin-bottom:20px;">
+            <div style="font-size:0.82rem; font-weight:700; color:var(--muted-text); text-transform:uppercase; margin-bottom:10px;">
+              Top Contenders
+            </div>
+            <div id="guruCompetitorsList">
+              <div style="text-align:center; padding:15px; color:var(--muted-text);">
+                <i class="ri-loader-4-line ri-spin" style="font-size:1.4rem;"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gap & Sprint Plan -->
+          <div style="background:var(--surface-alt); border:1px solid var(--border); border-radius:var(--radius-md); padding:16px; margin-bottom:18px;">
+            <div style="font-size:0.85rem; font-weight:800; color:var(--primary); margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+              <i class="ri-flashlight-fill"></i> Guru's Leaderboard Strategy
+            </div>
+            <p id="guruGapText" style="font-size:0.85rem; color:var(--text); line-height:1.45; margin:0 0 10px 0;">
+              Loading leaderboard strategy...
+            </p>
+            <div style="display:flex; gap:8px; flex-direction:column;">
+              <a href="/practice?exam=Lok+Sewa&subject=General+Knowledge&topic=Nepal+Constitution" class="btn btn-primary btn-sm" style="width:100%; justify-content:center;">
+                <i class="ri-rocket-fill"></i> Start +50 XP Revision Drill
+              </a>
+              <a href="/test?exam=Lok+Sewa&subject=General+Knowledge&count=10" class="btn btn-secondary btn-sm" style="width:100%; justify-content:center;">
+                <i class="ri-timer-line"></i> Timed Mock Challenge
+              </a>
+            </div>
+          </div>
+
+          <div style="font-size:0.75rem; color:var(--muted-text); text-align:center;">
+            Updated every mock submission • Live XP Tracking
+          </div>
+        </div>
+
+        <!-- Right: Real-time Gemini AI Chat Interface -->
+        <div class="guru-chat-card">
+
+          <!-- Chat Top Header -->
+          <div class="guru-chat-header">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:36px; height:36px; border-radius:50%; background:var(--guru-gradient); color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;">
+                <i class="ri-robot-2-line"></i>
+              </div>
+              <div>
+                <div style="font-weight:800; font-size:0.98rem; display:flex; align-items:center; gap:6px;">
+                  <span id="guruActivePersonaName">Lok Sewa Guru (लोक सेवा गुरु)</span>
+                  <span style="width:8px; height:8px; background:#10b981; border-radius:50%; display:inline-block;" title="Online"></span>
+                </div>
+                <div style="font-size:0.76rem; color:var(--muted-text);">
+                  Powered by Google Gemini • Context-Aware with your Leaderboard Rank
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span id="modelLatencyBadge" style="background:rgba(16, 185, 129, 0.12); color:#10b981; border:1px solid rgba(16, 185, 129, 0.3); font-size:0.75rem; font-weight:700; padding:3px 10px; border-radius:999px;">
+                🟢 Google Gemini Live Active
+              </span>
+              <button onclick="toggleSoundTTS()" id="ttsToggleBtn" class="btn btn-outline btn-sm" title="Toggle audio voice output">
+                <i class="ri-volume-up-line"></i> Voice: <span id="ttsStatusLabel">On</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- MODULE 7: CURRICULUM INTELLIGENCE & AI TEACHING MODES TOOLBAR -->
+          <div style="background:var(--surface-alt);border-bottom:1px solid var(--border);padding:14px 20px;">
+            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:0.8rem;font-weight:700;color:var(--muted-text);">Curriculum:</span>
+                <select id="tutorExamSelect" class="form-input" style="padding:6px 10px;font-size:0.82rem;font-weight:700;background:var(--surface);" onchange="TutorEngine.onExamChange()">
+                  <option value="see" selected>SEE – Grade 10</option>
+                  <option value="neb-11">NEB Grade 11</option>
+                  <option value="neb-12">NEB Grade 12</option>
+                  <option value="lok-sewa">Lok Sewa Aayog</option>
+                  <option value="nrb">Nepal Rastra Bank (NRB)</option>
+                  <option value="rbb">Rastriya Banijya Bank (RBB)</option>
+                  <option value="adbl">Agricultural Dev Bank (ADBL)</option>
+                  <option value="tsc">Teacher Service Commission (TSC)</option>
+                </select>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:0.8rem;font-weight:700;color:var(--muted-text);">Subject:</span>
+                <select id="tutorSubjectSelect" class="form-input" style="padding:6px 10px;font-size:0.82rem;font-weight:600;background:var(--surface);" onchange="TutorEngine.onSubjectChange()">
+                  <option value="">Loading subjects...</option>
+                </select>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:0.8rem;font-weight:700;color:var(--muted-text);">Chapter:</span>
+                <select id="tutorChapterSelect" class="form-input" style="padding:6px 10px;font-size:0.82rem;font-weight:600;max-width:240px;background:var(--surface);" onchange="TutorEngine.onChapterChange()">
+                  <option value="">Select Chapter</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 4 Dedicated AI Teaching Mode Buttons (Module 7) -->
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <span style="font-size:0.75rem;font-weight:800;color:var(--primary);text-transform:uppercase;margin-right:4px;">Mode:</span>
+              <button id="modeExplainBtn" class="btn btn-secondary btn-sm" onclick="TutorEngine.teachChapterStepByStep()" title="Explain current chapter step-by-step with real-world examples">
+                <i class="ri-book-read-line" style="color:var(--primary);"></i> 📖 Step-by-Step Lesson
+              </button>
+              <button id="modeHintBtn" class="btn btn-secondary btn-sm" onclick="TutorEngine.toggleSocraticHintMode()" title="Socratic mode: Gives clues instead of direct answers">
+                <i class="ri-lightbulb-line" style="color:#d97706;"></i> <span id="hintBtnLabel">💡 Socratic Hints: OFF</span>
+              </button>
+              <button id="modeGradeBtn" class="btn btn-secondary btn-sm" onclick="TutorEngine.openAnswerGraderModal()" title="Submit written answer for board examiner grading">
+                <i class="ri-edit-line" style="color:#16a34a;"></i> ✍️ Grade My Answer
+              </button>
+              <button id="modeFlashcardsBtn" class="btn btn-secondary btn-sm" onclick="TutorEngine.generateFlashcards()" title="High-yield flashcards & 150-word summary">
+                <i class="ri-file-list-3-line" style="color:#9333ea;"></i> 🗂️ Flashcards &amp; Notes
+              </button>
+              <button id="modeSmartMcqBtn" class="btn btn-primary btn-sm" onclick="TutorEngine.generateSmartMcqs()" title="Generate 5 specification grid MCQs for this chapter">
+                <i class="ri-play-circle-line"></i> 🎯 Smart Chapter Drill
+              </button>
+            </div>
+          </div>
+
+          <!-- Messages Stream -->
+          <div class="guru-chat-messages" id="guruMessagesContainer">
+            <!-- Initial AI Greeting rendered via JS with real student rank & name -->
+            <div class="chat-msg msg-ai">
+              <div class="chat-avatar"><i class="ri-sparkling-fill"></i></div>
+              <div class="chat-bubble">
+                <p><strong>नमस्ते!</strong> I am your <strong>AI Exam Guru (परीक्षा गुरु)</strong>, powered by Gemini.</p>
+                <p>I am tracking your performance on the Nepal Leaderboard. Ask me any question from the Lok Sewa, Banking, or SEE syllabus, or request a strategy to climb past your nearest competitor!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- High-Yield Suggestion Chips -->
+          <div class="guru-chips-scroll">
+            <button class="guru-chip" onclick="askPreset('How can I climb to #1 on the leaderboard?')">
+              🏆 Climb to #1 on Leaderboard
+            </button>
+            <button class="guru-chip" onclick="askPreset('Explain Article 284 of Nepal Constitution (Constitutional Council)')">
+              🇳🇵 Article 284 Constitutional Council
+            </button>
+            <button class="guru-chip" onclick="askPreset('What are the 31 Fundamental Rights in Part 3 of Nepal Constitution?')">
+              📜 31 Fundamental Rights
+            </button>
+            <button class="guru-chip" onclick="askPreset('Give me a memory trick for Karnali Province 10 districts')">
+              🗺️ Karnali 10 Districts Trick
+            </button>
+            <button class="guru-chip" onclick="askPreset('How should I manage time for 50 Lok Sewa MCQs in 45 minutes?')">
+              ⏱️ 50 MCQs in 45 Min Strategy
+            </button>
+          </div>
+
+          <!-- Input Area -->
+          <div class="guru-chat-input-area">
+            <input type="text" id="guruUserInput" class="guru-input" placeholder="Ask Guru anything (e.g. Constitution, Geography, IQ, Leaderboard strategy)..." autocomplete="off">
+            <button id="guruSendBtn" class="guru-send-btn" onclick="sendGuruMessage()" aria-label="Send query">
+              <i class="ri-send-plane-2-fill"></i>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 ExamSetu Nepal. Practice. Prepare. Pass.</div>
+      <div><a href="/privacy" style="color:var(--muted-text);">Privacy Policy</a></div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/guru.js"></script>
+  <script>
+    let currentRank = 3;
+    let currentUserXp = 450;
+    let currentXpGap = 130;
+    let isVoiceEnabled = true;
+
+    // Load Leaderboard Status
+    async function loadGuruStatus() {
+      try {
+        const res = await fetch('/api/guru/status');
+        const data = await res.json();
+        if (data.success) {
+          currentRank = data.rank || 3;
+          currentUserXp = data.user?.total_xp || 450;
+          currentXpGap = data.xpGap || 130;
+
+          document.getElementById('guruUserRank').textContent = `#${currentRank}`;
+          document.getElementById('guruUserXp').textContent = currentUserXp;
+          document.getElementById('guruUserStreak').textContent = data.user?.current_streak || 3;
+          document.getElementById('guruTotalStudents').textContent = data.totalStudents || 142;
+
+          // Render Contenders
+          const compList = document.getElementById('guruCompetitorsList');
+          if (data.leaderboard && data.leaderboard.length > 0) {
+            compList.innerHTML = data.leaderboard.slice(0, 5).map((u, idx) => {
+              const rank = idx + 1;
+              const isYou = rank === currentRank;
+              return `
+                <div class="competitor-row ${isYou ? 'current-user-row' : ''}">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="rank-circle">${rank}</div>
+                    <span>${escapeHTML(u.name.split(' (')[0])} ${isYou ? '<span style="color:var(--primary); font-size:0.75rem;">(You)</span>' : ''}</span>
+                  </div>
+                  <div style="font-weight:700; color:var(--accent);">
+                    ${u.total_xp} XP
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+
+          // Gap text
+          const target = data.targetCompetitor;
+          const gapEl = document.getElementById('guruGapText');
+          if (target) {
+            gapEl.innerHTML = `You are currently <strong>${currentXpGap} XP away</strong> from overtaking <strong>${escapeHTML(target.name.split(' (')[0])}</strong> for Rank #${currentRank - 1}. Complete 2 drills today to claim it!`;
+          } else {
+            gapEl.innerHTML = `🌟 <strong>Congratulations!</strong> You hold Rank #1 across Nepal! Maintain your daily study streak to protect your crown.`;
+          }
+
+          // Personalized initial message
+          const msgContainer = document.getElementById('guruMessagesContainer');
+          const firstName = (data.user?.name || 'Prabin').split(' ')[0];
+          msgContainer.innerHTML = `
+            <div class="chat-msg msg-ai">
+              <div class="chat-avatar"><i class="ri-sparkling-fill"></i></div>
+              <div class="chat-bubble">
+                <p><strong>नमस्ते ${escapeHTML(firstName)}!</strong> I am your <strong>AI Exam Guru (परीक्षा गुरु)</strong>.</p>
+                <p>I see you are holding <strong>Rank #${currentRank}</strong> with <strong>${currentUserXp} XP</strong> on Nepal's leaderboard. You are just <strong>${currentXpGap} XP</strong> away from climbing to the next rank!</p>
+                <p>Ask me any question from the Lok Sewa, Banking, or SEE syllabus, or tap one of the chips below for instant strategy!</p>
+              </div>
+            </div>
+          `;
+        }
+      } catch (err) {
+        console.warn('Guru status load warning:', err);
+      }
+    }
+
+    function handleModelChange() {
+      const select = document.getElementById('guruModelSelect');
+      const text = select.options[select.selectedIndex].text;
+      document.getElementById('guruActivePersonaName').textContent = text.split(' (')[0];
+      ExamSetu.showToast(`Switched model to ${text.split(' (')[0]}`, 'info');
+    }
+
+    function toggleSoundTTS() {
+      isVoiceEnabled = !isVoiceEnabled;
+      document.getElementById('ttsStatusLabel').textContent = isVoiceEnabled ? 'On' : 'Off';
+      ExamSetu.showToast(`Audio speech is now ${isVoiceEnabled ? 'Enabled' : 'Disabled'}`, 'info');
+    }
+
+    function speakText(text) {
+      if (!isVoiceEnabled || !('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        // Strip markdown stars and backticks for clean speech
+        const clean = text.replace(/[*_#`]/g, '').slice(0, 300);
+        const utterance = new SpeechSynthesisUtterance(clean);
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        window.speechSynthesis.speak(utterance);
+      } catch (e) {}
+    }
+
+    function clearGuruChat() {
+      if (!confirm('Clear current Guru conversation?')) return;
+      loadGuruStatus();
+    }
+
+    const GEMINI_API_KEY = "";
+
+    function askPreset(prompt) {
+      document.getElementById('guruUserInput').value = prompt;
+      sendGuruMessage();
+    }
+
+    async function sendGuruMessage() {
+      const input = document.getElementById('guruUserInput');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      input.value = '';
+      const container = document.getElementById('guruMessagesContainer');
+
+      // Append User Message
+      const userDiv = document.createElement('div');
+      userDiv.className = 'chat-msg msg-user';
+      userDiv.innerHTML = `
+        <div class="chat-avatar"><i class="ri-user-smile-line"></i></div>
+        <div class="chat-bubble"><p>${escapeHTML(msg)}</p></div>
+      `;
+      container.appendChild(userDiv);
+
+      const selectedModelVal = document.getElementById('guruModelSelect').value;
+      const modelDisplayName = document.getElementById('guruModelSelect').options[document.getElementById('guruModelSelect').selectedIndex].text;
+
+      // Append Typing Indicator
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'chat-msg msg-ai typing-indicator-msg';
+      typingDiv.innerHTML = `
+        <div class="chat-avatar"><i class="ri-sparkling-fill"></i></div>
+        <div class="chat-bubble">
+          <p><i class="ri-loader-4-line ri-spin" style="color:var(--guru-primary);"></i> Consulting Google Gemini live (${escapeHTML(selectedModelVal)})...</p>
+        </div>
+      `;
+      container.appendChild(typingDiv);
+      container.scrollTop = container.scrollHeight;
+
+      const sendBtn = document.getElementById('guruSendBtn');
+      sendBtn.disabled = true;
+      const startTime = Date.now();
+
+      try {
+        let actualModelId = 'gemini-3.5-flash-lite';
+        let systemPrompt = `You are ExamSetu Nepal's real AI Exam Guru (परीक्षा गुरु) powered by Google Gemini.
+You coach students preparing for Lok Sewa Aayog (Kharidar, Subba, Officer), SEE Class 10, NEB +2, and Banking exams in Nepal.
+Current Student Leaderboard Profile:
+- Leaderboard Rank: #${currentRank}
+- Total XP: ${currentUserXp} XP
+- XP Gap to next rank: ${currentXpGap} XP
+Respond directly, accurately, and thoroughly in the language the student writes (Nepali or English).
+Provide exact facts, article numbers of Nepal Constitution 2072, laws, formulas, and memory tricks.`;
+
+        if (selectedModelVal === 'gemini-3.1-flash-lite') {
+          actualModelId = 'gemini-3.1-flash-lite';
+        } else if (selectedModelVal === 'gemini-3.8-flash') {
+          actualModelId = 'gemini-3.8-flash';
+        } else if (selectedModelVal === 'loksewa-specialist') {
+          actualModelId = 'gemini-3.5-flash-lite';
+          systemPrompt += '\nSpecialized Domain: Nepal Government Civil Service, Constitution of Nepal 2072, Nepal Geography, and National Planning Commission.';
+        } else {
+          actualModelId = 'gemini-3.5-flash-lite';
+        }
+
+        if (window.TutorEngine && window.TutorEngine.hintModeActive) {
+          systemPrompt += '\n\nCRITICAL: SOCRATIC HINT MODE IS ACTIVE. Do NOT give direct answers. Give subtle clues, guiding hints, formulas, or leading questions to help the student solve it themselves.';
+        }
+
+        let reply = '';
+        let modelUsed = actualModelId;
+        let sourceUsed = 'Google Gemini (Live)';
+
+        // 1. Direct call to Google Gemini Generative Language API
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${actualModelId}:generateContent?key=${GEMINI_API_KEY}`;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 16000);
+
+        try {
+          const geminiRes = await fetch(geminiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{
+                parts: [{ text: `${systemPrompt}\n\nStudent Question: ${msg}` }]
+              }],
+              generationConfig: {
+                temperature: 0.65,
+                maxOutputTokens: 1200
+              }
+            }),
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+
+          const geminiData = await geminiRes.json();
+          if (geminiData?.candidates?.[0]?.content?.parts?.[0]?.text) {
+            reply = geminiData.candidates[0].content.parts[0].text.trim();
+          } else if (geminiData?.error) {
+            console.warn('[Gemini direct response notice]:', geminiData.error);
+            throw new Error(geminiData.error.message || 'Gemini status error');
+          }
+        } catch (directErr) {
+          console.warn('[Direct call note, falling back to server proxy]:', directErr.message);
+
+          // 2. Server Proxy Fallback
+          const proxyRes = await fetch(`/api/guru/chat?q=${encodeURIComponent(msg)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              message: msg,
+              modelKey: selectedModelVal,
+              userRank: currentRank,
+              totalXp: currentUserXp,
+              xpGap: currentXpGap
+            })
+          });
+          const proxyData = await proxyRes.json();
+          if (proxyData.reply) {
+            reply = proxyData.reply;
+            modelUsed = proxyData.modelUsed || actualModelId;
+            sourceUsed = proxyData.source || 'Gemini Proxy';
+          } else {
+            throw new Error('Unable to get response from Gemini.');
+          }
+        }
+
+        const elapsed = Date.now() - startTime;
+        typingDiv.remove();
+
+        const latencyBadge = document.getElementById('modelLatencyBadge');
+        if (latencyBadge) {
+          latencyBadge.innerHTML = `🟢 Live ${modelUsed} • ${elapsed}ms`;
+        }
+
+        // Format Markdown basic tags (bold, code, lines)
+        let formattedReply = escapeHTML(reply)
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/`([^`]+)`/g, '<code>$1</code>')
+          .replace(/\n\n/g, '</p><p>')
+          .replace(/\n/g, '<br>');
+
+        const aiDiv = document.createElement('div');
+        aiDiv.className = 'chat-msg msg-ai';
+        aiDiv.innerHTML = `
+          <div class="chat-avatar"><i class="ri-sparkling-fill"></i></div>
+          <div class="chat-bubble">
+            <p>${formattedReply}</p>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; border-top:1px solid rgba(0,0,0,0.06); padding-top:6px; font-size:0.75rem; color:var(--muted-text);">
+              <span><i class="ri-sparkling-line" style="color:var(--primary);"></i> ${escapeHTML(modelUsed)} (${elapsed}ms) • ${escapeHTML(sourceUsed)}</span>
+              <button onclick="speakText('${escapeHTML(reply.slice(0, 200).replace(/'/g, ''))}')" class="tts-btn" title="Read aloud">
+                <i class="ri-volume-up-line"></i> Listen
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(aiDiv);
+        container.scrollTop = container.scrollHeight;
+
+        speakText(reply);
+
+      } catch (err) {
+        typingDiv.remove();
+        const errDiv = document.createElement('div');
+        errDiv.className = 'chat-msg msg-ai';
+        errDiv.innerHTML = `
+          <div class="chat-avatar"><i class="ri-error-warning-line"></i></div>
+          <div class="chat-bubble" style="color:var(--danger);">
+            <p><strong>Gemini API Connection:</strong> ${escapeHTML(err.message)}</p>
+            <p style="font-size:0.8rem; margin-top:4px;">Please check internet access and try again.</p>
+          </div>
+        `;
+        container.appendChild(errDiv);
+      } finally {
+        sendBtn.disabled = false;
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+
+    document.getElementById('guruUserInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') sendGuruMessage();
+    });
+
+    document.addEventListener('DOMContentLoaded', loadGuruStatus);
+  </script>
+</body>
+</html>

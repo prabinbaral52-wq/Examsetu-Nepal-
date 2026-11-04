@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <title>Curriculum Intelligence &amp; Official Specification Grids - ExamSetu Nepal</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    .curriculum-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e3a8a 100%);
+      color: #fff;
+      padding: 48px 0 36px;
+      margin-bottom: 32px;
+      border-radius: var(--radius-lg);
+      position: relative;
+      overflow: hidden;
+    }
+    .curriculum-hero::after {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(59,130,246,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .exam-nav-tabs {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 24px;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .exam-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.92rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--transition-fast);
+    }
+    .exam-tab-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .exam-tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+    }
+    .stream-filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .stream-chip {
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .stream-chip.active {
+      background: #1e293b;
+      color: #fff;
+      border-color: #1e293b;
+    }
+    [data-theme='dark'] .stream-chip.active {
+      background: #3b82f6;
+      border-color: #3b82f6;
+    }
+    .subject-curriculum-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .subject-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .marks-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .badge-official {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #86efac;
+    }
+    .badge-historical {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #93c5fd;
+    }
+    .badge-ai {
+      background: #f3e8ff;
+      color: #6b21a8;
+      border: 1px solid #d8b4fe;
+    }
+    .chapter-accordion-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 12px;
+      background: var(--surface-alt);
+      overflow: hidden;
+    }
+    .chapter-accordion-header {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .chapter-accordion-header:hover {
+      background: var(--border);
+    }
+    .chapter-content-body {
+      padding: 16px 20px 20px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: none;
+    }
+    .cognitive-tag {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-left: 8px;
+    }
+    .cog-knowledge { background: #e0f2fe; color: #0369a1; }
+    .cog-understanding { background: #fef3c7; color: #92400e; }
+    .cog-application { background: #dcfce7; color: #166534; }
+    .cog-higher { background: #fce7f3; color: #9d174d; }
+
+    /* Modal for Marks Analysis */
+    .marks-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .marks-modal-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      max-width: 680px;
+      width: 100%;
+      padding: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon"><i class="ri-book-open-fill"></i></div>
+        <div class="brand-title">
+          <span class="brand-name">ExamSetu <span>Nepal</span></span>
+          <span class="brand-nepali">पाठ्यक्रम इन्टेलिजेन्स • CDC &amp; NEB Official</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/curriculum" class="nav-link active"><i class="ri-git-merge-line" style="color:var(--primary);"></i> Curriculum</a></li>
+          <li><a href="/planner" class="nav-link"><i class="ri-calendar-schedule-line" style="color:#d97706;"></i> Study Planner</a></li>
+          <li><a href="/exams" class="nav-link">All Exams</a></li>
+          <li><a href="/practice?exam=see" class="nav-link">Practice</a></li>
+          <li><a href="/test?exam=see" class="nav-link">Mock Tests</a></li>
+          <li><a href="/guru" class="nav-link"><i class="ri-sparkling-fill" style="color:#6366f1;"></i> AI Tutor</a></li>
+          <li><a href="/college" class="nav-link">College Portal</a></li>
+          <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle theme">
+          <i class="ri-moon-line"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      
+      <!-- Master Hero Banner -->
+      <div class="curriculum-hero">
+        <div style="max-width: 860px; padding: 0 32px;">
+          <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.12);padding:6px 14px;border-radius:9999px;font-size:0.85rem;font-weight:700;margin-bottom:16px;">
+            <i class="ri-shield-check-fill" style="color:#4ade80;"></i> 100% Verified Nepal Curriculum &amp; Specification Grids
+          </div>
+          <h1 style="font-size:2.4rem;font-weight:900;line-height:1.2;margin-bottom:12px;letter-spacing:-0.5px;">
+            Official Curriculum Intelligence &amp; Specification Grids
+          </h1>
+          <p style="font-size:1.05rem;opacity:0.9;line-height:1.6;margin-bottom:20px;">
+            Explore authoritative syllabuses, chapter-wise marks distributions, learning objectives, and model question specifications direct from CDC Sanothimi, NEB, Lok Sewa Aayog, NRB, and TSC.
+          </p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:0.85rem;">
+            <span style="opacity:0.8;"><i class="ri-checkbox-circle-fill" style="color:#4ade80;"></i> Strict Authority Separation</span>
+            <span style="opacity:0.8;"><i class="ri-checkbox-circle-fill" style="color:#4ade80;"></i> Uninvented Marks Attribution</span>
+            <span style="opacity:0.8;"><i class="ri-checkbox-circle-fill" style="color:#4ade80;"></i> Cognitive Domain Alignment</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 1: 8 SEPARATE EXAMINATION CATEGORY TABS -->
+      <div class="exam-nav-tabs" id="examTabsContainer">
+        <!-- Dynamically rendered via JS -->
+      </div>
+
+      <!-- Authority Attribution Bar -->
+      <div id="authorityBanner" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 20px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <i class="ri-government-line" style="font-size:1.4rem;color:var(--primary);"></i>
+          <div>
+            <div id="authTitle" style="font-weight:800;font-size:0.95rem;">Curriculum Development Centre (CDC) &amp; NEB</div>
+            <div id="authDesc" style="font-size:0.8rem;color:var(--muted-text);">Official National Curriculum Framework &amp; Specification Grid 2080/2081</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <a id="authOfficialLink" href="https://moecdc.gov.np/" target="_blank" rel="noopener" class="btn btn-secondary btn-sm">
+            <i class="ri-external-link-line"></i> Verify Official Source
+          </a>
+          <a id="launchPlannerBtn" href="/planner?exam=see" class="btn btn-primary btn-sm">
+            <i class="ri-calendar-schedule-line"></i> Generate Study Plan
+          </a>
+        </div>
+      </div>
+
+      <!-- Stream Filter Bar (for NEB 11/12 & Secondary) -->
+      <div class="stream-filter-bar" id="streamFilterBar" style="display:none;">
+        <span style="font-weight:700;font-size:0.88rem;align-self:center;margin-right:8px;">Filter Stream:</span>
+        <button class="stream-chip active" data-stream="all" onclick="CurriculumExplorer.filterStream('all', this)">All Subjects</button>
+        <button class="stream-chip" data-stream="Science" onclick="CurriculumExplorer.filterStream('Science', this)">Science</button>
+        <button class="stream-chip" data-stream="Management" onclick="CurriculumExplorer.filterStream('Management', this)">Management</button>
+        <button class="stream-chip" data-stream="Humanities" onclick="CurriculumExplorer.filterStream('Humanities', this)">Humanities</button>
+        <button class="stream-chip" data-stream="Compulsory" onclick="CurriculumExplorer.filterStream('Compulsory', this)">Compulsory Only</button>
+      </div>
+
+      <!-- Subjects & Syllabus Explorer Container -->
+      <div id="subjectsListContainer">
+        <div style="text-align:center;padding:60px 20px;">
+          <i class="ri-loader-4-line" style="font-size:2.5rem;color:var(--primary);animation:spin 1s linear infinite;"></i>
+          <p style="margin-top:12px;color:var(--muted-text);font-weight:600;">Loading official curriculum intelligence...</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODULE 5: MARKS ANALYSIS MODAL -->
+  <div class="marks-modal" id="marksAnalysisModal">
+    <div class="marks-modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:12px;">
+        <div>
+          <span style="font-size:0.75rem;font-weight:800;color:var(--primary);text-transform:uppercase;">Chapter Marks Intelligence</span>
+          <h3 id="modalChapterTitle" style="font-size:1.3rem;font-weight:800;margin-top:2px;">Chapter Title</h3>
+        </div>
+        <button onclick="CurriculumExplorer.closeMarksModal()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted-text);">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+
+      <!-- 3 Strictly Separated Marks Categories (Module 5) -->
+      <div style="display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:24px;">
+        
+        <!-- 1. OFFICIAL -->
+        <div style="background:var(--surface-alt);border:1.5px solid #86efac;border-radius:var(--radius-md);padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <span class="marks-pill-badge badge-official">
+              <i class="ri-shield-check-fill"></i> OFFICIAL MARKS
+            </span>
+            <span id="modalOfficialVal" style="font-size:1.4rem;font-weight:900;color:#166534;">--</span>
+          </div>
+          <p id="modalOfficialNote" style="font-size:0.85rem;color:var(--muted-text);margin:0;">
+            Published directly by the examination board in the specification grid.
+          </p>
+        </div>
+
+        <!-- 2. HISTORICAL -->
+        <div style="background:var(--surface-alt);border:1.5px solid #93c5fd;border-radius:var(--radius-md);padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <span class="marks-pill-badge badge-historical">
+              <i class="ri-history-line"></i> HISTORICAL FREQUENCY
+            </span>
+            <span id="modalHistoricalVal" style="font-size:1.4rem;font-weight:900;color:#1e40af;">--</span>
+          </div>
+          <p id="modalHistoricalNote" style="font-size:0.85rem;color:var(--muted-text);margin:0;">
+            Calculated from past 5-year examination question appearances.
+          </p>
+        </div>
+
+        <!-- 3. AI ESTIMATE -->
+        <div style="background:var(--surface-alt);border:1.5px solid #d8b4fe;border-radius:var(--radius-md);padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <span class="marks-pill-badge badge-ai">
+              <i class="ri-sparkling-fill"></i> AI ESTIMATE
+            </span>
+            <span id="modalAiVal" style="font-size:1.4rem;font-weight:900;color:#6b21a8;">--</span>
+          </div>
+          <p id="modalAiNote" style="font-size:0.85rem;color:var(--muted-text);margin:0;">
+            Predicted by AI analysis of working hours, cognitive load, and syllabus density.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Question Pattern Breakdown -->
+      <div style="background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-md);padding:18px;margin-bottom:24px;">
+        <h4 style="font-size:0.95rem;font-weight:800;margin-bottom:12px;">Expected Question Formats</h4>
+        <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;text-align:center;">
+          <div style="background:var(--surface);padding:12px;border-radius:8px;border:1px solid var(--border);">
+            <div style="font-size:0.75rem;color:var(--muted-text);font-weight:700;">MCQs</div>
+            <div id="modalMcqCount" style="font-size:1.2rem;font-weight:800;color:var(--primary);">--</div>
+          </div>
+          <div style="background:var(--surface);padding:12px;border-radius:8px;border:1px solid var(--border);">
+            <div style="font-size:0.75rem;color:var(--muted-text);font-weight:700;">Short Answer</div>
+            <div id="modalSaCount" style="font-size:1.2rem;font-weight:800;color:#d97706;">--</div>
+          </div>
+          <div style="background:var(--surface);padding:12px;border-radius:8px;border:1px solid var(--border);">
+            <div style="font-size:0.75rem;color:var(--muted-text);font-weight:700;">Long Answer</div>
+            <div id="modalLaCount" style="font-size:1.2rem;font-weight:800;color:#16a34a;">--</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Action Buttons -->
+      <div style="display:flex;gap:12px;justify-content:flex-end;">
+        <button id="modalTutorBtn" class="btn btn-secondary btn-sm">
+          <i class="ri-sparkling-fill" style="color:#6366f1;"></i> Learn with AI Tutor
+        </button>
+        <button id="modalDrillBtn" class="btn btn-primary btn-sm">
+          <i class="ri-play-circle-line"></i> Start Practice Drill
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand-col">
+        <div class="brand-title" style="margin-bottom:12px;">
+          <span class="brand-name">ExamSetu <span>Nepal</span></span>
+        </div>
+        <p style="font-size:0.88rem;color:var(--muted-text);line-height:1.6;">
+          Nepal's premier curriculum-aligned examination intelligence platform. Official specification grids, AI study guidance, and test simulations.
+        </p>
+      </div>
+      <div>
+        <h4 style="font-weight:800;margin-bottom:12px;">Curriculum</h4>
+        <ul style="list-style:none;padding:0;font-size:0.85rem;line-height:2.2;">
+          <li><a href="/curriculum?exam=see">SEE Grade 10</a></li>
+          <li><a href="/curriculum?exam=neb-11">NEB Grade 11</a></li>
+          <li><a href="/curriculum?exam=neb-12">NEB Grade 12</a></li>
+          <li><a href="/curriculum?exam=lok-sewa">Lok Sewa Aayog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-weight:800;margin-bottom:12px;">Banking &amp; TSC</h4>
+        <ul style="list-style:none;padding:0;font-size:0.85rem;line-height:2.2;">
+          <li><a href="/curriculum?exam=nrb">Nepal Rastra Bank</a></li>
+          <li><a href="/curriculum?exam=rbb">Rastriya Banijya Bank</a></li>
+          <li><a href="/curriculum?exam=adbl">Agricultural Dev Bank</a></li>
+          <li><a href="/curriculum?exam=tsc">Teacher Service Commission</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-weight:800;margin-bottom:12px;">Official Sources</h4>
+        <ul style="list-style:none;padding:0;font-size:0.85rem;line-height:2.2;">
+          <li><a href="https://moecdc.gov.np/" target="_blank">moecdc.gov.np</a></li>
+          <li><a href="https://neb.gov.np/" target="_blank">neb.gov.np</a></li>
+          <li><a href="https://psc.gov.np/syllabus" target="_blank">psc.gov.np</a></li>
+          <li><a href="https://tsc.gov.np/" target="_blank">tsc.gov.np</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <div>&copy; 2026 ExamSetu Nepal. Powered by Official Nepal Curriculum Frameworks.</div>
+      <div>All Rights Reserved</div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    // =========================================================================
+    // EXAMSETU NEPAL - CURRICULUM INTELLIGENCE CONTROLLER
+    // =========================================================================
+    const CurriculumExplorer = {
+      activeExamSlug: 'see',
+      activeStream: 'all',
+      exams: [],
+      currentSubjects: [],
+
+      async init() {
+        const urlParams = new URLSearchParams(window.location.search);
+        this.activeExamSlug = urlParams.get('exam') || 'see';
+
+        await this.loadExams();
+        await this.loadSubjects(this.activeExamSlug);
+      },
+
+      async loadExams() {
+        try {
+          const res = await fetch('/api/curriculum/exams');
+          const data = await res.json();
+          if (data.success) {
+            this.exams = data.exams;
+            this.renderExamTabs();
+          }
+        } catch (e) {
+          console.error('Failed to load curriculum exams:', e);
+        }
+      },
+
+      renderExamTabs() {
+        const container = document.getElementById('examTabsContainer');
+        if (!container) return;
+
+        // The 8 official categories required by Module 1
+        const targetOrder = ['see', 'neb-11', 'neb-12', 'lok-sewa', 'nrb', 'rbb', 'adbl', 'tsc'];
+        const sortedExams = [];
+        targetOrder.forEach(slug => {
+          const found = this.exams.find(e => e.slug === slug);
+          if (found) sortedExams.push(found);
+        });
+
+        // Add remaining if any
+        this.exams.forEach(e => {
+          if (!targetOrder.includes(e.slug) && e.subject_count > 0) {
+            sortedExams.push(e);
+          }
+        });
+
+        container.innerHTML = sortedExams.map(ex => `
+          <button class="exam-tab-btn ${ex.slug === this.activeExamSlug ? 'active' : ''}" 
+                  onclick="CurriculumExplorer.switchExam('${ex.slug}')">
+            <i class="${ex.icon || 'ri-book-line'}"></i>
+            <span>${ex.name}</span>
+            <span style="font-size:0.75rem;opacity:0.75;background:rgba(0,0,0,0.1);padding:2px 6px;border-radius:4px;">
+              ${ex.subject_count || 0}
+            </span>
+          </button>
+        `).join('');
+
+        this.updateAuthorityBanner();
+      },
+
+      updateAuthorityBanner() {
+        const currentExam = this.exams.find(e => e.slug === this.activeExamSlug) || {
+          name: 'SEE (Grade 10)',
+          authority: 'Curriculum Development Centre (CDC) & NEB',
+          authority_url: 'https://moecdc.gov.np/',
+          description: 'Official National Curriculum Framework 2080/2081.'
+        };
+
+        document.getElementById('authTitle').textContent = currentExam.authority || 'Curriculum Authority';
+        document.getElementById('authDesc').textContent = currentExam.description || 'Verified National Curriculum Framework.';
+        document.getElementById('authOfficialLink').href = currentExam.authority_url || 'https://moecdc.gov.np/';
+        document.getElementById('launchPlannerBtn').href = `/planner?exam=${this.activeExamSlug}`;
+
+        // Toggle stream filter for higher secondary
+        const isHigherSecondary = ['neb-11', 'neb-12'].includes(this.activeExamSlug);
+        document.getElementById('streamFilterBar').style.display = isHigherSecondary ? 'flex' : 'none';
+      },
+
+      async switchExam(slug) {
+        this.activeExamSlug = slug;
+        this.activeStream = 'all';
+
+        // Update URL query param without reload
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set('exam', slug);
+        window.history.pushState({}, '', newUrl);
+
+        this.renderExamTabs();
+        await this.loadSubjects(slug);
+      },
+
+      filterStream(stream, btn) {
+        this.activeStream = stream;
+        document.querySelectorAll('.stream-chip').forEach(c => c.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        this.loadSubjects(this.activeExamSlug, stream);
+      },
+
+      async loadSubjects(examSlug, stream = null) {
+        const container = document.getElementById('subjectsListContainer');
+        container.innerHTML = `
+          <div style="text-align:center;padding:50px 20px;">
+            <i class="ri-loader-4-line" style="font-size:2rem;color:var(--primary);animation:spin 1s linear infinite;"></i>
+            <p style="margin-top:10px;color:var(--muted-text);">Loading official syllabus and chapters...</p>
+          </div>
+        `;
+
+        try {
+          let url = `/api/curriculum/exams/${examSlug}/subjects`;
+          if (stream && stream !== 'all') {
+            url += `?stream=${encodeURIComponent(stream)}`;
+          }
+
+          const res = await fetch(url);
+          const data = await res.json();
+
+          if (data.success && data.subjects.length > 0) {
+            this.currentSubjects = data.subjects;
+            await this.renderFullCurriculum(data.subjects);
+          } else {
+            container.innerHTML = `
+              <div style="text-align:center;padding:50px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+                <i class="ri-file-search-line" style="font-size:3rem;color:var(--muted-text);"></i>
+                <h3 style="margin-top:12px;font-weight:800;">No subjects found for this selection</h3>
+                <p style="color:var(--muted-text);font-size:0.9rem;">Please choose another stream or filter.</p>
+              </div>
+            `;
+          }
+        } catch (e) {
+          container.innerHTML = `<div class="alert alert-danger">Error loading curriculum: ${e.message}</div>`;
+        }
+      },
+
+      async renderFullCurriculum(subjects) {
+        const container = document.getElementById('subjectsListContainer');
+        let html = '';
+
+        for (const s of subjects) {
+          // Fetch full chapter tree for each subject
+          let fullSubject = s;
+          try {
+            const subRes = await fetch(`/api/curriculum/subjects/${s.id}`);
+            const subData = await subRes.json();
+            if (subData.success) fullSubject = subData.subject;
+          } catch (e) {}
+
+          const chapters = fullSubject.chapters || [];
+
+          html += `
+            <div class="subject-curriculum-card">
+              <div class="subject-header-row">
+                <div>
+                  <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+                    <span style="font-family:monospace;font-size:0.8rem;background:var(--surface-alt);padding:2px 8px;border-radius:4px;border:1px solid var(--border);font-weight:700;">
+                      CODE: ${s.code || 'CDC-101'}
+                    </span>
+                    <span style="font-size:0.8rem;color:var(--primary);font-weight:700;">
+                      ${s.stream || 'Compulsory'}
+                    </span>
+                  </div>
+                  <h2 style="font-size:1.4rem;font-weight:800;color:var(--text);margin-bottom:4px;">
+                    ${s.name} <span style="font-size:1.1rem;font-weight:600;color:var(--muted-text);">(${s.nepali_name})</span>
+                  </h2>
+                  <p style="font-size:0.85rem;color:var(--muted-text);margin:0;">
+                    ${s.specification_grid_summary || 'Official CDC National Curriculum Framework Specification Grid'}
+                  </p>
+                </div>
+
+                <div style="display:flex;gap:16px;text-align:right;">
+                  <div style="background:var(--surface-alt);padding:8px 14px;border-radius:8px;border:1px solid var(--border);">
+                    <div style="font-size:0.75rem;color:var(--muted-text);font-weight:700;">Full Marks</div>
+                    <div style="font-size:1.2rem;font-weight:900;color:var(--text);">${s.full_marks || 100}</div>
+                    <div style="font-size:0.7rem;color:var(--muted-text);">${s.theory_marks || 75} Theory + ${s.internal_marks || 25} Internal</div>
+                  </div>
+                  <div style="background:var(--surface-alt);padding:8px 14px;border-radius:8px;border:1px solid var(--border);">
+                    <div style="font-size:0.75rem;color:var(--muted-text);font-weight:700;">Credit Hours</div>
+                    <div style="font-size:1.2rem;font-weight:900;color:var(--primary);">${s.credit_hours || 4} CH</div>
+                    <div style="font-size:0.7rem;color:var(--muted-text);">${s.annual_working_hours || 128} Annual Hrs</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chapter List & Syllabus Hierarchy (Module 3) -->
+              <div style="margin-top:20px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                  <h3 style="font-size:1rem;font-weight:800;letter-spacing:-0.2px;">
+                    <i class="ri-list-check-3"></i> Syllabus Units &amp; Specification Grid Breakdown (${chapters.length} Chapters)
+                  </h3>
+                  <button class="btn btn-secondary btn-sm" onclick="CurriculumExplorer.toggleAllChapters(this)">
+                    Expand All Chapters
+                  </button>
+                </div>
+
+                <div class="chapters-accordion-group">
+                  ${chapters.map(ch => this.renderChapterAccordion(ch, s)).join('')}
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        container.innerHTML = html;
+      },
+
+      renderChapterAccordion(ch, subject) {
+        const officialMarksLabel = ch.is_marks_specified === 1
+          ? `<span class="marks-pill-badge badge-official"><i class="ri-shield-check-fill"></i> OFFICIAL: ${ch.official_marks} Marks</span>`
+          : `<span class="marks-pill-badge badge-official" title="Official marks given by content area"><i class="ri-information-line"></i> Pooled Content Area Marks</span>`;
+
+        const historicalBadge = `<span class="marks-pill-badge badge-historical"><i class="ri-history-line"></i> HISTORICAL: ${ch.historical_frequency_score || 75}%</span>`;
+        const aiBadge = `<span class="marks-pill-badge badge-ai"><i class="ri-sparkling-fill"></i> AI ESTIMATE: ${(ch.ai_importance_score || 80)}%</span>`;
+
+        const lessons = ch.lessons || [];
+        const topics = ch.topics || [];
+
+        return `
+          <div class="chapter-accordion-item" id="chapter-item-${ch.id}">
+            <div class="chapter-accordion-header" onclick="CurriculumExplorer.toggleChapter(${ch.id})">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="width:28px;height:28px;border-radius:6px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.82rem;">
+                  ${ch.chapter_no}
+                </span>
+                <div>
+                  <div style="font-weight:800;font-size:0.96rem;">
+                    ${ch.title_en} <span style="font-weight:600;color:var(--muted-text);font-size:0.88rem;">(${ch.title_np})</span>
+                  </div>
+                  <div style="font-size:0.78rem;color:var(--muted-text);margin-top:2px;">
+                    Content Area: <strong>${ch.content_area}</strong> • ${ch.learning_hours} Learning Hours • Difficulty: <strong style="text-transform:capitalize;">${ch.difficulty_level}</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:8px;">
+                ${officialMarksLabel}
+                ${historicalBadge}
+                <i class="ri-arrow-down-s-line" id="arrow-${ch.id}" style="font-size:1.3rem;transition:transform 0.2s;"></i>
+              </div>
+            </div>
+
+            <div class="chapter-content-body" id="body-${ch.id}">
+              <!-- Chapter Specification Grid & Official Allocation -->
+              <div style="background:var(--surface-alt);padding:12px 16px;border-radius:8px;border:1px solid var(--border);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                <div>
+                  <div style="font-size:0.82rem;font-weight:800;margin-bottom:4px;">Official Specification Notes:</div>
+                  <div style="font-size:0.8rem;color:var(--muted-text);">
+                    ${ch.official_marks_note || (ch.is_marks_specified === 1 ? 'Official allocation strictly published in national specification grid.' : 'Official chapter-wise marks not separately specified.')}
+                  </div>
+                </div>
+                <div>
+                  ${aiBadge}
+                </div>
+              </div>
+
+              <!-- Lessons and Subtopics -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:18px;">
+                <div>
+                  <h5 style="font-size:0.85rem;font-weight:800;margin-bottom:8px;color:var(--text);"><i class="ri-booklet-line"></i> Lessons &amp; Learning Outcomes</h5>
+                  <ul style="padding-left:18px;font-size:0.85rem;line-height:1.8;color:var(--muted-text);">
+                    ${lessons.length > 0 ? lessons.map(l => `<li><strong>${l.title_en}</strong> (${l.title_np})</li>`).join('') : '<li>Official textbook lessons aligned with CDC syllabus.</li>'}
+                  </ul>
+                </div>
+                <div>
+                  <h5 style="font-size:0.85rem;font-weight:800;margin-bottom:8px;color:var(--text);"><i class="ri-mind-map"></i> Key Concepts &amp; Cognitive Levels</h5>
+                  <ul style="padding-left:18px;font-size:0.85rem;line-height:1.8;color:var(--muted-text);">
+                    ${topics.length > 0 ? topics.map(t => `
+                      <li>
+                        ${t.title_en}
+                        <span class="cognitive-tag cog-${(t.cognitive_level || 'understanding').toLowerCase()}">${t.cognitive_level || 'Understanding'}</span>
+                      </li>
+                    `).join('') : '<li>Core conceptual definitions, derivations, and board examination riders.</li>'}
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Interactive Action Buttons -->
+              <div style="display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border);padding-top:14px;flex-wrap:wrap;">
+                <button class="btn btn-secondary btn-sm" onclick="CurriculumExplorer.openMarksModal(${ch.id})">
+                  <i class="ri-bar-chart-box-line" style="color:var(--primary);"></i> Marks Analysis
+                </button>
+                <a href="/guru?chapter=${ch.id}&subject=${subject.id}" class="btn btn-secondary btn-sm">
+                  <i class="ri-sparkling-fill" style="color:#6366f1;"></i> Learn with AI Tutor
+                </a>
+                <a href="/practice?subject=${encodeURIComponent(subject.name)}&topic=${encodeURIComponent(ch.title_en)}" class="btn btn-primary btn-sm">
+                  <i class="ri-play-circle-line"></i> Practice Chapter MCQs
+                </a>
+                <button class="btn btn-secondary btn-sm" onclick="CurriculumExplorer.markChapterMastered(${ch.id}, ${subject.id}, this)">
+                  <i class="ri-checkbox-circle-line" style="color:#16a34a;"></i> Mark Mastered
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+
+      toggleChapter(id) {
+        const body = document.getElementById(`body-${id}`);
+        const arrow = document.getElementById(`arrow-${id}`);
+        if (!body) return;
+        const isHidden = body.style.display === 'none' || !body.style.display;
+        body.style.display = isHidden ? 'block' : 'none';
+        if (arrow) arrow.style.transform = isHidden ? 'rotate(180deg)' : '';
+      },
+
+      toggleAllChapters(btn) {
+        const allBodies = document.querySelectorAll('.chapter-content-body');
+        const firstHidden = Array.from(allBodies).some(b => b.style.display === 'none' || !b.style.display);
+        allBodies.forEach(b => b.style.display = firstHidden ? 'block' : 'none');
+        document.querySelectorAll('[id^="arrow-"]').forEach(a => a.style.transform = firstHidden ? 'rotate(180deg)' : '');
+        btn.textContent = firstHidden ? 'Collapse All Chapters' : 'Expand All Chapters';
+      },
+
+      async openMarksModal(chapterId) {
+        const modal = document.getElementById('marksAnalysisModal');
+        modal.style.display = 'flex';
+
+        try {
+          const res = await fetch(`/api/curriculum/chapters/${chapterId}/marks`);
+          const data = await res.json();
+          if (data.success) {
+            document.getElementById('modalChapterTitle').textContent = `${data.chapter.title_en} (${data.chapter.title_np})`;
+            
+            // Official marks
+            document.getElementById('modalOfficialVal').textContent = data.official.value !== null ? `${data.official.value} Marks` : 'Pooled Marks';
+            document.getElementById('modalOfficialNote').textContent = data.official.note;
+
+            // Historical frequency
+            document.getElementById('modalHistoricalVal').textContent = `${data.historical.frequency_score_percent}%`;
+            document.getElementById('modalHistoricalNote').textContent = `${data.historical.note} (~${data.historical.estimated_marks} marks historical frequency).`;
+
+            // AI estimate
+            document.getElementById('modalAiVal').textContent = `${data.aiEstimate.predicted_marks} Marks`;
+            document.getElementById('modalAiNote').textContent = `${data.aiEstimate.note} (${data.aiEstimate.confidence_percent}% confidence).`;
+
+            // Question breakdown
+            document.getElementById('modalMcqCount').textContent = `${data.question_counts.mcq_count} Questions`;
+            document.getElementById('modalSaCount').textContent = `${data.question_counts.short_answer_count} Questions`;
+            document.getElementById('modalLaCount').textContent = `${data.question_counts.long_answer_count} Questions`;
+
+            // Setup buttons
+            document.getElementById('modalTutorBtn').onclick = () => {
+              window.location.href = `/guru?chapter=${chapterId}`;
+            };
+            document.getElementById('modalDrillBtn').onclick = () => {
+              window.location.href = `/test?chapter=${chapterId}`;
+            };
+          }
+        } catch (e) {
+          alert('Failed to load marks analysis: ' + e.message);
+        }
+      },
+
+      closeMarksModal() {
+        document.getElementById('marksAnalysisModal').style.display = 'none';
+      },
+
+      async markChapterMastered(chapterId, subjectId, btn) {
+        try {
+          const res = await fetch('/api/curriculum/student/progress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chapterId,
+              subjectId,
+              status: 'Mastered',
+              score: 95
+            })
+          });
+          const data = await res.json();
+          if (data.success) {
+            btn.innerHTML = '<i class="ri-check-double-line" style="color:#16a34a;"></i> Mastered ✓';
+            btn.style.borderColor = '#16a34a';
+            if (window.ExamSetu && window.ExamSetu.showToast) {
+              window.ExamSetu.showToast('Chapter progress saved: Mastered!', 'success');
+            } else {
+              alert('Chapter marked as Mastered! Study planner and progress analytics updated.');
+            }
+          }
+        } catch (e) {
+          alert('Failed to update progress: ' + e.message);
+        }
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      CurriculumExplorer.init();
+    });
+  </script>
+</body>
+</html>

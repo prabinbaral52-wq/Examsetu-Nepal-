@@ -1,0 +1,597 @@
+[
+  {
+    "id": 1,
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Nepal Constitution",
+    "difficulty": "easy",
+    "question": "According to the Constitution of Nepal (2072), how many fundamental rights are guaranteed to the citizens?",
+    "options": {
+      "A": "25",
+      "B": "31",
+      "C": "35",
+      "D": "21"
+    },
+    "correct_answer": "B",
+    "explanation": "Part 3 (Articles 16 to 46) of the Constitution of Nepal 2072 guarantees 31 fundamental rights to citizens.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 2,
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Geography of Nepal",
+    "difficulty": "easy",
+    "question": "Which province of Nepal has the longest international border with China?",
+    "options": {
+      "A": "Koshi Province",
+      "B": "Bagmati Province",
+      "C": "Gandaki Province",
+      "D": "Karnali Province"
+    },
+    "correct_answer": "D",
+    "explanation": "Karnali Province, having districts like Humla, Dolpa, and Mugu, shares the longest northern border with the Tibet Autonomous Region of China.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 3,
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Nepal Constitution",
+    "difficulty": "medium",
+    "question": "Who chairs the Constitutional Council of Nepal according to Article 284 of the Constitution?",
+    "options": {
+      "A": "President of Nepal",
+      "B": "Chief Justice of Supreme Court",
+      "C": "Prime Minister of Nepal",
+      "D": "Speaker of the House of Representatives"
+    },
+    "correct_answer": "C",
+    "explanation": "As per Article 284, the Prime Minister acts as the Chairperson of the Constitutional Council.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 4,
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "National Parks & Environment",
+    "difficulty": "easy",
+    "question": "What is the largest national park of Nepal by area?",
+    "options": {
+      "A": "Chitwan National Park",
+      "B": "Shey-Phoksundo National Park",
+      "C": "Rara National Park",
+      "D": "Makalu Barun National Park"
+    },
+    "correct_answer": "B",
+    "explanation": "Shey-Phoksundo National Park covers 3,555 sq. km across Dolpa and Mugu districts, making it Nepal's largest national park.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 5,
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "River Systems of Nepal",
+    "difficulty": "medium",
+    "question": "Which river in Nepal is recognized as the deepest river of the country?",
+    "options": {
+      "A": "Koshi River",
+      "B": "Gandaki (Narayani) River",
+      "C": "Karnali River",
+      "D": "Mahakali River"
+    },
+    "correct_answer": "B",
+    "explanation": "The Gandaki (specifically the Kali Gandaki gorge) is recognized as the deepest river system in Nepal.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 6,
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "History of Nepal",
+    "difficulty": "medium",
+    "question": "During whose reign was the historic Sugauli Treaty signed in 1816?",
+    "options": {
+      "A": "King Prithvi Narayan Shah",
+      "B": "King Girvan Yuddha Bikram Shah",
+      "C": "King Rana Bahadur Shah",
+      "D": "King Tribhuvan Bir Bikram Shah"
+    },
+    "correct_answer": "B",
+    "explanation": "The Sugauli Treaty was signed in 1816 during the reign of King Girvan Yuddha Bikram Shah, with Bhimsen Thapa serving as Mukhtiyar.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 7,
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Governance and Public Administration",
+    "difficulty": "hard",
+    "question": "What is the minimum age required to be appointed as a member of the Public Service Commission (Lok Sewa Aayog) in Nepal?",
+    "options": {
+      "A": "35 years",
+      "B": "40 years",
+      "C": "45 years",
+      "D": "50 years"
+    },
+    "correct_answer": "C",
+    "explanation": "According to Article 242(4) of the Constitution of Nepal, a person must have completed 45 years of age to be eligible for appointment in the PSC.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 8,
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Demographics and Economy",
+    "difficulty": "easy",
+    "question": "According to the National Population and Housing Census 2078 (2021), what is the official population of Nepal?",
+    "options": {
+      "A": "29,164,578",
+      "B": "26,494,504",
+      "C": "31,245,670",
+      "D": "28,584,975"
+    },
+    "correct_answer": "A",
+    "explanation": "The final report of Census 2078 released by the National Statistics Office confirmed Nepal's total population at 29,164,578.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 9,
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "International Affairs",
+    "difficulty": "medium",
+    "question": "When did Nepal officially become a member of the United Nations (UN)?",
+    "options": {
+      "A": "December 14, 1955",
+      "B": "October 24, 1945",
+      "C": "September 20, 1960",
+      "D": "January 1, 1950"
+    },
+    "correct_answer": "A",
+    "explanation": "Nepal was formally admitted to the United Nations on December 14, 1955 under the Package Deal resolution.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 10,
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Geography & Mountains",
+    "difficulty": "easy",
+    "question": "What is the officially recognized height of Mount Everest announced jointly by Nepal and China in 2020?",
+    "options": {
+      "A": "8848.00 meters",
+      "B": "8848.86 meters",
+      "C": "8850.12 meters",
+      "D": "8844.43 meters"
+    },
+    "correct_answer": "B",
+    "explanation": "On December 8, 2020, Nepal and China officially announced the new measured elevation of Mt. Everest as 8848.86 meters.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 11,
+    "exam": "Lok Sewa",
+    "subject": "Computer/IT",
+    "topic": "Computer Fundamentals",
+    "difficulty": "easy",
+    "question": "Which component of the Central Processing Unit (CPU) is responsible for coordinating and directing data flow between memory and the ALU?",
+    "options": {
+      "A": "Registers",
+      "B": "Control Unit (CU)",
+      "C": "Cache Memory",
+      "D": "System Bus"
+    },
+    "correct_answer": "B",
+    "explanation": "The Control Unit (CU) interprets instructions, coordinates internal operations, and controls data transfers between the ALU, registers, and memory.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 12,
+    "exam": "Lok Sewa",
+    "subject": "Computer/IT",
+    "topic": "Networking & Protocols",
+    "difficulty": "medium",
+    "question": "In the OSI 7-layer reference model, which layer is responsible for end-to-end reliability, flow control, and segmentation?",
+    "options": {
+      "A": "Network Layer",
+      "B": "Transport Layer",
+      "C": "Session Layer",
+      "D": "Data Link Layer"
+    },
+    "correct_answer": "B",
+    "explanation": "The Transport Layer (Layer 4) provides transparent transfer of data between end users, handling segmentation, flow control, and error recovery (e.g., TCP).",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 13,
+    "exam": "Lok Sewa",
+    "subject": "Computer/IT",
+    "topic": "Cyber Law & Nepal IT Policy",
+    "difficulty": "medium",
+    "question": "In Nepal, which law serves as the primary legislation governing cyber crimes, electronic records, and digital signatures?",
+    "options": {
+      "A": "Telecommunications Act 2053",
+      "B": "Electronic Transactions Act 2063",
+      "C": "Copyright Act 2059",
+      "D": "Right to Information Act 2064"
+    },
+    "correct_answer": "B",
+    "explanation": "The Electronic Transactions Act 2063 (ETA 2006) is the landmark legislation addressing cyber crimes, electronic records, and digital signature authentication in Nepal.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 14,
+    "exam": "Lok Sewa",
+    "subject": "Computer/IT",
+    "topic": "Operating Systems",
+    "difficulty": "easy",
+    "question": "What is the primary function of Virtual Memory in modern operating systems?",
+    "options": {
+      "A": "To increase the physical clock speed of the CPU",
+      "B": "To use hard disk storage as an extension of RAM when physical memory is full",
+      "C": "To create encrypted backups of user files",
+      "D": "To permanently store ROM firmware"
+    },
+    "correct_answer": "B",
+    "explanation": "Virtual Memory combines computer RAM with temporary space on the hard disk/SSD (paging file/swap), allowing programs to run larger than physical RAM.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 15,
+    "exam": "Lok Sewa",
+    "subject": "Computer/IT",
+    "topic": "IP Addressing & Subnetting",
+    "difficulty": "hard",
+    "question": "What is the default subnet mask for a standard Class B IPv4 network?",
+    "options": {
+      "A": "255.0.0.0",
+      "B": "255.255.0.0",
+      "C": "255.255.255.0",
+      "D": "255.255.255.255"
+    },
+    "correct_answer": "B",
+    "explanation": "Class B IPv4 addresses utilize the first two octets for network ID (16 bits) and the last two for host ID, giving a default subnet mask of 255.255.0.0 (/16).",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 16,
+    "exam": "Lok Sewa",
+    "subject": "Computer/IT",
+    "topic": "Database Management",
+    "difficulty": "medium",
+    "question": "Which SQL constraint ensures that all values in a column are distinct and cannot be null?",
+    "options": {
+      "A": "UNIQUE",
+      "B": "CHECK",
+      "C": "PRIMARY KEY",
+      "D": "FOREIGN KEY"
+    },
+    "correct_answer": "C",
+    "explanation": "A PRIMARY KEY constraint automatically enforces both UNIQUE and NOT NULL constraints on the identified column(s).",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 17,
+    "exam": "Lok Sewa",
+    "subject": "Computer/IT",
+    "topic": "Information Security",
+    "difficulty": "medium",
+    "question": "Which port number is utilized by standard HTTPS (Hypertext Transfer Protocol Secure) traffic by default?",
+    "options": {
+      "A": "Port 80",
+      "B": "Port 21",
+      "C": "Port 443",
+      "D": "Port 8080"
+    },
+    "correct_answer": "C",
+    "explanation": "HTTPS runs over TLS/SSL encryption on standard TCP port 443, while unencrypted HTTP utilizes port 80.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 18,
+    "exam": "Lok Sewa",
+    "subject": "Computer/IT",
+    "topic": "Data Representation",
+    "difficulty": "easy",
+    "question": "What is the decimal equivalent of the binary number (10110)₂?",
+    "options": {
+      "A": "18",
+      "B": "22",
+      "C": "26",
+      "D": "20"
+    },
+    "correct_answer": "B",
+    "explanation": "Calculation: (1 × 2⁴) + (0 × 2³) + (1 × 2²) + (1 × 2¹) + (0 × 2⁰) = 16 + 0 + 4 + 2 + 0 = 22.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 19,
+    "exam": "Lok Sewa",
+    "subject": "Computer/IT",
+    "topic": "Web Technologies",
+    "difficulty": "easy",
+    "question": "What does the abbreviation DNS stand for in computer networking?",
+    "options": {
+      "A": "Data Network System",
+      "B": "Domain Name System",
+      "C": "Digital Network Service",
+      "D": "Dynamic Naming Server"
+    },
+    "correct_answer": "B",
+    "explanation": "DNS stands for Domain Name System. It resolves human-readable hostnames (e.g., examsetu.np) into IP addresses.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 20,
+    "exam": "Lok Sewa",
+    "subject": "Computer/IT",
+    "topic": "Office Automation",
+    "difficulty": "easy",
+    "question": "In spreadsheet applications like MS Excel, which keyboard shortcut creates an absolute cell reference by toggling the dollar ($) signs?",
+    "options": {
+      "A": "F2",
+      "B": "F4",
+      "C": "F7",
+      "D": "F12"
+    },
+    "correct_answer": "B",
+    "explanation": "Pressing F4 while editing a cell reference cycles through relative, absolute ($A$1), and mixed ($A1 or A$1) reference modes.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 21,
+    "exam": "SEE",
+    "subject": "Science",
+    "topic": "Optics & Light",
+    "difficulty": "easy",
+    "question": "What type of lens is prescribed by optometrists to correct myopia (nearsightedness)?",
+    "options": {
+      "A": "Convex lens",
+      "B": "Concave lens",
+      "C": "Cylindrical lens",
+      "D": "Bifocal convex lens"
+    },
+    "correct_answer": "B",
+    "explanation": "In myopia, parallel rays focus in front of the retina. A diverging (concave) lens spreads the light rays outward so the image forms exactly on the retina.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 22,
+    "exam": "SEE",
+    "subject": "Science",
+    "topic": "Force & Gravity",
+    "difficulty": "medium",
+    "question": "What is the average value of acceleration due to gravity (g) at the polar regions of the Earth?",
+    "options": {
+      "A": "9.78 m/s²",
+      "B": "9.81 m/s²",
+      "C": "9.83 m/s²",
+      "D": "10.0 m/s²"
+    },
+    "correct_answer": "C",
+    "explanation": "Because the Earth is flattened at the poles, polar radius (R) is minimum; since g = GM/R², acceleration due to gravity is maximum at the poles (~9.83 m/s²).",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 23,
+    "exam": "SEE",
+    "subject": "Mathematics",
+    "topic": "Compound Interest",
+    "difficulty": "medium",
+    "question": "If Rs 10,000 is deposited in a bank at an annual compound interest rate of 10% compounded yearly, what will be the total amount after 2 years?",
+    "options": {
+      "A": "Rs 12,000",
+      "B": "Rs 12,100",
+      "C": "Rs 12,250",
+      "D": "Rs 11,500"
+    },
+    "correct_answer": "B",
+    "explanation": "Formula: A = P(1 + R/100)^T = 10,000 × (1 + 0.10)² = 10,000 × 1.21 = Rs 12,100.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 24,
+    "exam": "SEE",
+    "subject": "Science",
+    "topic": "Chemical Reactions",
+    "difficulty": "medium",
+    "question": "What gas is produced when dilute hydrochloric acid (HCl) reacts with calcium carbonate (marble chips)?",
+    "options": {
+      "A": "Hydrogen gas (H₂)",
+      "B": "Oxygen gas (O₂)",
+      "C": "Carbon dioxide gas (CO₂)",
+      "D": "Chlorine gas (Cl₂)"
+    },
+    "correct_answer": "C",
+    "explanation": "Reaction: CaCO₃ + 2HCl → CaCl₂ + H₂O + CO₂↑. Carbon dioxide gas is evolved and turns lime water milky.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 25,
+    "exam": "SEE",
+    "subject": "Mathematics",
+    "topic": "Trigonometry",
+    "difficulty": "easy",
+    "question": "In a right-angled triangle, if the opposite side (perpendicular) is 6 cm and the adjacent side (base) is 8 cm, what is the length of the hypotenuse?",
+    "options": {
+      "A": "9 cm",
+      "B": "10 cm",
+      "C": "12 cm",
+      "D": "14 cm"
+    },
+    "correct_answer": "B",
+    "explanation": "Pythagoras theorem: h = √(p² + b²) = √(6² + 8²) = √(36 + 64) = √100 = 10 cm.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 26,
+    "exam": "SEE",
+    "subject": "Science",
+    "topic": "Genetics & Heredity",
+    "difficulty": "medium",
+    "question": "What is the expected phenotypic ratio in the F2 generation of a Mendelian monohybrid cross?",
+    "options": {
+      "A": "1:2:1",
+      "B": "3:1",
+      "C": "9:3:3:1",
+      "D": "2:1"
+    },
+    "correct_answer": "B",
+    "explanation": "In Mendel's monohybrid cross, the phenotypic ratio in F2 is 3:1 (dominant to recessive), while the genotypic ratio is 1:2:1.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 27,
+    "exam": "SEE",
+    "subject": "Mathematics",
+    "topic": "Quadratic Equations",
+    "difficulty": "medium",
+    "question": "What are the roots of the quadratic equation x² - 5x + 6 = 0?",
+    "options": {
+      "A": "x = 2 and x = 3",
+      "B": "x = -2 and x = -3",
+      "C": "x = 1 and x = 6",
+      "D": "x = -1 and x = 6"
+    },
+    "correct_answer": "A",
+    "explanation": "Factorizing: x² - 3x - 2x + 6 = 0 => (x - 3)(x - 2) = 0. Therefore, the roots are x = 3 and x = 2.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 28,
+    "exam": "SEE",
+    "subject": "Science",
+    "topic": "Metals & Periodic Table",
+    "difficulty": "easy",
+    "question": "Which metal is liquid at standard room temperature and pressure?",
+    "options": {
+      "A": "Bromine",
+      "B": "Mercury",
+      "C": "Sodium",
+      "D": "Gallium"
+    },
+    "correct_answer": "B",
+    "explanation": "Mercury (Hg) is the only metal that remains in a liquid state at normal room temperature. (Bromine is a non-metal).",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 29,
+    "exam": "SEE",
+    "subject": "Mathematics",
+    "topic": "Sets & Venn Diagrams",
+    "difficulty": "easy",
+    "question": "In a group of 50 students, 30 like tea, 25 like coffee, and 10 like both. How many students like neither tea nor coffee?",
+    "options": {
+      "A": "5",
+      "B": "10",
+      "C": "15",
+      "D": "8"
+    },
+    "correct_answer": "A",
+    "explanation": "n(T ∪ C) = n(T) + n(C) - n(T ∩ C) = 30 + 25 - 10 = 45. Neither = Total - n(T ∪ C) = 50 - 45 = 5.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 30,
+    "exam": "SEE",
+    "subject": "Science",
+    "topic": "Electricity & Magnetism",
+    "difficulty": "medium",
+    "question": "Which principle explains the production of induced electromotive force (EMF) in an AC generator or dynamo?",
+    "options": {
+      "A": "Pascal's Law",
+      "B": "Faraday's Law of Electromagnetic Induction",
+      "C": "Ohm's Law",
+      "D": "Archimedes' Principle"
+    },
+    "correct_answer": "B",
+    "explanation": "Dynamo and electric generators operate directly on Faraday's Law of Electromagnetic Induction, converting mechanical kinetic energy into electrical energy.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 31,
+    "exam": "Banking",
+    "subject": "Banking Law & Economy",
+    "topic": "Nepal Rastra Bank Act",
+    "difficulty": "medium",
+    "question": "According to the Nepal Rastra Bank Act 2058, who acts as the Chairperson of the Board of Directors of Nepal Rastra Bank?",
+    "options": {
+      "A": "Finance Minister of Nepal",
+      "B": "Governor of Nepal Rastra Bank",
+      "C": "Finance Secretary",
+      "D": "Senior Deputy Governor"
+    },
+    "correct_answer": "B",
+    "explanation": "The Governor of Nepal Rastra Bank serves as the Chairperson of the seven-member Board of Directors.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 32,
+    "exam": "Banking",
+    "subject": "Banking Law & Economy",
+    "topic": "Monetary Policy & Inflation",
+    "difficulty": "easy",
+    "question": "What is the primary statutory objective of the monetary policy formulated by central banks like Nepal Rastra Bank?",
+    "options": {
+      "A": "To fix commercial tax rates",
+      "B": "To maintain price and external sector stability",
+      "C": "To print unlimited physical bank notes",
+      "D": "To allocate national election budgets"
+    },
+    "correct_answer": "B",
+    "explanation": "The core objective of central bank monetary policy is maintaining price stability, foreign exchange stability, and financial sector soundness.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 33,
+    "exam": "TSC",
+    "subject": "Education Pedagogy",
+    "topic": "Teacher Service Commission",
+    "difficulty": "medium",
+    "question": "According to the Education Act 2028 (with amendments), how many members are there in the Teachers Service Commission (TSC)?",
+    "options": {
+      "A": "3 members (1 Chairperson and 2 Members)",
+      "B": "5 members",
+      "C": "7 members",
+      "D": "4 members"
+    },
+    "correct_answer": "A",
+    "explanation": "The Teachers Service Commission consists of 3 members: one Chairperson and two members (including at least one woman).",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 34,
+    "exam": "Entrance",
+    "subject": "Engineering / Medical Aptitude",
+    "topic": "Physics & Aptitude",
+    "difficulty": "hard",
+    "question": "A stone is dropped from a cliff 80 meters high. Taking g = 10 m/s², how much time does it take to reach the ground?",
+    "options": {
+      "A": "2 seconds",
+      "B": "4 seconds",
+      "C": "6 seconds",
+      "D": "8 seconds"
+    },
+    "correct_answer": "B",
+    "explanation": "Formula: s = ut + 0.5gt². Since u = 0: 80 = 0.5 × 10 × t² => 80 = 5t² => t² = 16 => t = 4 seconds.",
+    "created_at": "2026-10-25"
+  },
+  {
+    "id": 35,
+    "exam": "NEB",
+    "subject": "+2 General Studies",
+    "topic": "Social Studies & Life Skills",
+    "difficulty": "easy",
+    "question": "Which of the following is considered an essential critical thinking skill in modern education pedagogy?",
+    "options": {
+      "A": "Rote memorization without understanding",
+      "B": "Evaluating evidence before drawing conclusions",
+      "C": "Accepting unverified internet news uncritically",
+      "D": "Avoiding asking questions in class"
+    },
+    "correct_answer": "B",
+    "explanation": "Critical thinking involves analyzing facts, distinguishing biases, and evaluating evidence objectively before forming a judgment.",
+    "created_at": "2026-10-25"
+  }
+]

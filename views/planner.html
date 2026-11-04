@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <title>AI Personal Study Planner - ExamSetu Nepal</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    .planner-hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 60%, #0f172a 100%);
+      color: #fff;
+      padding: 44px 0 32px;
+      margin-bottom: 28px;
+      border-radius: var(--radius-lg);
+    }
+    .planner-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      transition: background 0.2s;
+    }
+    .task-item.completed {
+      opacity: 0.6;
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+    .status-badge {
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+    }
+    .status-not-started { background: #f1f5f9; color: #64748b; }
+    .status-learning { background: #eff6ff; color: #1e40af; }
+    .status-practicing { background: #fef3c7; color: #92400e; }
+    .status-mastered { background: #dcfce7; color: #166534; }
+    .status-revision { background: #fce7f3; color: #9d174d; }
+  </style>
+</head>
+<body>
+  <!-- Header Navigation -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon"><i class="ri-book-open-fill"></i></div>
+        <div class="brand-title">
+          <span class="brand-name">ExamSetu <span>Nepal</span></span>
+          <span class="brand-nepali">एआई अध्ययन योजनाकार • AI Study Planner</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/curriculum" class="nav-link"><i class="ri-git-merge-line"></i> Curriculum</a></li>
+          <li><a href="/planner" class="nav-link active"><i class="ri-calendar-schedule-line" style="color:var(--primary);"></i> Study Planner</a></li>
+          <li><a href="/exams" class="nav-link">All Exams</a></li>
+          <li><a href="/practice?exam=see" class="nav-link">Practice</a></li>
+          <li><a href="/test?exam=see" class="nav-link">Mock Tests</a></li>
+          <li><a href="/guru" class="nav-link"><i class="ri-sparkling-fill" style="color:#6366f1;"></i> AI Tutor</a></li>
+          <li><a href="/college" class="nav-link">College Portal</a></li>
+          <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle theme">
+          <i class="ri-moon-line"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      
+      <!-- Planner Hero -->
+      <div class="planner-hero">
+        <div style="max-width: 860px; padding: 0 32px;">
+          <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.14);padding:5px 12px;border-radius:9999px;font-size:0.82rem;font-weight:700;margin-bottom:12px;">
+            <i class="ri-sparkling-fill" style="color:#fbbf24;"></i> Gemini AI Study Planner Engine
+          </div>
+          <h1 style="font-size:2.3rem;font-weight:900;line-height:1.2;margin-bottom:10px;">
+            Intelligent Personalized Study Planner &amp; Timetable
+          </h1>
+          <p style="font-size:1rem;opacity:0.9;line-height:1.6;margin-bottom:16px;">
+            Calculates your optimum daily study schedule, chapter completion milestones, and revision timetable prioritizing official specification grid marks, your weak topics, and remaining prep time.
+          </p>
+        </div>
+      </div>
+
+      <!-- Grid: Configuration Form on Left, Plan View on Right -->
+      <div style="display:grid;grid-template-columns:380px 1fr;gap:28px;align-items:start;">
+        
+        <!-- Planner Wizard Input Form (Module 6) -->
+        <div class="planner-card">
+          <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:18px;display:flex;align-items:center;gap:8px;">
+            <i class="ri-equalizer-line" style="color:var(--primary);"></i> Configure Your Goals
+          </h2>
+
+          <form id="studyPlanForm" onsubmit="PlannerApp.generatePlan(event)">
+            
+            <div class="form-group" style="margin-bottom:14px;">
+              <label class="form-label" style="font-weight:700;font-size:0.85rem;">Target Examination *</label>
+              <select id="planExamSelect" class="form-input" style="width:100%;font-weight:600;" required onchange="PlannerApp.onExamChange()">
+                <option value="see" selected>SEE – Grade 10 (CDC Specification)</option>
+                <option value="neb-11">NEB Grade 11 (+2 Board)</option>
+                <option value="neb-12">NEB Grade 12 (+2 Board Finals)</option>
+                <option value="lok-sewa">Lok Sewa Aayog (Civil Service)</option>
+                <option value="nrb">Nepal Rastra Bank (NRB Level 4/6)</option>
+                <option value="rbb">Rastriya Banijya Bank (RBB Level 4)</option>
+                <option value="adbl">Agricultural Development Bank (ADBL)</option>
+                <option value="tsc">Teacher Service Commission (TSC)</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:14px;">
+              <label class="form-label" style="font-weight:700;font-size:0.85rem;">Target Exam Date *</label>
+              <input type="date" id="planTargetDate" class="form-input" style="width:100%;" required>
+              <small id="daysRemainingNote" style="font-size:0.78rem;color:var(--primary);font-weight:700;display:block;margin-top:4px;">
+                Calculated preparation days: --
+              </small>
+            </div>
+
+            <div class="form-group" style="margin-bottom:14px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <label class="form-label" style="font-weight:700;font-size:0.85rem;margin:0;">Daily Study Hours</label>
+                <span id="hoursValDisplay" style="font-weight:800;color:var(--primary);font-size:0.9rem;">3.0 Hours / Day</span>
+              </div>
+              <input type="range" id="planDailyHours" min="1" max="8" step="0.5" value="3" class="form-input" style="width:100%;padding:0;" oninput="document.getElementById('hoursValDisplay').textContent = this.value + ' Hours / Day'">
+            </div>
+
+            <div class="form-group" style="margin-bottom:14px;">
+              <label class="form-label" style="font-weight:700;font-size:0.85rem;">Current Preparation Level</label>
+              <select id="planPrepLevel" class="form-input" style="width:100%;">
+                <option value="Beginner">Beginner (Starting syllabus from scratch)</option>
+                <option value="Intermediate" selected>Intermediate (Completed basic textbook theory)</option>
+                <option value="Advanced">Advanced (Revision and past paper practice)</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:20px;">
+              <label class="form-label" style="font-weight:700;font-size:0.85rem;">Target Performance Goal</label>
+              <select id="planTargetGrade" class="form-input" style="width:100%;">
+                <option value="A+ (3.6+ GPA) / Distinction">A+ (3.6+ GPA) / Distinction</option>
+                <option value="A (3.2+ GPA) / First Division" selected>A (3.2+ GPA) / First Division</option>
+                <option value="Top 10 Rank / Competitive Merit">Top 10 Rank / Merit Selection</option>
+                <option value="Pass Mark (50%+)">Target Pass Mark (50%+)</option>
+              </select>
+            </div>
+
+            <button type="submit" id="planSubmitBtn" class="btn btn-primary" style="width:100%;font-weight:800;padding:12px;">
+              <i class="ri-sparkling-fill"></i> Generate AI Study Schedule
+            </button>
+          </form>
+
+        </div>
+
+        <!-- Dynamic Study Plan View -->
+        <div id="planDisplayArea">
+          
+          <!-- Today's Schedule Card -->
+          <div class="planner-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <div>
+                <span style="font-size:0.75rem;font-weight:800;color:var(--primary);text-transform:uppercase;">Daily Action Plan</span>
+                <h3 style="font-size:1.3rem;font-weight:800;margin-top:2px;">Today's Priority Study Tasks</h3>
+              </div>
+              <span id="todayDateLabel" style="font-size:0.85rem;color:var(--muted-text);font-weight:700;"></span>
+            </div>
+
+            <div id="todayTasksList">
+              <div style="text-align:center;padding:30px;color:var(--muted-text);">
+                <i class="ri-calendar-line" style="font-size:2rem;margin-bottom:8px;display:block;"></i>
+                Configure your exam date and goals on the left to generate your custom daily timetable.
+              </div>
+            </div>
+          </div>
+
+          <!-- Weekly Schedule Timetable Card -->
+          <div class="planner-card">
+            <h3 style="font-size:1.15rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+              <i class="ri-calendar-2-line" style="color:var(--primary);"></i> Weekly Subject Timetable
+            </h3>
+            <div id="weeklyScheduleGrid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:10px;">
+              <!-- Monday - Sunday cards -->
+            </div>
+          </div>
+
+          <!-- Monthly Roadmaps & High-Yield Milestones -->
+          <div class="planner-card">
+            <h3 style="font-size:1.15rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+              <i class="ri-road-map-line" style="color:#d97706;"></i> Monthly Chapter Completion Roadmaps
+            </h3>
+            <div id="monthlyRoadmapList" style="display:grid;grid-template-columns:1fr;gap:12px;">
+              <!-- Milestones -->
+            </div>
+          </div>
+
+          <!-- Revision & Mock Test Timetable -->
+          <div class="planner-card">
+            <h3 style="font-size:1.15rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+              <i class="ri-timer-line" style="color:#16a34a;"></i> Revision &amp; Board Model Examination Schedule
+            </h3>
+            <div id="revisionScheduleList">
+              <!-- Revision plans -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 ExamSetu Nepal. AI Personal Study Planner Engine.</div>
+      <div>Aligned with Nepal National Examination Frameworks</div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    const PlannerApp = {
+      currentExamSlug: 'see',
+      activePlan: null,
+
+      init() {
+        const urlParams = new URLSearchParams(window.location.search);
+        this.currentExamSlug = urlParams.get('exam') || 'see';
+        document.getElementById('planExamSelect').value = this.currentExamSlug;
+
+        // Set default target exam date to 60 days from now
+        const defaultDate = new Date();
+        defaultDate.setDate(defaultDate.getDate() + 60);
+        document.getElementById('planTargetDate').value = defaultDate.toISOString().split('T')[0];
+        this.updateDaysRemaining();
+
+        document.getElementById('planTargetDate').addEventListener('change', () => this.updateDaysRemaining());
+
+        document.getElementById('todayDateLabel').textContent = new Date().toLocaleDateString('en-US', {
+          weekday: 'long', month: 'short', day: 'numeric', year: 'numeric'
+        });
+
+        this.loadExistingPlan();
+      },
+
+      onExamChange() {
+        this.currentExamSlug = document.getElementById('planExamSelect').value;
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set('exam', this.currentExamSlug);
+        window.history.pushState({}, '', newUrl);
+        this.loadExistingPlan();
+      },
+
+      updateDaysRemaining() {
+        const val = document.getElementById('planTargetDate').value;
+        if (!val) return;
+        const target = new Date(val);
+        const diffMs = target - new Date();
+        const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+        document.getElementById('daysRemainingNote').textContent = days > 0
+          ? `Preparation window: ${days} days remaining`
+          : 'Please select a future target examination date';
+      },
+
+      async loadExistingPlan() {
+        try {
+          const res = await fetch(`/api/curriculum/planner/current?exam=${this.currentExamSlug}`);
+          const data = await res.json();
+          if (data.success && data.plan && data.plan.plan) {
+            this.activePlan = data.plan;
+            this.renderPlan(data.plan.plan, data.plan.sessions || []);
+          }
+        } catch (e) {}
+      },
+
+      async generatePlan(e) {
+        if (e) e.preventDefault();
+        const btn = document.getElementById('planSubmitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="ri-loader-4-line" style="animation:spin 1s linear infinite;"></i> Designing AI Study Schedule...';
+
+        try {
+          const targetDate = document.getElementById('planTargetDate').value;
+          const dailyHours = document.getElementById('planDailyHours').value;
+          const prepLevel = document.getElementById('planPrepLevel').value;
+          const targetGrade = document.getElementById('planTargetGrade').value;
+
+          const res = await fetch('/api/curriculum/planner/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              examSlug: this.currentExamSlug,
+              targetDate,
+              dailyHours,
+              prepLevel,
+              targetGrade
+            })
+          });
+
+          const data = await res.json();
+          if (data.success) {
+            this.renderPlan(data.plan, []);
+            if (window.ExamSetu && window.ExamSetu.showToast) {
+              window.ExamSetu.showToast('Personalized AI Study Schedule Generated!', 'success');
+            } else {
+              alert('AI Personalized Study Plan generated and saved to your account!');
+            }
+          } else {
+            alert(data.message || 'Failed to generate study plan.');
+          }
+        } catch (err) {
+          alert('Error generating plan: ' + err.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="ri-sparkling-fill"></i> Generate AI Study Schedule';
+        }
+      },
+
+      renderPlan(plan, sessions) {
+        // 1. Render Today's Tasks
+        const tasksContainer = document.getElementById('todayTasksList');
+        const tasks = (sessions && sessions.length > 0) ? sessions.slice(0, 5) : (plan.daily_tasks || []);
+
+        if (tasks.length > 0) {
+          tasksContainer.innerHTML = tasks.map((t, idx) => `
+            <div class="task-item ${t.status === 'completed' ? 'completed' : ''}" id="task-card-${t.id || idx}">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <input type="checkbox" ${t.status === 'completed' ? 'checked' : ''} 
+                       onchange="PlannerApp.toggleSession(${t.id || idx}, this)" 
+                       style="width:20px;height:20px;cursor:pointer;">
+                <div>
+                  <div style="font-weight:800;font-size:0.95rem;">${t.title}</div>
+                  <div style="font-size:0.8rem;color:var(--muted-text);">
+                    ${t.subject_name || 'Core'} • ${t.duration_minutes || 45} mins • <span style="text-transform:capitalize;">${t.session_type || 'Practice'}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:8px;">
+                <a href="/guru?subject=${t.subject_id || 1}" class="btn btn-secondary btn-sm" title="Ask AI Tutor">
+                  <i class="ri-sparkling-fill" style="color:#6366f1;"></i> AI Tutor
+                </a>
+                <a href="/practice?subject=${encodeURIComponent(t.subject_name || 'Core')}" class="btn btn-primary btn-sm">
+                  <i class="ri-play-line"></i> Practice
+                </a>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // 2. Weekly Schedule Grid
+        const weeklyContainer = document.getElementById('weeklyScheduleGrid');
+        const weekly = plan.weekly_distribution || {};
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        weeklyContainer.innerHTML = days.map(d => `
+          <div style="background:var(--surface-alt);border:1px solid var(--border);border-radius:8px;padding:12px;">
+            <div style="font-size:0.8rem;font-weight:800;color:var(--primary);margin-bottom:6px;">${d}</div>
+            <div style="font-size:0.8rem;color:var(--text);line-height:1.4;">
+              ${weekly[d] || 'Structured concept learning & revision'}
+            </div>
+          </div>
+        `).join('');
+
+        // 3. Monthly Roadmaps
+        const monthlyContainer = document.getElementById('monthlyRoadmapList');
+        const milestones = plan.monthly_milestones || [];
+        monthlyContainer.innerHTML = milestones.map((m, idx) => `
+          <div style="background:var(--surface-alt);border-left:4px solid var(--primary);border-radius:6px;padding:14px 18px;">
+            <div style="font-weight:800;font-size:0.95rem;margin-bottom:4px;">${m.phase}</div>
+            <div style="font-size:0.85rem;color:var(--muted-text);line-height:1.5;">${m.objective}</div>
+          </div>
+        `).join('');
+
+        // 4. Revision Timetable
+        const revContainer = document.getElementById('revisionScheduleList');
+        const revs = plan.revision_schedule || [];
+        revContainer.innerHTML = revs.map(r => `
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border);">
+            <div style="font-weight:800;font-size:0.85rem;color:#16a34a;min-width:130px;">${r.week || 'Scheduled'}</div>
+            <div style="font-size:0.85rem;color:var(--text);">${r.activity}</div>
+          </div>
+        `).join('');
+      },
+
+      async toggleSession(sessionId, checkbox) {
+        if (!sessionId) return;
+        try {
+          const res = await fetch(`/api/curriculum/planner/session/${sessionId}/complete`, {
+            method: 'POST'
+          });
+          const data = await res.json();
+          if (data.success) {
+            checkbox.closest('.task-item').classList.add('completed');
+            if (window.ExamSetu && window.ExamSetu.showToast) {
+              window.ExamSetu.showToast('Study session completed! Progress updated.', 'success');
+            }
+          }
+        } catch (e) {}
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      PlannerApp.init();
+    });
+  </script>
+</body>
+</html>

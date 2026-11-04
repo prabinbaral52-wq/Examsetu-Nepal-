@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: examsetunepal
+    env: node
+    plan: free
+    region: singapore
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: APP_NAME
+        value: ExamSetu Nepal
+      - key: SESSION_NAME
+        value: examsetu_sid
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        value: file:./data/examsetu.db

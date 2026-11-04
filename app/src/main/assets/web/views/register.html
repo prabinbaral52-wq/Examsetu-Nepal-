@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <title>Create Free Account - ExamSetu Nepal</title>
+  <meta name="description" content="Register free on ExamSetu Nepal with interactive studio lamp experience. Prepare for Lok Sewa, SEE, NEB, and Banking exams in Nepal.">
+  <link rel="stylesheet" href="/css/remixicon.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/lamp-auth.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon"><i class="ri-book-open-fill"></i></div>
+        <div class="brand-title"><span class="brand-name">ExamSetu <span>Nepal</span></span></div>
+      </a>
+      <div class="nav-actions">
+        <a href="/exams" class="nav-link" style="margin-right:12px;font-size:0.9rem;font-weight:600;"><i class="ri-apps-2-line"></i> All Exams</a>
+        <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle Theme"><i class="ri-moon-line"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content" style="padding-top:calc(var(--header-height) + 14px);">
+    <div class="container">
+
+      <!-- Interactive Lamp Studio Stage -->
+      <div id="lampStage" class="lamp-stage-wrapper">
+        <div class="lamp-particles"></div>
+
+        <!-- Floating Stage Controls -->
+        <div class="stage-controls">
+          <button id="lampStateBtn" class="stage-btn" title="Toggle Desk Lamp"><i class="ri-lightbulb-fill" style="color:#fbbf24;"></i> Light: ON</button>
+          <button id="soundToggleBtn" class="stage-btn active" title="Toggle Web Audio Effects"><i class="ri-volume-up-line"></i> Sound: ON</button>
+        </div>
+
+        <div class="lamp-scene">
+          
+          <!-- Desk Lamp Graphic & Physics Pull Cord -->
+          <div class="lamp-container">
+            <!-- Projected Light Beam -->
+            <div class="lamp-light-beam"></div>
+
+            <!-- SVG Desk Lamp -->
+            <svg class="lamp-svg" viewBox="0 0 320 460" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffd573" />
+                  <stop offset="50%" stop-color="#e5a93c" />
+                  <stop offset="100%" stop-color="#996a1a" />
+                </linearGradient>
+
+                <linearGradient id="metalRim" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#334155" />
+                  <stop offset="45%" stop-color="#ffd573" />
+                  <stop offset="60%" stop-color="#e5a93c" />
+                  <stop offset="100%" stop-color="#1e293b" />
+                </linearGradient>
+
+                <linearGradient id="lampBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#2d3748" />
+                  <stop offset="60%" stop-color="#1a202c" />
+                  <stop offset="100%" stop-color="#0f141c" />
+                </linearGradient>
+
+                <radialGradient id="baseShadow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="rgba(0,0,0,0.85)" />
+                  <stop offset="70%" stop-color="rgba(0,0,0,0.4)" />
+                  <stop offset="100%" stop-color="rgba(0,0,0,0)" />
+                </radialGradient>
+              </defs>
+
+              <!-- Base Ground Shadow -->
+              <ellipse cx="100" cy="420" rx="75" ry="18" fill="url(#baseShadow)" />
+
+              <!-- Lamp Base Plate -->
+              <g id="lampBase">
+                <ellipse cx="100" cy="410" rx="60" ry="15" fill="#111827" stroke="url(#metalRim)" stroke-width="2" />
+                <ellipse cx="100" cy="406" rx="46" ry="11" fill="url(#lampBodyGrad)" />
+                <ellipse cx="100" cy="402" rx="20" ry="5" fill="url(#goldGrad)" />
+                <rect x="94" y="380" width="12" height="22" rx="4" fill="#1f2937" stroke="url(#goldGrad)" stroke-width="1.5" />
+                <circle cx="100" cy="390" r="4.5" fill="url(#goldGrad)" />
+              </g>
+
+              <!-- Lower Arm -->
+              <g id="lowerArm">
+                <line x1="97" y1="384" x2="148" y2="258" stroke="#1f2937" stroke-width="4.5" stroke-linecap="round" />
+                <line x1="103" y1="386" x2="154" y2="260" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round" />
+                <line x1="97" y1="384" x2="148" y2="258" stroke="url(#goldGrad)" stroke-width="1" stroke-dasharray="1 8" />
+              </g>
+
+              <!-- Elbow Joint -->
+              <g id="midJoint">
+                <circle cx="151" cy="259" r="11" fill="url(#lampBodyGrad)" stroke="url(#goldGrad)" stroke-width="2" />
+                <circle cx="151" cy="259" r="5" fill="url(#goldGrad)" />
+                <rect x="146" y="257" width="10" height="4" rx="2" fill="#0f172a" />
+              </g>
+
+              <!-- Upper Arm -->
+              <g id="upperArm">
+                <line x1="151" y1="259" x2="204" y2="182" stroke="#1f2937" stroke-width="5" stroke-linecap="round" />
+                <line x1="153" y1="261" x2="206" y2="184" stroke="url(#goldGrad)" stroke-width="1.2" />
+              </g>
+
+              <!-- Lamp Head Joint Connector -->
+              <g id="headJoint">
+                <circle cx="205" cy="183" r="8" fill="url(#goldGrad)" />
+                <circle cx="205" cy="183" r="3.5" fill="#0f172a" />
+              </g>
+
+              <!-- Lamp Shade / Hood -->
+              <g id="lampShade">
+                <path d="M 194 175 C 190 160, 225 140, 248 152 L 262 208 C 240 220, 185 210, 175 194 Z" 
+                      fill="url(#lampBodyGrad)" stroke="#334155" stroke-width="1.5" />
+                <ellipse cx="218" cy="204" rx="44" ry="14" fill="#0b0f17" stroke="url(#goldGrad)" stroke-width="2.5" />
+                <ellipse cx="218" cy="204" rx="34" ry="10" fill="#1e180d" />
+                <ellipse id="lampBulb" class="bulb-glow-circle" cx="218" cy="204" rx="14" ry="7" fill="#fff7d6" />
+              </g>
+
+              <!-- Interactive Physics Pull Cord Switch -->
+              <g id="lampCordGroup" class="lamp-cord-group" title="Pull cord to switch light ON/OFF">
+                <circle cx="218" cy="206" r="3" fill="url(#goldGrad)" />
+                <line id="cordLine" x1="218" y1="207" x2="218" y2="284" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 2" />
+                <g class="cord-handle">
+                  <circle cx="218" cy="288" r="8" fill="url(#goldGrad)" stroke="#6b4c13" stroke-width="1.5" />
+                  <circle cx="216" cy="286" r="3" fill="#ffffff" opacity="0.6" />
+                  <circle cx="218" cy="296" r="3.5" fill="url(#goldGrad)" />
+                </g>
+              </g>
+            </svg>
+
+            <!-- Floating Tooltip Hint -->
+            <div id="cordHint" class="cord-hint">
+              <i class="ri-hand-pointing-right-line"></i> Pull cord to toggle light!
+            </div>
+          </div>
+
+          <!-- Authentication Card (Obsidian / Glassmorphic) -->
+          <div class="lamp-auth-card">
+            
+            <!-- Card Header Badge: "YOUR SPACE" -->
+            <div class="card-header-badge">
+              <div class="space-tag">
+                <span class="space-star">✦</span> YOUR SPACE • EXAMSETU
+              </div>
+              <div style="color:#64748b;font-size:0.9rem;" title="Official ExamSetu Secure Portal">
+                <i class="ri-shield-check-line" style="color:#22c55e;"></i>
+              </div>
+            </div>
+
+            <!-- Title & Subtitle -->
+            <h1 id="cardAuthTitle" class="card-auth-title">Sign Up</h1>
+            <p id="cardAuthSubtitle" class="card-auth-subtitle">Create an account to get started</p>
+
+            <!-- Tab Switcher: [ Sign In ] [ Sign Up ] -->
+            <div class="auth-tab-switcher">
+              <button id="tabSignIn" type="button" class="tab-btn">
+                <i class="ri-login-box-line"></i> Sign In
+              </button>
+              <button id="tabSignUp" type="button" class="tab-btn active">
+                <i class="ri-user-add-line"></i> Sign Up
+              </button>
+            </div>
+
+            <!-- Form -->
+            <form id="lampAuthForm">
+              
+              <!-- Full Name (Visible on Sign Up) -->
+              <div id="nameFieldGroup" class="lamp-form-group">
+                <div class="lamp-field-header">
+                  <label for="lampName" class="lamp-field-label">Full Name</label>
+                </div>
+                <div class="lamp-input-wrap">
+                  <input type="text" id="lampName" class="lamp-input" placeholder="e.g. Ramesh Adhikari" required autocomplete="name">
+                  <i class="ri-user-line lamp-input-icon"></i>
+                </div>
+              </div>
+
+              <!-- Username or Email -->
+              <div class="lamp-form-group">
+                <div class="lamp-field-header">
+                  <label for="lampEmail" class="lamp-field-label">Username or Email</label>
+                </div>
+                <div class="lamp-input-wrap">
+                  <input type="text" id="lampEmail" class="lamp-input" placeholder="Enter username or email" required autocomplete="email">
+                  <i class="ri-user-3-line lamp-input-icon"></i>
+                </div>
+              </div>
+
+              <!-- Password with Eye Toggle -->
+              <div class="lamp-form-group">
+                <div class="lamp-field-header">
+                  <label for="lampPassword" class="lamp-field-label">Password</label>
+                  <div id="forgotPassWrap" style="display:none;">
+                    <a href="#" class="lamp-forgot-link" onclick="if(window.ExamSetu){ExamSetu.showToast('Please use the 1-Click Demo accounts below to test instantly!','info');}return false;">Forgot?</a>
+                  </div>
+                </div>
+                <div class="lamp-input-wrap">
+                  <input type="password" id="lampPassword" class="lamp-input" placeholder="Create a password (min 6 chars)" minlength="6" required autocomplete="new-password">
+                  <i class="ri-lock-2-line lamp-input-icon"></i>
+                  <button type="button" id="passToggleBtn" class="password-toggle-btn" title="Toggle password visibility">
+                    <i class="ri-eye-line"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Remember Me Checkbox -->
+              <div id="rememberRow" class="remember-row" style="display:none;">
+                <input type="checkbox" id="rememberMe" class="custom-checkbox" checked>
+                <label for="rememberMe" class="remember-label">Remember me</label>
+              </div>
+
+              <!-- Terms note for Sign Up -->
+              <div id="termsRow" style="font-size:0.78rem;color:#94a3b8;margin-bottom:16px;line-height:1.4;">
+                By signing up, you agree to ExamSetu's <a href="/terms" style="color:#fbbf24;">Terms of Service</a> & <a href="/privacy" style="color:#fbbf24;">Privacy Policy</a>.
+              </div>
+
+              <!-- Primary Submit Button -->
+              <button type="submit" id="lampSubmitBtn" class="lamp-submit-btn">
+                <span id="submitBtnText">Create Account →</span>
+              </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="or-divider">
+              <span>Or Continue With</span>
+            </div>
+
+            <!-- Social Providers -->
+            <div class="social-btn-group">
+              <button type="button" class="social-btn" data-provider="Google" title="Sign up with Google">
+                <i class="ri-google-fill"></i>
+              </button>
+              <button type="button" class="social-btn" data-provider="GitHub" title="Sign up with GitHub">
+                <i class="ri-github-fill"></i>
+              </button>
+              <button type="button" class="social-btn" data-provider="Apple" title="Sign up with Apple">
+                <i class="ri-apple-fill"></i>
+              </button>
+            </div>
+
+            <!-- 1-Click Fast Evaluation Logins -->
+            <div class="quick-demo-container">
+              <div class="quick-demo-title">
+                <i class="ri-flashlight-fill" style="color:#fbbf24;"></i> 1-Click Quick Demo Access
+              </div>
+              <div class="quick-demo-btns">
+                <button type="button" class="demo-pill-btn" onclick="fillLampCredentials('student@examsetu.com','student123')">
+                  <i class="ri-user-line"></i> Student Demo
+                </button>
+                <button type="button" class="demo-pill-btn" onclick="fillLampCredentials('admin@examsetu.com','ChangeThisStrongPassword123')">
+                  <i class="ri-shield-keyhole-line"></i> Admin Demo
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 ExamSetu Nepal. Dedicated to Nepalese civil service and academic aspirants.</div>
+      <div><a href="/privacy" style="color:var(--muted-text);">Privacy</a> • <a href="/terms" style="color:var(--muted-text);">Terms</a> • <a href="/about" style="color:var(--muted-text);">About</a></div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/lamp-auth.js"></script>
+</body>
+</html>

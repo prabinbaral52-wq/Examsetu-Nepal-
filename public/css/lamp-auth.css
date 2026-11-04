@@ -1,0 +1,697 @@
+/* ==========================================================================
+   ExamSetu Nepal - Interactive Studio Lamp & Auth Animation
+   Inspired by Code with Bhurtel Desk Lamp & Web Audio API
+   ========================================================================== */
+
+:root {
+  --lamp-bg-dark: #090c10;
+  --lamp-bg-light: #161c24;
+  --lamp-gold: #e5a93c;
+  --lamp-gold-light: #ffd277;
+  --lamp-cord: #c4b5a0;
+  --lamp-card-bg: rgba(18, 24, 33, 0.88);
+  --lamp-card-border: rgba(255, 255, 255, 0.08);
+  --lamp-glow-color: rgba(255, 222, 130, 0.38);
+}
+
+/* Stage Container */
+/* Stage Container (Full-Width Desktop Layout) */
+.lamp-stage-wrapper {
+  position: relative;
+  min-height: calc(100vh - var(--header-height, 70px) - 50px);
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px clamp(20px, 4vw, 72px);
+  background: radial-gradient(circle at 35% 45%, #18202c 0%, #0c1017 60%, #06080b 100%);
+  overflow: hidden;
+  transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 24px;
+  margin: 10px auto 40px;
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.7);
+}
+
+/* Lamp OFF State - Deep Midnight Ambience */
+.lamp-stage-wrapper.lamp-off {
+  background: radial-gradient(circle at 35% 45%, #0d1218 0%, #06080b 70%, #030405 100%);
+}
+
+/* Ambient Dust / Starlight specks */
+.lamp-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(1.5px 1.5px at 20px 30px, rgba(255,255,255,0.25), transparent),
+    radial-gradient(1px 1px at 80px 140px, rgba(255,255,255,0.18), transparent),
+    radial-gradient(1.5px 1.5px at 190px 80px, rgba(255,255,255,0.2), transparent),
+    radial-gradient(2px 2px at 320px 260px, rgba(255,230,160,0.22), transparent),
+    radial-gradient(1px 1px at 450px 180px, rgba(255,255,255,0.15), transparent),
+    radial-gradient(1.5px 1.5px at 620px 90px, rgba(255,255,255,0.2), transparent),
+    radial-gradient(2px 2px at 780px 320px, rgba(255,230,160,0.18), transparent);
+  background-size: 550px 550px;
+  opacity: 0.6;
+  transition: opacity 0.6s ease;
+}
+
+.lamp-stage-wrapper.lamp-off .lamp-particles {
+  opacity: 0.25;
+}
+
+/* Main Flex Layout: Desktop Studio Stage */
+.lamp-scene {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: clamp(40px, 5vw, 90px);
+  width: 100%;
+  max-width: 1440px;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   DESK LAMP SECTION
+   ========================================================================== */
+.lamp-container {
+  position: relative;
+  width: 320px;
+  height: 480px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.lamp-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.6));
+}
+
+/* Light Cone Projector */
+.lamp-light-beam {
+  position: absolute;
+  top: 140px;
+  left: 200px;
+  width: 650px;
+  height: 480px;
+  pointer-events: none;
+  z-index: 1;
+  transform-origin: top left;
+  background: conic-gradient(
+    from 115deg at 0% 0%,
+    rgba(255, 235, 170, 0.32) 0deg,
+    rgba(255, 225, 140, 0.16) 28deg,
+    rgba(255, 215, 120, 0.05) 55deg,
+    transparent 65deg
+  );
+  filter: blur(28px);
+  opacity: 1;
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  mix-blend-mode: screen;
+}
+
+.lamp-stage-wrapper.lamp-off .lamp-light-beam {
+  opacity: 0;
+}
+
+/* Bulb Glow */
+.bulb-glow-circle {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.lamp-stage-wrapper:not(.lamp-off) .bulb-glow-circle {
+  fill: #fff7d6;
+  filter: drop-shadow(0 0 18px #ffcf54) drop-shadow(0 0 40px #ffb326);
+}
+
+.lamp-stage-wrapper.lamp-off .bulb-glow-circle {
+  fill: #3b2816;
+  filter: none;
+  opacity: 0.4;
+}
+
+/* Interactive Cord Switch */
+.lamp-cord-group {
+  cursor: pointer;
+  transform-origin: 218px 200px;
+  transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.4, 1);
+}
+
+.lamp-cord-group:hover .cord-handle {
+  filter: drop-shadow(0 0 8px #ffc107);
+}
+
+.lamp-cord-group.pulling {
+  transform: translateY(28px) scaleY(1.35);
+  animation: none !important;
+}
+
+.lamp-cord-group.spring-back {
+  animation: cordBounce 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes cordBounce {
+  0% { transform: translateY(28px) scaleY(1.35); }
+  25% { transform: translateY(-10px) scaleY(0.92); }
+  50% { transform: translateY(8px) scaleY(1.08); }
+  75% { transform: translateY(-3px) scaleY(0.98); }
+  100% { transform: translateY(0px) scaleY(1); }
+}
+
+/* Cord Tooltip hint */
+.cord-hint {
+  position: absolute;
+  top: 310px;
+  left: 200px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  pointer-events: none;
+  animation: floatHint 2.4s ease-in-out infinite;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  z-index: 4;
+}
+
+@keyframes floatHint {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Sound and Controls floating panel */
+.stage-controls {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 10;
+}
+
+.stage-btn {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+.stage-btn:hover {
+  background: rgba(51, 65, 85, 0.9);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.stage-btn.active {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+/* ==========================================================================
+   AUTHENTICATION CARD (Code with Bhurtel / Studio Style)
+   ========================================================================== */
+.lamp-auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  background: var(--lamp-card-bg);
+  border: 1px solid var(--lamp-card-border);
+  border-radius: 26px;
+  padding: 42px 38px 36px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 3;
+}
+
+/* Illuminated highlight when lamp is ON */
+.lamp-stage-wrapper:not(.lamp-off) .lamp-auth-card {
+  border-color: rgba(255, 225, 140, 0.28);
+  box-shadow: 
+    -12px -10px 45px -5px rgba(255, 215, 120, 0.16),
+    0 30px 60px -12px rgba(0, 0, 0, 0.75),
+    inset 1px 1px 1px rgba(255, 245, 210, 0.35);
+}
+
+.lamp-stage-wrapper.lamp-off .lamp-auth-card {
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.75);
+}
+
+/* Card Header: "YOUR SPACE" */
+.card-header-badge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.space-tag {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.space-star {
+  color: #fbbf24;
+  font-size: 0.85rem;
+}
+
+/* Card Title */
+.card-auth-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+  line-height: 1.2;
+}
+
+.card-auth-subtitle {
+  color: #94a3b8;
+  font-size: 0.88rem;
+  margin: 0 0 22px;
+}
+
+/* Tab Switcher: [ Sign In ] [ Sign Up ] */
+.auth-tab-switcher {
+  position: relative;
+  display: flex;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 24px;
+}
+
+.tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 8px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  z-index: 1;
+}
+
+.tab-btn:hover {
+  color: #f1f5f9;
+}
+
+.tab-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.lamp-stage-wrapper:not(.lamp-off) .tab-btn.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border: 1px solid rgba(255, 225, 140, 0.25);
+}
+
+/* Form Fields */
+.lamp-form-group {
+  margin-bottom: 18px;
+}
+
+.lamp-field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.lamp-field-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.lamp-forgot-link {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.lamp-forgot-link:hover {
+  color: #fbbf24;
+  text-decoration: underline;
+}
+
+/* Input Container with Icons */
+.lamp-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.lamp-input-icon {
+  position: absolute;
+  left: 14px;
+  color: #64748b;
+  font-size: 1.1rem;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.lamp-input {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px 14px 12px 42px;
+  color: #f8fafc;
+  font-size: 0.92rem;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.lamp-input::placeholder {
+  color: #64748b;
+}
+
+.lamp-input:focus {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+}
+
+.lamp-input:focus ~ .lamp-input-icon {
+  color: #38bdf8;
+}
+
+.lamp-stage-wrapper:not(.lamp-off) .lamp-input:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+.lamp-stage-wrapper:not(.lamp-off) .lamp-input:focus ~ .lamp-input-icon {
+  color: #f59e0b;
+}
+
+/* Password Eye Toggle */
+.password-toggle-btn {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.password-toggle-btn:hover {
+  color: #e2e8f0;
+}
+
+/* Remember Me Checkbox */
+.remember-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 20px;
+  user-select: none;
+}
+
+.remember-label {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  cursor: pointer;
+}
+
+.custom-checkbox {
+  appearance: none;
+  width: 17px;
+  height: 17px;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  background: rgba(15, 23, 42, 0.6);
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+  transition: all 0.2s ease;
+}
+
+.custom-checkbox:checked {
+  background: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.custom-checkbox:checked::before {
+  content: "✓";
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* Primary Action Submit Button */
+.lamp-submit-btn {
+  width: 100%;
+  padding: 13px 20px;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 0.96rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+}
+
+.lamp-stage-wrapper:not(.lamp-off) .lamp-submit-btn {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+.lamp-submit-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.lamp-submit-btn:active {
+  transform: translateY(0);
+}
+
+/* "OR CONTINUE WITH" Divider */
+.or-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 22px 0 18px;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.or-divider::before,
+.or-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.or-divider span {
+  padding: 0 12px;
+}
+
+/* Social & 1-Click Buttons */
+.social-btn-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.social-btn {
+  flex: 1;
+  height: 44px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 12px;
+  color: #e2e8f0;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.social-btn:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* 1-Click Fast Evaluation Logins */
+.quick-demo-container {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 10px;
+}
+
+.quick-demo-title {
+  font-size: 0.76rem;
+  color: #cbd5e1;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.quick-demo-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.demo-pill-btn {
+  flex: 1;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+
+.demo-pill-btn:hover {
+  background: rgba(51, 65, 85, 0.95);
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (Adaptive Layout)
+   ========================================================================== */
+@media (max-width: 900px) {
+  .lamp-scene {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .lamp-container {
+    width: 260px;
+    height: 280px;
+    margin-bottom: -30px;
+  }
+
+  .lamp-light-beam {
+    top: 90px;
+    left: 130px;
+    width: 380px;
+    height: 380px;
+    transform: rotate(20deg);
+  }
+
+  .cord-hint {
+    top: 180px;
+    left: 170px;
+  }
+
+  .lamp-auth-card {
+    max-width: 520px;
+    width: 100%;
+  }
+}
+
+/* Widescreen Desktop Monitors (1200px+) */
+@media (min-width: 1200px) {
+  .lamp-container {
+    width: 360px;
+    height: 520px;
+  }
+  .lamp-light-beam {
+    top: 150px;
+    left: 220px;
+    width: 780px;
+    height: 560px;
+  }
+  .lamp-auth-card {
+    max-width: 620px;
+    padding: 46px 42px 38px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lamp-stage-wrapper {
+    padding: 24px 16px;
+    border-radius: 16px;
+  }
+
+  .lamp-auth-card {
+    padding: 26px 20px;
+    border-radius: 20px;
+    max-width: 100%;
+  }
+
+  .card-auth-title {
+    font-size: 1.75rem;
+  }
+}
