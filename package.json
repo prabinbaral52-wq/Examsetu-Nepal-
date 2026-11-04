@@ -1,12 +1,13 @@
 {
   "name": "examsetu-nepal",
   "version": "1.0.0",
-  "description": "ExamSetu Nepal - Practice MCQ exams for Lok Sewa, SEE, NEB, Banking, TSC, and Entrance exams.",
+  "description": "ExamSetu Nepal - Practice MCQ exams for Lok Sewa, SEE, NEB, Banking, TSC, and Entrance exams",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "bot": "node bot/telegram-bot.js"
+    "bot": "node bot/telegram-bot.js",
+    "build": "npx prisma db push"
   },
   "keywords": [
     "lok-sewa",
@@ -21,10 +22,12 @@
   "author": "ExamSetu Nepal",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^5.10.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^18.0.9",
     "express": "^5.3.0",
-    "express-session": "^1.19.0"
+    "express-session": "^1.19.0",
+    "prisma": "^5.10.0"
   }
 }
