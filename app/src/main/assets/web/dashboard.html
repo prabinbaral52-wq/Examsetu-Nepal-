@@ -128,12 +128,17 @@
               <i class="ri-user-smile-line"></i>
             </div>
             <div>
-              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                <h1 id="dashUserName" style="font-size:1.8rem;font-weight:800;margin-bottom:2px;">Student Dashboard</h1>
+              <div style="font-size:0.85rem;color:var(--primary);font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">
+                <i class="ri-checkbox-circle-fill"></i> Verified Student Session
+              </div>
+              <h1 id="dashWelcomeHeading" style="font-size:1.85rem;font-weight:900;margin-bottom:6px;line-height:1.2;">
+                Welcome to ExamSetu Nepal, <span id="dashWelcomeName" style="color:var(--primary);">Student</span>! 🇳🇵
+              </h1>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                 <span id="dashUserRoleBadge" class="tag-badge tag-badge-primary">Student</span>
                 <span id="dashLevelBadge" class="tag-badge" style="background:#fef3c7;color:#b45309;font-weight:700;"><i class="ri-shield-star-line"></i> Level 1 Scholar</span>
+                <span id="dashUserEmail" style="color:var(--muted-text);font-size:0.88rem;">student@examsetu.np</span>
               </div>
-              <p id="dashUserEmail" style="color:var(--muted-text);font-size:0.95rem;">Loading account...</p>
             </div>
           </div>
 
@@ -200,170 +205,6 @@
           <div style="font-size:0.85rem;color:var(--muted-text);font-weight:600;margin-bottom:8px;">Wrong-Answer Log</div>
           <div id="statWrongCount" style="font-size:2.2rem;font-weight:900;color:var(--danger);line-height:1;">0</div>
           <div style="font-size:0.8rem;color:var(--muted-text);margin-top:6px;">Mistakes to conquer</div>
-        </div>
-      </div>
-
-      <!-- Achievement Badges Shelf -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px;box-shadow:var(--shadow-sm);margin-bottom:32px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
-          <div>
-            <h2 style="font-size:1.3rem;font-weight:800;display:flex;align-items:center;gap:8px;">
-              <i class="ri-medal-fill" style="color:var(--accent);"></i> Achievement Badges & Milestones
-            </h2>
-            <p style="font-size:0.88rem;color:var(--muted-text);">Earn badges and bonus XP by completing tests and maintaining daily streaks.</p>
-          </div>
-          <span id="badgeProgressLabel" class="tag-badge tag-badge-primary">0 / 4 Unlocked</span>
-        </div>
-
-        <div id="badgesGrid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));gap:16px;">
-          <div style="text-align:center;padding:20px;grid-column:1/-1;color:var(--muted-text);">
-            <i class="ri-loader-4-line ri-spin" style="font-size:1.8rem;color:var(--primary);"></i>
-            <p style="margin-top:6px;">Loading badges...</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- MODULE 9: CURRICULUM INTELLIGENCE & SYLLABUS MASTERY ANALYTICS -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-sm);margin-bottom:32px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:14px;">
-          <div>
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
-              <h2 style="font-size:1.35rem;font-weight:800;margin:0;display:flex;align-items:center;gap:8px;">
-                <i class="ri-git-merge-line" style="color:var(--primary);"></i> Curriculum Intelligence &amp; Syllabus Progress
-              </h2>
-              <span class="tag-badge tag-badge-primary">Module 9 Analytics</span>
-            </div>
-            <p style="font-size:0.88rem;color:var(--muted-text);margin:0;">
-              Tracks your verified chapter completion, weak areas, and cognitive preparation against the official Nepal CDC / NEB / PSC specification grids.
-            </p>
-          </div>
-
-          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:0.8rem;font-weight:700;color:var(--muted-text);">Target Exam:</span>
-              <select id="dashCurriculumExamSelect" class="form-input" style="padding:6px 12px;font-size:0.85rem;font-weight:700;background:var(--surface-alt);" onchange="loadCurriculumAnalytics(this.value)">
-                <option value="see" selected>SEE – Grade 10</option>
-                <option value="neb-11">NEB Grade 11</option>
-                <option value="neb-12">NEB Grade 12</option>
-                <option value="lok-sewa">Lok Sewa Aayog</option>
-                <option value="nrb">Nepal Rastra Bank (NRB)</option>
-                <option value="rbb">Rastriya Banijya Bank (RBB)</option>
-                <option value="adbl">Agricultural Dev Bank (ADBL)</option>
-                <option value="tsc">Teacher Service Commission (TSC)</option>
-              </select>
-            </div>
-            <a href="/planner" class="btn btn-secondary btn-sm" style="color:#d97706;">
-              <i class="ri-calendar-schedule-line"></i> Study Planner
-            </a>
-            <a href="/curriculum" class="btn btn-primary btn-sm">
-              <i class="ri-git-merge-line"></i> View Official Grid
-            </a>
-          </div>
-        </div>
-
-        <!-- Overall Progress Summary Banner -->
-        <div style="background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px;margin-bottom:24px;">
-          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:20px;align-items:center;">
-            <div>
-              <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:var(--muted-text);">Overall Curriculum Preparation</div>
-              <div style="display:flex;align-items:baseline;gap:8px;margin-top:4px;">
-                <span id="curriculumOverallPct" style="font-size:2.2rem;font-weight:900;color:var(--primary);line-height:1;">0%</span>
-                <span id="curriculumChaptersCount" style="font-size:0.9rem;color:var(--muted-text);">0 / 0 chapters mastered</span>
-              </div>
-              <div style="width:100%;height:8px;background:var(--border);border-radius:999px;margin-top:10px;overflow:hidden;">
-                <div id="curriculumOverallBar" style="width:0%;height:100%;background:linear-gradient(90deg, var(--primary), var(--success));transition:width 0.4s ease;"></div>
-              </div>
-            </div>
-
-            <div>
-              <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:var(--muted-text);">Predicted Board Examination Level</div>
-              <div id="curriculumPredictedGrade" style="font-size:1.4rem;font-weight:900;color:#16a34a;margin-top:4px;">
-                Calculating...
-              </div>
-              <p style="font-size:0.75rem;color:var(--muted-text);margin:6px 0 0 0;line-height:1.35;font-style:italic;">
-                * Predicted performance is an estimate based on recent diagnostic activity and does not constitute a guaranteed board result.
-              </p>
-            </div>
-
-            <!-- Chapter Mastery Status Chips -->
-            <div>
-              <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:var(--muted-text);margin-bottom:8px;">Chapter Status Distribution</div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap;" id="curriculumStatusChips">
-                <span class="tag-badge" style="background:#e2e8f0;color:#475569;font-size:0.72rem;">Not Started: <strong id="cntNotStarted">0</strong></span>
-                <span class="tag-badge" style="background:#dbeafe;color:#1d4ed8;font-size:0.72rem;">Learning: <strong id="cntLearning">0</strong></span>
-                <span class="tag-badge" style="background:#fef3c7;color:#b45309;font-size:0.72rem;">Practicing: <strong id="cntPracticing">0</strong></span>
-                <span class="tag-badge" style="background:#fee2e2;color:#b91c1c;font-size:0.72rem;">Revision Due: <strong id="cntRevision">0</strong></span>
-                <span class="tag-badge" style="background:#dcfce7;color:#15803d;font-size:0.72rem;">Mastered: <strong id="cntMastered">0</strong></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Two Columns: Subject-Wise Progress & Diagnosed Weak/Strong Chapters -->
-        <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:24px;" class="curriculum-analytics-grid">
-          <!-- Left: Enrolled Subject Progress Cards -->
-          <div>
-            <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:6px;">
-              <i class="ri-book-read-line" style="color:var(--primary);"></i> Subject-Wise Curriculum Coverage
-            </h3>
-            <div id="curriculumSubjectsContainer" style="display:flex;flex-direction:column;gap:12px;">
-              <div style="text-align:center;padding:24px;color:var(--muted-text);background:var(--surface-alt);border-radius:var(--radius-md);">
-                <i class="ri-loader-4-line ri-spin" style="font-size:1.4rem;"></i> Loading subject breakdowns...
-              </div>
-            </div>
-          </div>
-
-          <!-- Right: Weak Chapters & Mastered Concepts -->
-          <div>
-            <!-- Weak Chapters Alert Card -->
-            <div style="background:var(--surface-alt);border:1px solid #fecaca;border-radius:var(--radius-md);padding:18px;margin-bottom:18px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                <h4 style="font-size:0.95rem;font-weight:800;color:#dc2626;margin:0;display:flex;align-items:center;gap:6px;">
-                  <i class="ri-alert-fill"></i> Weak Chapters (<span id="weakChaptersCount">0</span>)
-                </h4>
-                <span style="font-size:0.72rem;color:var(--muted-text);">&lt; 50% Diagnostic Score</span>
-              </div>
-              <p style="font-size:0.78rem;color:var(--muted-text);margin:0 0 10px 0;">
-                Focus immediate study time on these chapters to maximize score on high-weight specification grid questions.
-              </p>
-              <div id="weakChaptersList" style="display:flex;flex-direction:column;gap:8px;">
-                <!-- Populated dynamically -->
-              </div>
-            </div>
-
-            <!-- Strong Chapters Card -->
-            <div style="background:var(--surface-alt);border:1px solid #bbf7d0;border-radius:var(--radius-md);padding:18px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                <h4 style="font-size:0.95rem;font-weight:800;color:#16a34a;margin:0;display:flex;align-items:center;gap:6px;">
-                  <i class="ri-checkbox-circle-fill"></i> Strong &amp; Mastered Chapters (<span id="strongChaptersCount">0</span>)
-                </h4>
-                <span style="font-size:0.72rem;color:var(--muted-text);">&ge; 80% Mastery</span>
-              </div>
-              <div id="strongChaptersList" style="display:flex;flex-direction:column;gap:8px;">
-                <!-- Populated dynamically -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px;box-shadow:var(--shadow-sm);margin-bottom:32px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
-          <div>
-            <h2 style="font-size:1.3rem;font-weight:800;display:flex;align-items:center;gap:8px;">
-              <i class="ri-trophy-fill" style="color:#f59e0b;"></i> Nepal Aspirants Leaderboard (Top Rankers)
-            </h2>
-            <p style="font-size:0.88rem;color:var(--muted-text);">See where you stand among students preparing for Lok Sewa, Banking, and SEE.</p>
-          </div>
-          <a href="/guru" class="btn btn-primary btn-sm" style="background:var(--guru-gradient);border:none;">
-            <i class="ri-sparkling-fill"></i> Get Guru's Climb Strategy
-          </a>
-        </div>
-
-        <div id="dashLeaderboardList" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:12px;">
-          <div style="text-align:center;padding:20px;grid-column:1/-1;color:var(--muted-text);">
-            <i class="ri-loader-4-line ri-spin" style="font-size:1.6rem;color:var(--primary);"></i>
-            <p style="margin-top:6px;">Loading leaderboard...</p>
-          </div>
         </div>
       </div>
 
@@ -475,15 +316,6 @@
         </div>
 
       </div>
-
-      <!-- In-Page Ad Container -->
-      <div class="ad-container" style="margin-top:30px;">
-        <div class="ad-label">Advertisement</div>
-        <div class="ad-slot-responsive">
-          <span>728x90 Student Dashboard Ad Unit • ExamSetu Nepal</span>
-        </div>
-      </div>
-
     </div>
   </main>
 
@@ -776,94 +608,74 @@
 
     async function loadDashboard() {
       try {
-        const res = await fetch('/api/user/dashboard');
-        const data = await res.json();
+        let res = await fetch('/api/user/dashboard');
+        let data = await res.json();
+
+        if (!data.success) {
+          // Check if user was previously logged in on this device (Persistent Login)
+          const savedUserJson = localStorage.getItem('examsetu_user');
+          if (savedUserJson) {
+            try {
+              const savedUser = JSON.parse(savedUserJson);
+              if (savedUser && (savedUser.id || savedUser.email)) {
+                const autoRes = await fetch('/api/auth/auto-login', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ userId: savedUser.id, email: savedUser.email })
+                });
+                const autoData = await autoRes.json();
+                if (autoData.success && autoData.user) {
+                  localStorage.setItem('examsetu_user', JSON.stringify(autoData.user));
+                  localStorage.setItem('examsetu_logged_in', 'true');
+                  res = await fetch('/api/user/dashboard');
+                  data = await res.json();
+                }
+              }
+            } catch (err) {
+              console.warn('Auto-login error in dashboard:', err);
+            }
+          }
+        }
 
         if (!data.success) {
           window.location.href = '/login?redirect=/dashboard';
           return;
         }
 
-        // Populate User Info
-        document.getElementById('dashUserName').textContent = data.user.name;
-        document.getElementById('dashUserEmail').textContent = data.user.email;
-        document.getElementById('dashUserRoleBadge').textContent = (data.user.role || 'student').toUpperCase();
+        // Save fresh user data
+        if (data.user) {
+          localStorage.setItem('examsetu_user', JSON.stringify(data.user));
+          localStorage.setItem('examsetu_logged_in', 'true');
+        }
 
-        const xp = data.stats.totalXp || 50;
+        // Populate User Info
+        const studentName = data.user.name || 'Student';
+        const welcomeElem = document.getElementById('dashWelcomeName');
+        if (welcomeElem) welcomeElem.textContent = studentName;
+        const nameElem = document.getElementById('dashUserName');
+        if (nameElem) nameElem.textContent = studentName;
+        const emailElem = document.getElementById('dashUserEmail');
+        if (emailElem) emailElem.textContent = data.user.email || '';
+        const roleElem = document.getElementById('dashUserRoleBadge');
+        if (roleElem) roleElem.textContent = (data.user.role || 'student').toUpperCase();
+
+        const xp = data.stats?.totalXp || 50;
         const level = Math.floor(xp / 100) + 1;
-        document.getElementById('dashLevelBadge').innerHTML = `<i class="ri-shield-star-line"></i> Level ${level} Scholar`;
-        document.getElementById('statTotalXp').textContent = `${xp} XP`;
-        document.getElementById('statStreakDays').textContent = `${data.stats.currentStreak || 1} Day${(data.stats.currentStreak || 1) > 1 ? 's' : ''}`;
+        const levelElem = document.getElementById('dashLevelBadge');
+        if (levelElem) levelElem.innerHTML = `<i class="ri-shield-star-line"></i> Level ${level} Scholar`;
+        const xpElem = document.getElementById('statTotalXp');
+        if (xpElem) xpElem.textContent = `${xp} XP`;
+        const streakElem = document.getElementById('statStreakDays');
+        if (streakElem) streakElem.textContent = `${data.stats?.currentStreak || 1} Day${(data.stats?.currentStreak || 1) > 1 ? 's' : ''}`;
 
         // Populate Stats
-        document.getElementById('statTestsTaken').textContent = data.stats.testsTaken;
-        document.getElementById('statAvgScore').textContent = `${data.stats.averageScore}%`;
-        document.getElementById('statBestScore').textContent = `${data.stats.bestScore}%`;
-        document.getElementById('statBookmarks').textContent = data.stats.bookmarksCount;
-        document.getElementById('statWrongCount').textContent = data.stats.wrongNotebookCount || 0;
-        document.getElementById('tabBmCount').textContent = data.stats.bookmarksCount;
-        document.getElementById('tabWrongCount').textContent = data.stats.wrongNotebookCount || 0;
-
-        // Render Badges
-        const badgesContainer = document.getElementById('badgesGrid');
-        if (data.allBadges && data.allBadges.length > 0) {
-          const earnedCodes = new Set((data.badges || []).map(b => b.code));
-          document.getElementById('badgeProgressLabel').textContent = `${earnedCodes.size} / ${data.allBadges.length} Unlocked`;
-
-          badgesContainer.innerHTML = data.allBadges.map(b => {
-            const isEarned = earnedCodes.has(b.code);
-            return `
-              <div style="background:${isEarned ? 'var(--surface)' : 'var(--surface-alt)'};border:1px solid ${isEarned ? 'var(--accent)' : 'var(--border)'};border-radius:var(--radius-md);padding:16px;display:flex;align-items:center;gap:14px;opacity:${isEarned ? '1' : '0.65'};">
-                <div style="width:48px;height:48px;border-radius:50%;background:${isEarned ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'var(--border)'};color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">
-                  <i class="${b.icon || 'ri-medal-line'}"></i>
-                </div>
-                <div>
-                  <div style="display:flex;align-items:center;gap:6px;">
-                    <strong style="font-size:0.95rem;">${escapeHTML(b.name)}</strong>
-                    ${isEarned ? '<span style="font-size:0.75rem;color:var(--success);"><i class="ri-checkbox-circle-fill"></i></span>' : '<span style="font-size:0.7rem;color:var(--muted-text);"><i class="ri-lock-line"></i></span>'}
-                  </div>
-                  <p style="font-size:0.8rem;color:var(--muted-text);margin:2px 0 4px 0;">${escapeHTML(b.description || '')}</p>
-                  <span style="font-size:0.75rem;font-weight:700;color:var(--accent);">+${b.xp_reward || 50} XP</span>
-                </div>
-              </div>
-            `;
-          }).join('');
-        }
-
-        // Render Weekly Leaderboard
-        const lbContainer = document.getElementById('dashLeaderboardList');
-        if (data.leaderboard && data.leaderboard.length > 0) {
-          lbContainer.innerHTML = data.leaderboard.slice(0, 6).map((u, idx) => {
-            const rank = idx + 1;
-            const isYou = u.id === data.user?.id;
-            return `
-              <div style="background:${isYou ? 'rgba(99, 102, 241, 0.12)' : 'var(--surface-alt)'};border:1px solid ${isYou ? 'var(--guru-primary)' : 'var(--border)'};border-radius:var(--radius-md);padding:14px;display:flex;align-items:center;justify-content:space-between;">
-                <div style="display:flex;align-items:center;gap:10px;">
-                  <div style="width:30px;height:30px;border-radius:50%;background:${rank === 1 ? '#fbbf24' : rank === 2 ? '#cbd5e1' : rank === 3 ? '#fdba74' : 'var(--surface)'};color:${rank === 1 ? '#78350f' : '#0f172a'};font-weight:900;display:flex;align-items:center;justify-content:center;font-size:0.85rem;border:1px solid var(--border);">
-                    ${rank}
-                  </div>
-                  <div>
-                    <strong style="font-size:0.92rem;">${escapeHTML(u.name.split(' (')[0])}</strong> ${isYou ? '<span class="tag-badge tag-badge-primary" style="font-size:0.65rem;margin-left:4px;">You</span>' : ''}
-                    <div style="font-size:0.75rem;color:var(--muted-text);">${u.current_streak || 1} day streak 🔥</div>
-                  </div>
-                </div>
-                <div style="text-align:right;">
-                  <span style="font-size:1.1rem;font-weight:900;color:var(--accent);">${u.total_xp}</span>
-                  <span style="font-size:0.75rem;color:var(--muted-text);">XP</span>
-                </div>
-              </div>
-            `;
-          }).join('');
-        } else {
-          lbContainer.innerHTML = `
-            <div style="grid-column:1/-1;text-align:center;padding:26px 16px;background:var(--surface-alt);border:1px dashed var(--border);border-radius:var(--radius-lg);color:var(--muted-text);">
-              <i class="ri-trophy-line" style="font-size:2.2rem;color:var(--accent);display:block;margin-bottom:8px;"></i>
-              <strong style="font-size:0.95rem;color:var(--text);">Leaderboard Ready for Your First Score</strong>
-              <p style="font-size:0.84rem;margin:4px 0 14px 0;">Complete mock tests and practice sets to earn XP and record your score!</p>
-              <a href="/exams" class="btn btn-primary btn-sm"><i class="ri-play-line"></i> Take a Mock Test</a>
-            </div>
-          `;
-        }
+        if (document.getElementById('statTestsTaken')) document.getElementById('statTestsTaken').textContent = data.stats?.testsTaken ?? 0;
+        if (document.getElementById('statAvgScore')) document.getElementById('statAvgScore').textContent = `${data.stats?.averageScore ?? 0}%`;
+        if (document.getElementById('statBestScore')) document.getElementById('statBestScore').textContent = `${data.stats?.bestScore ?? 0}%`;
+        if (document.getElementById('statBookmarks')) document.getElementById('statBookmarks').textContent = data.stats?.bookmarksCount ?? 0;
+        if (document.getElementById('statWrongCount')) document.getElementById('statWrongCount').textContent = data.stats?.wrongNotebookCount ?? 0;
+        if (document.getElementById('tabBmCount')) document.getElementById('tabBmCount').textContent = data.stats?.bookmarksCount ?? 0;
+        if (document.getElementById('tabWrongCount')) document.getElementById('tabWrongCount').textContent = data.stats?.wrongNotebookCount ?? 0;
 
         // Render Recent Tests
         const testsContainer = document.getElementById('recentTestsList');
@@ -1616,9 +1428,33 @@
       openDashGenMcq(activeDashViewingBook.id);
     }
 
+  <!-- Ambition Guru Mobile Bottom App Bar -->
+  <nav class="mobile-bottom-bar" aria-label="Mobile Bottom Navigation">
+    <a href="/" class="bottom-nav-item">
+      <i class="ri-home-5-line"></i>
+      <span>Home</span>
+    </a>
+    <a href="#librarySection" class="bottom-nav-item">
+      <i class="ri-book-2-line"></i>
+      <span>Library</span>
+    </a>
+    <a href="/exams" class="bottom-nav-item">
+      <i class="ri-file-list-3-line"></i>
+      <span>Tests</span>
+    </a>
+    <a href="/guru" class="bottom-nav-item">
+      <i class="ri-sparkling-line"></i>
+      <span>Guru AI</span>
+    </a>
+    <a href="/dashboard" class="bottom-nav-item active">
+      <i class="ri-user-3-fill"></i>
+      <span>Dashboard</span>
+    </a>
+  </nav>
+
+  <script>
     document.addEventListener('DOMContentLoaded', () => {
       loadDashboard();
-      loadCurriculumAnalytics('see');
       loadDashBooks();
     });
   </script>

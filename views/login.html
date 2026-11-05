@@ -9,6 +9,13 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/responsive.css">
   <link rel="stylesheet" href="/css/lamp-auth.css">
+  <script>
+    try {
+      if (localStorage.getItem('examsetu_user') && !window.location.search.includes('force=true')) {
+        window.location.replace('/dashboard');
+      }
+    } catch (e) {}
+  </script>
 </head>
 <body>
 

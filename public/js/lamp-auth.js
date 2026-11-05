@@ -509,6 +509,10 @@
           const data = await res.json();
 
           if (data.success) {
+            if (data.user) {
+              localStorage.setItem('examsetu_user', JSON.stringify(data.user));
+              localStorage.setItem('examsetu_logged_in', 'true');
+            }
             if (window.ExamSetu && window.ExamSetu.showToast) {
               window.ExamSetu.showToast(
                 isGeneralSignUp ? 'Account created! Welcome to ExamSetu.' : 'Welcome back! Login successful.',
@@ -518,7 +522,7 @@
             const redirect = (data.user && data.user.role === 'admin') ? '/admin' : '/dashboard';
             setTimeout(() => {
               window.location.href = redirect;
-            }, 500);
+            }, 300);
           } else {
             if (window.ExamSetu && window.ExamSetu.showToast) {
               window.ExamSetu.showToast(data.message || 'Authentication failed', 'danger');

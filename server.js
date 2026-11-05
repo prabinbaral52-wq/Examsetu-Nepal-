@@ -46,7 +46,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: false, // works seamlessly on all proxies and local environments
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      maxAge: 365 * 24 * 60 * 60 * 1000 // 365 days persistent login
     }
   })
 );

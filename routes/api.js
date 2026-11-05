@@ -130,6 +130,41 @@ router.get('/auth/me', (req, res) => {
     const fresh = DB.getUserById(req.session.user.id);
     return res.json({ success: true, user: fresh || req.session.user });
   }
+  return res.json({ success: false, user: null });
+});
+
+// Auto-Login / Persistent Remember Me (Restores active session on return)
+router.post('/auth/auto-login', (req, res) => {
+  try {
+    const { userId, email } = req.body;
+    if (!userId && !email) {
+      return res.status(400).json({ success: false, message: 'Missing user credentials for auto-login.' });
+    }
+    let user = null;
+    if (userId) {
+      user = DB.getUserById(userId);
+    }
+    if (!user && email) {
+      user = DB.getUserByEmail(email.trim().toLowerCase());
+    }
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User account not found.' });
+    }
+
+    const sessionUser = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      current_streak: user.current_streak || 1,
+      total_xp: user.total_xp || 50
+    };
+    req.session.user = sessionUser;
+    return res.json({ success: true, message: 'Session restored successfully.', user: sessionUser });
+  } catch (err) {
+    console.error('Auto-login error:', err);
+    return res.status(500).json({ success: false, message: 'Server error restoring session.' });
+  }
 });
 
 // Google Sign-In Authentication

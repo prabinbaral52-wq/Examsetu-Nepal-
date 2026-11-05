@@ -31,12 +31,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await res.json();
 
         if (data.success) {
+          if (data.user) {
+            localStorage.setItem('examsetu_user', JSON.stringify(data.user));
+            localStorage.setItem('examsetu_logged_in', 'true');
+          }
           ExamSetu.showToast('Welcome back! Login successful.', 'success');
           const urlParams = new URLSearchParams(window.location.search);
           const redirect = urlParams.get('redirect') || (data.user.role === 'admin' ? '/admin' : '/dashboard');
           setTimeout(() => {
             ExamSetu.navigateTo(redirect);
-          }, 400);
+          }, 300);
         } else {
           ExamSetu.showToast(data.message || 'Login failed', 'danger');
           submitBtn.disabled = false;
@@ -81,10 +85,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await res.json();
 
         if (data.success) {
+          if (data.user) {
+            localStorage.setItem('examsetu_user', JSON.stringify(data.user));
+            localStorage.setItem('examsetu_logged_in', 'true');
+          }
           ExamSetu.showToast('Account created successfully! Welcome.', 'success');
           setTimeout(() => {
             ExamSetu.navigateTo('/dashboard');
-          }, 400);
+          }, 300);
         } else {
           ExamSetu.showToast(data.message || 'Registration failed.', 'danger');
           submitBtn.disabled = false;

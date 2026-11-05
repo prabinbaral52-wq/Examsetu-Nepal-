@@ -8,17 +8,54 @@ const ExamSetu = {
     this.initTheme();
     this.initMobileMenu();
     this.checkAuthStatus();
-    this.removeMobileNav();
+    this.initMobileBottomBar();
   },
 
-  // Web-First: remove mobile bottom nav bar if dynamically present
-  removeMobileNav() {
-    try {
-      const bars = document.querySelectorAll('.mobile-bottom-nav');
-      bars.forEach(b => b.remove());
-    } catch (e) {
-      // ignore
-    }
+  // Ambition Guru-Style Mobile Bottom App Bar
+  initMobileBottomBar() {
+    if (document.querySelector('.mobile-bottom-bar')) return;
+    const isFileProto = window.location.protocol === 'file:';
+    const currentPath = window.location.pathname;
+
+    const nav = document.createElement('nav');
+    nav.className = 'mobile-bottom-bar';
+    nav.setAttribute('aria-label', 'Mobile Bottom Navigation');
+
+    const homeUrl = isFileProto ? 'index.html' : '/';
+    const libUrl = isFileProto ? 'dashboard.html#librarySection' : '/dashboard#librarySection';
+    const examsUrl = isFileProto ? 'exams.html' : '/exams';
+    const guruUrl = isFileProto ? 'guru.html' : '/guru';
+    const dashUrl = isFileProto ? 'dashboard.html' : '/dashboard';
+
+    const isHome = currentPath === '/' || currentPath.endsWith('index.html') || currentPath === '';
+    const isLib = window.location.hash === '#librarySection';
+    const isExams = currentPath.includes('/exams') || currentPath.includes('/practice') || currentPath.includes('/test');
+    const isGuru = currentPath.includes('/guru');
+    const isDash = (currentPath.includes('/dashboard') || currentPath.includes('/admin')) && !isLib;
+
+    nav.innerHTML = `
+      <a href="${homeUrl}" class="bottom-nav-item ${isHome ? 'active' : ''}">
+        <i class="ri-home-5-${isHome ? 'fill' : 'line'}"></i>
+        <span>Home</span>
+      </a>
+      <a href="${libUrl}" class="bottom-nav-item ${isLib ? 'active' : ''}">
+        <i class="ri-book-2-${isLib ? 'fill' : 'line'}"></i>
+        <span>Library</span>
+      </a>
+      <a href="${examsUrl}" class="bottom-nav-item ${isExams ? 'active' : ''}">
+        <i class="ri-file-list-3-${isExams ? 'fill' : 'line'}"></i>
+        <span>Tests</span>
+      </a>
+      <a href="${guruUrl}" class="bottom-nav-item ${isGuru ? 'active' : ''}">
+        <i class="ri-sparkling-${isGuru ? 'fill' : 'line'}"></i>
+        <span>Guru AI</span>
+      </a>
+      <a href="${dashUrl}" class="bottom-nav-item ${isDash ? 'active' : ''}">
+        <i class="ri-user-3-${isDash ? 'fill' : 'line'}"></i>
+        <span>Dashboard</span>
+      </a>
+    `;
+    document.body.appendChild(nav);
   },
 
   // Dark/Light Theme Handler
@@ -57,31 +94,91 @@ const ExamSetu = {
     }
   },
 
-  // User Authentication State
+  // User Authentication State with Persistent Auto-Login (Remember Me)
   async checkAuthStatus() {
     try {
-      const res = await fetch('/api/auth/me');
-      const data = await res.json();
-      const authSlot = document.getElementById('navAuthSlot');
+      let res = await fetch('/api/auth/me');
+      let data = await res.json();
 
+      // If server session is not active, attempt auto-login using persisted local credentials
+      if (!data.success || !data.user) {
+        const savedUserJson = localStorage.getItem('examsetu_user');
+        if (savedUserJson) {
+          try {
+            const savedUser = JSON.parse(savedUserJson);
+            if (savedUser && (savedUser.id || savedUser.email)) {
+              const autoRes = await fetch('/api/auth/auto-login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: savedUser.id, email: savedUser.email })
+              });
+              const autoData = await autoRes.json();
+              if (autoData.success && autoData.user) {
+                data = autoData;
+                localStorage.setItem('examsetu_user', JSON.stringify(autoData.user));
+                localStorage.setItem('examsetu_logged_in', 'true');
+              }
+            }
+          } catch (err) {
+            console.warn('Auto-login parse error:', err);
+          }
+        }
+      } else {
+        localStorage.setItem('examsetu_user', JSON.stringify(data.user));
+        localStorage.setItem('examsetu_logged_in', 'true');
+      }
+
+      // If user is already authenticated and visits login/register page, auto-redirect to dashboard
+      const currentPath = window.location.pathname;
+      if (data.success && data.user && (currentPath === '/login' || currentPath === '/register' || currentPath.endsWith('login.html') || currentPath.endsWith('register.html'))) {
+        window.location.href = data.user.role === 'admin' ? '/admin' : '/dashboard';
+        return;
+      }
+
+      const authSlot = document.getElementById('navAuthSlot');
       if (authSlot) {
         if (data.success && data.user) {
           const isAdmin = data.user.role === 'admin';
           authSlot.innerHTML = `
-            <div style="display:flex;align-items:center;gap:10px;">
-              <a href="${isAdmin ? '/admin' : '/dashboard'}" class="btn btn-secondary btn-sm" title="Go to Dashboard">
-                <i class="ri-user-smile-line"></i> ${escapeHTML(data.user.name.split(' ')[0])}
-                ${isAdmin ? '<span class="tag-badge tag-badge-primary" style="margin-left:4px;font-size:0.7rem;">Admin</span>' : ''}
+            <div style="display:flex;align-items:center;gap:8px;">
+              <a href="${isAdmin ? '/admin' : '/dashboard'}" class="btn btn-secondary btn-sm" style="display:inline-flex;align-items:center;gap:6px;font-weight:700;">
+                <i class="ri-user-smile-line" style="color:var(--primary);"></i> <span>${escapeHTML(data.user.name.split(' ')[0])}</span>
+                ${isAdmin ? '<span class="tag-badge tag-badge-primary" style="margin-left:2px;font-size:0.68rem;padding:2px 6px;">Admin</span>' : ''}
               </a>
-              <button onclick="ExamSetu.logout()" class="btn btn-outline btn-sm" title="Sign Out">
+              <button onclick="ExamSetu.logout()" class="btn btn-outline btn-sm" title="Sign Out" style="padding:6px 10px;">
                 <i class="ri-logout-box-r-line"></i>
               </button>
             </div>
           `;
         } else {
           authSlot.innerHTML = `
-            <a href="/login" class="btn btn-secondary btn-sm">Login</a>
-            <a href="/register" class="btn btn-primary btn-sm">Join Free</a>
+            <a href="/login" class="btn btn-secondary btn-sm" style="font-weight:700;">Login</a>
+            <a href="/register" class="btn btn-primary btn-sm" style="font-weight:700;">Join Free</a>
+          `;
+        }
+      }
+
+      // Update Home Screen Dynamic Welcome Banner if present
+      const homeGreeting = document.getElementById('homeUserGreeting');
+      if (homeGreeting) {
+        if (data.success && data.user) {
+          homeGreeting.innerHTML = `
+            <div style="background:var(--surface-alt);border:1px solid var(--border);border-radius:16px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px;box-shadow:var(--shadow-sm);">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#3b82f6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;box-shadow:0 3px 8px rgba(37,99,235,0.3);">
+                  ${escapeHTML(data.user.name.charAt(0).toUpperCase())}
+                </div>
+                <div>
+                  <div style="font-size:0.82rem;color:var(--muted-text);font-weight:600;">Welcome back,</div>
+                  <div style="font-size:1.15rem;font-weight:800;color:var(--text);">${escapeHTML(data.user.name)}</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <a href="/dashboard" class="btn btn-primary btn-sm" style="font-weight:700;">
+                  <i class="ri-dashboard-line"></i> Go to Dashboard
+                </a>
+              </div>
+            </div>
           `;
         }
       }
@@ -90,19 +187,20 @@ const ExamSetu = {
     }
   },
 
-  // Logout
+  // Logout & Clean Persistence
   async logout() {
     try {
-      const res = await fetch('/api/auth/logout', { method: 'POST' });
-      const data = await res.json();
-      if (data.success) {
-        this.showToast('Logged out successfully', 'success');
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 500);
-      }
+      localStorage.removeItem('examsetu_user');
+      localStorage.removeItem('examsetu_logged_in');
+      await fetch('/api/auth/logout', { method: 'POST' });
+      this.showToast('Logged out successfully', 'success');
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 400);
     } catch (err) {
-      this.showToast('Error logging out', 'danger');
+      localStorage.removeItem('examsetu_user');
+      localStorage.removeItem('examsetu_logged_in');
+      window.location.href = '/';
     }
   },
 

@@ -354,3 +354,131 @@ button, input, select, textarea, a.btn {
 .btn {
   min-height: 44px;
 }
+
+/* ==========================================================================
+   Ambition Guru Mobile App Experience (Nepal Exam Prep Standards)
+   ========================================================================== */
+
+/* Fixed Mobile Bottom Bar */
+.mobile-bottom-bar {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  body {
+    padding-bottom: 76px !important;
+  }
+
+  .mobile-bottom-bar {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 62px !important;
+    background: var(--surface) !important;
+    border-top: 1px solid var(--border) !important;
+    box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.08) !important;
+    z-index: 9999 !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    padding: 0 4px !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  }
+
+  .bottom-nav-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: var(--muted-text) !important;
+    text-decoration: none !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    gap: 2px !important;
+    padding: 6px 8px !important;
+    border-radius: 12px !important;
+    transition: all 0.15s ease !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    text-align: center !important;
+  }
+
+  .bottom-nav-item i {
+    font-size: 1.35rem !important;
+    line-height: 1 !important;
+  }
+
+  .bottom-nav-item.active {
+    color: var(--primary) !important;
+  }
+
+  .bottom-nav-item:active {
+    transform: scale(0.95);
+  }
+
+  /* Ambition Guru Mobile Welcome Card */
+  .mobile-welcome-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 20px !important;
+    padding: 24px 20px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+    text-align: center !important;
+    margin-bottom: 24px !important;
+  }
+
+  .mobile-brand-emblem {
+    width: 72px !important;
+    height: 72px !important;
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%) !important;
+    color: #ffffff !important;
+    border-radius: 20px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 2.2rem !important;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3) !important;
+    margin-bottom: 14px !important;
+  }
+
+  .mobile-launcher-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 14px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .mobile-launcher-card {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 16px !important;
+    padding: 18px 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    color: var(--text) !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: transform 0.15s ease, border-color 0.15s ease !important;
+  }
+
+  .mobile-launcher-card:active {
+    transform: scale(0.97) !important;
+    border-color: var(--primary) !important;
+  }
+
+  .mobile-launcher-icon {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.5rem !important;
+    margin-bottom: 10px !important;
+  }
+}
+

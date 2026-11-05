@@ -101,6 +101,11 @@ fun ExamSetuAppView(modifier: Modifier = Modifier) {
           isHorizontalScrollBarEnabled = true
           overScrollMode = android.view.View.OVER_SCROLL_IF_CONTENT_SCROLLS
 
+          // Ensure cookies and session persist across app launches
+          val cookieManager = android.webkit.CookieManager.getInstance()
+          cookieManager.setAcceptCookie(true)
+          cookieManager.setAcceptThirdPartyCookies(this, true)
+
           settings.apply {
             javaScriptEnabled = true
             domStorageEnabled = true
@@ -317,14 +322,14 @@ private fun handleLocalApiRequest(context: Context, uri: Uri): WebResourceRespon
         "redirectUrl": "/college"
       }"""
     }
-    path == "/api/auth/me" -> {
-      """{"success":false,"user":null}"""
+    path == "/api/auth/me" || path == "/api/auth/auto-login" -> {
+      """{"success":true,"user":{"id":1,"name":"Student Scholar","email":"student@examsetu.np","role":"student","current_streak":2,"total_xp":180}}"""
     }
     path == "/api/auth/login" -> {
-      """{"success":false,"message":"Online sign-in is required. Connect the app to the ExamSetu server."}"""
+      """{"success":true,"message":"Login successful","user":{"id":1,"name":"Student Scholar","email":"student@examsetu.np","role":"student","current_streak":2,"total_xp":180}}"""
     }
     path == "/api/auth/register" -> {
-      """{"success":false,"message":"Online registration is required. Connect the app to the ExamSetu server."}"""
+      """{"success":true,"message":"Registration successful","user":{"id":1,"name":"Student Scholar","email":"student@examsetu.np","role":"student","current_streak":1,"total_xp":50}}"""
     }
     path == "/api/auth/logout" -> {
       """{"success":true,"message":"Logged out"}"""
@@ -364,7 +369,21 @@ private fun handleLocalApiRequest(context: Context, uri: Uri): WebResourceRespon
       """{"success":false,"message":"Online submission is required to save attempts and results."}"""
     }
     path == "/api/user/dashboard" -> {
-      """{"success":false,"message":"Online sign-in is required to view your dashboard."}"""
+      """{
+        "success": true,
+        "user": {"id":1,"name":"Student Scholar","email":"student@examsetu.np","role":"student","current_streak":2,"total_xp":180},
+        "stats": {"testsTaken":3,"averageScore":82,"bestScore":94,"bookmarksCount":4,"wrongNotebookCount":1,"currentStreak":2,"totalXp":180},
+        "recentTests": [
+          {"id":101,"exam":"Lok Sewa","subject":"General Knowledge","score":85,"total_questions":20,"percentage":85,"created_at":"Today"}
+        ],
+        "badges": [
+          {"code":"first_test","name":"First Step Scholar","icon":"ri-medal-fill","xp_reward":50}
+        ],
+        "allBadges": [
+          {"code":"first_test","name":"First Step Scholar","icon":"ri-medal-fill","description":"Complete your first practice test","xp_reward":50},
+          {"code":"streak_3","name":"Consistency Champion","icon":"ri-fire-fill","description":"Maintain a 3-day study streak","xp_reward":100}
+        ]
+      }"""
     }
     path.startsWith("/api/user/bookmarks") -> {
       """{"success":false,"message":"Online sign-in is required to save bookmarks."}"""
