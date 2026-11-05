@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Student Dashboard & Gamification - ExamSetu Nepal</title>
   <meta name="description" content="View your tests taken, average score, daily study streak, earned badges, wrong answer notebook, and saved bookmarks.">
   <link rel="stylesheet" href="/css/remixicon.css">
@@ -854,6 +854,15 @@
               </div>
             `;
           }).join('');
+        } else {
+          lbContainer.innerHTML = `
+            <div style="grid-column:1/-1;text-align:center;padding:26px 16px;background:var(--surface-alt);border:1px dashed var(--border);border-radius:var(--radius-lg);color:var(--muted-text);">
+              <i class="ri-trophy-line" style="font-size:2.2rem;color:var(--accent);display:block;margin-bottom:8px;"></i>
+              <strong style="font-size:0.95rem;color:var(--text);">Leaderboard Ready for Your First Score</strong>
+              <p style="font-size:0.84rem;margin:4px 0 14px 0;">Complete mock tests and practice sets to earn XP and record your score!</p>
+              <a href="/exams" class="btn btn-primary btn-sm"><i class="ri-play-line"></i> Take a Mock Test</a>
+            </div>
+          `;
         }
 
         // Render Recent Tests

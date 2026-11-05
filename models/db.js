@@ -557,13 +557,15 @@ function initDB() {
   const existingStudent = db.prepare('SELECT * FROM users WHERE email = ?').get(studentEmail);
   if (!existingStudent) {
     const studentHash = bcrypt.hashSync('student123', 10);
-    db.prepare('INSERT INTO users (name, email, password_hash, role, total_xp, current_streak) VALUES (?, ?, ?, ?, 120, 3)').run(
-      'Aayush Shrestha (Student)',
+    db.prepare('INSERT INTO users (name, email, password_hash, role, total_xp, current_streak) VALUES (?, ?, ?, ?, 120, 1)').run(
+      'Demo Student',
       studentEmail,
       studentHash,
       'student'
     );
     console.log(`[DB] Created demo student account: ${studentEmail}`);
+  } else {
+    db.prepare("UPDATE users SET name = 'Demo Student' WHERE email = ? AND name LIKE '%Aayush%'").run(studentEmail);
   }
 
   // Seed questions if empty

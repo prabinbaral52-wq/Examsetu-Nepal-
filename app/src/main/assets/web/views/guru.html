@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>AI Exam Guru - Gemini Powered Leaderboard Mentor | ExamSetu Nepal</title>
   <meta name="description" content="Personalized AI Exam Guru powered by Google Gemini. Get custom study plans, instant syllabus clarifications, and strategic advice tailored to your competitive leaderboard rank in Lok Sewa, Banking, and SEE.">
   <link rel="stylesheet" href="/css/remixicon.css">
@@ -107,18 +107,18 @@
           <!-- Rank Banner -->
           <div class="guru-rank-banner">
             <div style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.5px; opacity:0.85; margin-bottom:4px;">
-              Competitive Position
+              Your Learning Profile
             </div>
             <div style="display:flex; align-items:baseline; gap:8px;">
-              <span class="guru-rank-number" id="guruUserRank">#3</span>
-              <span style="font-size:1rem; opacity:0.9;">in Nepal (<span id="guruTotalStudents">142</span> aspirants)</span>
+              <span class="guru-rank-number" id="guruUserRank">#1</span>
+              <span style="font-size:1rem; opacity:0.9;">Scholar Status</span>
             </div>
             <div style="display:flex; gap:12px; margin-top:12px; font-size:0.82rem; font-weight:700;">
               <span style="display:flex; align-items:center; gap:4px; color:#fbbf24;">
-                <i class="ri-copper-coin-fill"></i> <span id="guruUserXp">450</span> XP
+                <i class="ri-copper-coin-fill"></i> <span id="guruUserXp">120</span> XP
               </span>
               <span style="display:flex; align-items:center; gap:4px; color:#f87171;">
-                <i class="ri-fire-fill"></i> <span id="guruUserStreak">3</span> Day Streak
+                <i class="ri-fire-fill"></i> <span id="guruUserStreak">1</span> Day Streak
               </span>
             </div>
           </div>
@@ -317,12 +317,12 @@
           document.getElementById('guruUserStreak').textContent = data.user?.current_streak || 3;
           document.getElementById('guruTotalStudents').textContent = data.totalStudents || 142;
 
-          // Render Contenders
+          // Render Contenders / Leaderboard
           const compList = document.getElementById('guruCompetitorsList');
           if (data.leaderboard && data.leaderboard.length > 0) {
             compList.innerHTML = data.leaderboard.slice(0, 5).map((u, idx) => {
               const rank = idx + 1;
-              const isYou = rank === currentRank;
+              const isYou = u.id === data.user?.id;
               return `
                 <div class="competitor-row ${isYou ? 'current-user-row' : ''}">
                   <div style="display:flex; align-items:center; gap:8px;">
@@ -335,27 +335,27 @@
                 </div>
               `;
             }).join('');
+          } else {
+            compList.innerHTML = `
+              <div style="text-align:center; padding:12px; color:var(--muted-text); font-size:0.84rem;">
+                No other aspirants ranked yet. Take mock tests to set the record!
+              </div>
+            `;
           }
 
           // Gap text
-          const target = data.targetCompetitor;
           const gapEl = document.getElementById('guruGapText');
-          if (target) {
-            gapEl.innerHTML = `You are currently <strong>${currentXpGap} XP away</strong> from overtaking <strong>${escapeHTML(target.name.split(' (')[0])}</strong> for Rank #${currentRank - 1}. Complete 2 drills today to claim it!`;
-          } else {
-            gapEl.innerHTML = `🌟 <strong>Congratulations!</strong> You hold Rank #1 across Nepal! Maintain your daily study streak to protect your crown.`;
-          }
+          gapEl.innerHTML = `🌟 Complete practice questions and syllabus mock tests daily to earn XP and strengthen your board exam preparation!`;
 
           // Personalized initial message
           const msgContainer = document.getElementById('guruMessagesContainer');
-          const firstName = (data.user?.name || 'Prabin').split(' ')[0];
+          const firstName = data.user?.name ? data.user.name.split(' ')[0] : 'Learner';
           msgContainer.innerHTML = `
             <div class="chat-msg msg-ai">
               <div class="chat-avatar"><i class="ri-sparkling-fill"></i></div>
               <div class="chat-bubble">
                 <p><strong>नमस्ते ${escapeHTML(firstName)}!</strong> I am your <strong>AI Exam Guru (परीक्षा गुरु)</strong>.</p>
-                <p>I see you are holding <strong>Rank #${currentRank}</strong> with <strong>${currentUserXp} XP</strong> on Nepal's leaderboard. You are just <strong>${currentXpGap} XP</strong> away from climbing to the next rank!</p>
-                <p>Ask me any question from the Lok Sewa, Banking, or SEE syllabus, or tap one of the chips below for instant strategy!</p>
+                <p>I am tracking your syllabus preparation and mock test diagnostics. Ask me any question from the Lok Sewa, Banking, SEE, or NEB (+2) syllabus, or tap one of the chips below for instant strategy!</p>
               </div>
             </div>
           `;

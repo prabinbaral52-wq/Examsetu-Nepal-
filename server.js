@@ -72,13 +72,7 @@ const sendView = (res, viewFile) => {
 };
 
 // Website Page Routes
-// Root URL: If not logged in, immediately show the interactive login & sign-up panel directly
-app.get('/', (req, res) => {
-  if (!req.session || !req.session.user) {
-    return sendView(res, 'login.html');
-  }
-  return sendView(res, 'index.html');
-});
+app.get('/', (req, res) => sendView(res, 'index.html'));
 app.get('/home', (req, res) => sendView(res, 'index.html'));
 app.get('/curriculum', (req, res) => sendView(res, 'curriculum.html'));
 app.get('/planner', (req, res) => sendView(res, 'planner.html'));

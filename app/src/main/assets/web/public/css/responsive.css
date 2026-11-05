@@ -1,170 +1,356 @@
 /* ==========================================================================
-   ExamSetu Nepal - Responsive Stylesheet
-   Mobile-First Breakpoints & Adaptive Layouts
+   ExamSetu Nepal - Mobile-First Responsive Stylesheet
+   Full fluid adaptation for smartphones, foldables, tablets, and desktops.
+   Guarantees 100% mobile-friendly view with no horizontal overflow.
    ========================================================================== */
 
-/* Large Tablets & Small Laptops (Max 1024px) */
-@media (max-width: 1024px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  .hero-visual {
-    max-width: 540px;
-    margin: 0 auto;
-  }
-
-  .footer-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
-
-  .test-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .palette-card {
-    position: static;
-    margin-top: 24px;
-  }
+/* 1. Global Viewport & Reset */
+html, body {
+  min-width: 0 !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+  overflow-x: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  -webkit-text-size-adjust: 100%;
 }
 
-/* Tablets (Max 768px) */
-@media (max-width: 768px) {
-  :root {
-    --header-height: 64px;
-  }
+* {
+  box-sizing: border-box;
+}
 
-  .hero-title {
-    font-size: 2.3rem;
-  }
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
 
-  .hero-subtitle-np {
-    font-size: 1.1rem;
-  }
+/* 2. Fluid Containers */
+.container {
+  width: 100% !important;
+  max-width: 1240px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: clamp(14px, 4vw, 28px) !important;
+  padding-right: clamp(14px, 4vw, 28px) !important;
+}
 
-  .hero-description {
-    font-size: 1rem;
-  }
+.container-fluid {
+  width: 100% !important;
+  padding-left: clamp(12px, 3vw, 24px) !important;
+  padding-right: clamp(12px, 3vw, 24px) !important;
+}
 
-  .section-title {
-    font-size: 1.8rem;
+/* 3. Top Navigation Bar (Mobile & Desktop) */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height, 68px);
+  min-width: 0 !important;
+  width: 100% !important;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.nav-container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  height: 100% !important;
+  gap: 12px !important;
+}
+
+/* Mobile Hamburger Toggle Button */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.nav-toggle:hover, .nav-toggle:focus {
+  background: var(--surface);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Mobile Screens (<= 992px) */
+@media (max-width: 992px) {
+  .nav-toggle {
+    display: inline-flex !important;
   }
 
   .nav-links {
-    position: fixed;
-    top: var(--header-height);
-    left: 0;
-    right: 0;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    flex-direction: column;
-    padding: 20px;
-    gap: 12px;
-    box-shadow: var(--shadow-lg);
-    display: none;
+    position: fixed !important;
+    top: var(--header-height, 68px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: calc(100vh - var(--header-height, 68px)) !important;
+    background: var(--surface) !important;
+    display: none !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 20px 16px 40px 16px !important;
+    gap: 8px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    z-index: 9999 !important;
+    box-shadow: var(--shadow-lg) !important;
+    border-top: 1px solid var(--border) !important;
   }
 
   .nav-links.open {
-    display: flex;
+    display: flex !important;
+    animation: mobileNavSlide 0.25s ease-out;
   }
 
-  .nav-toggle {
-    display: flex;
+  @keyframes mobileNavSlide {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
-  .categories-grid {
-    grid-template-columns: 1fr;
+  .nav-links li {
+    width: 100% !important;
   }
 
-  .test-main-card {
-    padding: 20px;
+  .nav-links .nav-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 13px 16px !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    border-radius: var(--radius-md) !important;
+    color: var(--text) !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    background: var(--surface-alt) !important;
+    border: 1px solid var(--border) !important;
   }
 
-  .question-text {
-    font-size: 1.1rem;
+  .nav-links .nav-link.active,
+  .nav-links .nav-link:hover {
+    background: rgba(37, 99, 235, 0.08) !important;
+    border-color: var(--primary) !important;
+    color: var(--primary) !important;
   }
 
-  .test-actions-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .action-left-group, .action-right-group {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .action-left-group button, .action-right-group button {
-    flex: 1;
-  }
-
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-
-  .footer-bottom {
-    flex-direction: column;
-    text-align: center;
-    gap: 8px;
-  }
-
-  .hero-stats-row {
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-}
-
-/* Small Mobile Screens (Max 480px) */
-@media (max-width: 480px) {
-  .hero-title {
-    font-size: 1.9rem;
-  }
-
-  .hero-cta-group {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .hero-cta-group .btn {
-    width: 100%;
-  }
-
+  /* Compact Brand on Mobile */
   .brand-nepali {
-    display: none;
+    display: none !important;
   }
 
   .brand-name {
-    font-size: 1.2rem;
+    font-size: 1.15rem !important;
+  }
+}
+
+/* 4. Desktop Screens (> 992px) */
+@media (min-width: 993px) {
+  .nav-links {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 16px !important;
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    list-style: none !important;
   }
 
-  .option-btn {
-    padding: 12px 14px;
-    gap: 10px;
+  .nav-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    font-size: 0.92rem !important;
+    font-weight: 600 !important;
+    padding: 8px 12px !important;
+    border-radius: var(--radius-sm) !important;
+    white-space: nowrap !important;
+    color: var(--text) !important;
   }
 
-  .opt-key {
-    width: 28px;
-    height: 28px;
-    font-size: 0.85rem;
+  .nav-link:hover, .nav-link.active {
+    color: var(--primary) !important;
+  }
+}
+
+/* 5. Mobile Layout Adaptations (<= 768px) */
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: calc(var(--header-height, 68px) + 14px) !important;
   }
 
-  .opt-text {
-    font-size: 0.95rem;
+  /* Hero Section */
+  .hero-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 28px !important;
+    text-align: center !important;
   }
 
-  .palette-grid {
-    grid-template-columns: repeat(4, 1fr);
+  .hero-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
   }
 
-  .result-hero-card {
-    padding: 24px 16px;
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 2.8rem) !important;
+    line-height: 1.15 !important;
   }
 
-  .auth-wrapper {
-    padding: 24px 16px;
-    margin: 20px auto;
+  .hero-subtitle, .hero-subtitle-np {
+    font-size: 1rem !important;
+    margin: 8px 0 20px 0 !important;
   }
+
+  .hero-cta-group {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+
+  .hero-cta-group .btn {
+    width: 100% !important;
+    min-height: 48px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Grid Conversions for Phones */
+  .categories-grid,
+  .dashboard-stats-grid,
+  .dashboard-grid,
+  .test-layout,
+  .guru-layout-grid,
+  .curriculum-analytics-grid,
+  .faculty-split-layout,
+  .source-selector-bar {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+
+  .source-selector-bar {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Test Engine on Mobile */
+  .test-actions-bar {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .action-left-group, .action-right-group {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+  }
+
+  .action-left-group .btn, .action-right-group .btn {
+    flex: 1 !important;
+    min-height: 46px !important;
+  }
+
+  .palette-card {
+    position: static !important;
+    width: 100% !important;
+    margin-top: 16px !important;
+  }
+
+  /* Tables & Horizontal Containers */
+  .table-responsive,
+  table {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Modals on Mobile */
+  .test-modal-box,
+  .admin-modal-box {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    margin: 10px auto !important;
+    padding: 18px !important;
+    max-height: 92vh !important;
+    overflow-y: auto !important;
+    border-radius: var(--radius-lg) !important;
+  }
+
+  /* Search & Filter Toolbars */
+  #filterPills,
+  #dashLibraryCategoryPills,
+  .filter-pills-wrap {
+    display: flex !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    padding-bottom: 8px !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Footer */
+  .footer-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 28px !important;
+  }
+
+  .footer-bottom {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    text-align: center !important;
+  }
+}
+
+/* 6. Tablet Layout Adaptations (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .test-layout {
+    grid-template-columns: 1fr 280px !important;
+    gap: 20px !important;
+  }
+
+  .guru-layout-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* 7. Accessibility & Touch Optimization */
+button, input, select, textarea, a.btn {
+  touch-action: manipulation;
+}
+
+.btn {
+  min-height: 44px;
 }

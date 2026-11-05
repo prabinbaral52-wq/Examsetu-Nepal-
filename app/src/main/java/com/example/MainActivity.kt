@@ -110,9 +110,7 @@ fun ExamSetuAppView(modifier: Modifier = Modifier) {
             allowFileAccessFromFileURLs = true
             allowUniversalAccessFromFileURLs = true
             useWideViewPort = true
-            loadWithOverviewMode = true
-            // Enforce Desktop Web Browser User-Agent so site never serves mobile layout
-            userAgentString = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+            loadWithOverviewMode = false
             cacheMode = WebSettings.LOAD_DEFAULT
             mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
             setSupportZoom(true)
@@ -377,22 +375,18 @@ private fun handleLocalApiRequest(context: Context, uri: Uri): WebResourceRespon
     path == "/api/guru/status" -> {
       """{
         "success": true,
-        "user": {"id":1,"name":"Prabin Baral","email":"prabinbaral52@gmail.com","role":"student","streak":3,"total_xp":450},
-        "rank": 3,
-        "totalStudents": 142,
+        "user": {"id":1,"name":"Student Scholar","email":"student@examsetu.com","role":"student","streak":1,"total_xp":120},
+        "rank": 1,
+        "totalStudents": 1,
         "leaderboard": [
-          {"id":101,"name":"Aayush Thapa (Kharidar Aspirant)","total_xp":720,"current_streak":7},
-          {"id":102,"name":"Bipul Sharma (Subba Preparation)","total_xp":580,"current_streak":5},
-          {"id":1,"name":"Prabin Baral","total_xp":450,"current_streak":3},
-          {"id":103,"name":"Suman Adhikari (Officer Track)","total_xp":390,"current_streak":4},
-          {"id":104,"name":"Pooja Karki (Banking NRB)","total_xp":310,"current_streak":2}
+          {"id":1,"name":"Student Scholar","total_xp":120,"current_streak":1}
         ],
-        "targetCompetitor": {"id":102,"name":"Bipul Sharma (Subba Preparation)","total_xp":580,"current_streak":5},
-        "xpGap": 130,
+        "targetCompetitor": null,
+        "xpGap": 0,
         "recommendations": [
           {
-            "title": "Climb to Rank #2 (+130 XP Sprint)",
-            "description": "You are only 130 XP behind Bipul Sharma. Complete 2 practice drills in Nepal Constitution today to take Rank #2!",
+            "title": "Daily Practice Streak (+50 XP)",
+            "description": "Complete 10 practice questions today to build your daily study momentum!",
             "actionExam": "Lok Sewa",
             "actionSubject": "General Knowledge",
             "bonusXp": 50

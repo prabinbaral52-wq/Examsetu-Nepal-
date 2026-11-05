@@ -759,35 +759,21 @@ Provide exact citations to the Constitution of Nepal 2072 (articles & schedules)
 
 router.get('/guru/status', (req, res) => {
   try {
-    const rawLeaderboard = DB.getWeeklyLeaderboard();
-    const fullLeaderboard = rawLeaderboard && rawLeaderboard.length >= 3 ? rawLeaderboard : [
-      { id: 101, name: 'Aayush Thapa (Kharidar Aspirant)', total_xp: 720, current_streak: 7 },
-      { id: 102, name: 'Bipul Sharma (Subba Preparation)', total_xp: 580, current_streak: 5 },
-      { id: 1, name: req.session?.user?.name || 'Prabin Baral', total_xp: req.session?.user?.total_xp || 450, current_streak: req.session?.user?.current_streak || 3 },
-      { id: 103, name: 'Suman Adhikari (Officer Track)', total_xp: 390, current_streak: 4 },
-      { id: 104, name: 'Pooja Karki (Banking NRB)', total_xp: 310, current_streak: 2 }
-    ];
+    const rawLeaderboard = DB.getWeeklyLeaderboard() || [];
+    const stats = DB.getOverallStats();
+    const currentUser = req.session?.user || (rawLeaderboard.length > 0 ? rawLeaderboard[0] : {
+      id: 1,
+      name: 'Student Learner',
+      total_xp: 50,
+      current_streak: 1
+    });
 
-    const currentUserId = req.session?.user?.id || 1;
-    let userRank = fullLeaderboard.findIndex(u => u.id === currentUserId) + 1;
-    if (userRank === 0) userRank = 3;
-
-    const currentUser = fullLeaderboard[userRank - 1] || {
-      id: currentUserId,
-      name: req.session?.user?.name || 'Prabin Baral',
-      total_xp: req.session?.user?.total_xp || 450,
-      current_streak: req.session?.user?.current_streak || 3
-    };
-
-    const targetCompetitor = userRank > 1 ? fullLeaderboard[userRank - 2] : null;
-    const xpGap = targetCompetitor ? Math.max(10, targetCompetitor.total_xp - currentUser.total_xp) : 0;
+    const userRank = Math.max(1, rawLeaderboard.findIndex(u => u.id === currentUser.id) + 1);
 
     const recommendations = [
       {
-        title: userRank === 1 ? 'Defend Your #1 Position' : `Climb to Rank #${userRank - 1}`,
-        description: targetCompetitor
-          ? `You are only ${xpGap} XP behind ${targetCompetitor.name.split(' ')[0]}. Complete 2 practice drills today to overtake them!`
-          : 'You are leading Nepal\'s leaderboard! Maintain your daily streak to stay ahead.',
+        title: 'Daily Practice Milestone (+50 XP)',
+        description: 'Complete 10 high-yield questions today to advance your syllabus mastery.',
         actionExam: 'Lok Sewa',
         actionSubject: 'General Knowledge',
         bonusXp: 50
@@ -806,10 +792,10 @@ router.get('/guru/status', (req, res) => {
       success: true,
       user: currentUser,
       rank: userRank,
-      totalStudents: Math.max(fullLeaderboard.length, 142),
-      leaderboard: fullLeaderboard,
-      targetCompetitor,
-      xpGap,
+      totalStudents: stats.totalUsers || 1,
+      leaderboard: rawLeaderboard,
+      targetCompetitor: null,
+      xpGap: 0,
       recommendations
     });
   } catch (err) {
