@@ -9,6 +9,84 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/responsive.css">
   <link rel="stylesheet" href="/css/guru.css">
+  <style>
+    .test-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+    .test-modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      animation: modalFadeIn 0.2s ease-out;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .source-selector-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      background: var(--surface-alt);
+      padding: 6px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 18px;
+    }
+    .source-selector-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--muted-text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .source-selector-btn.active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
+    }
+    .book-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .book-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+    }
+    .source-pill-badge {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+  </style>
 </head>
 <body>
 
@@ -22,6 +100,7 @@
       <nav>
         <ul class="nav-links" id="navLinks">
           <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="#librarySection" class="nav-link"><i class="ri-book-2-line" style="color:#10b981;"></i> Library</a></li>
           <li><a href="/curriculum" class="nav-link"><i class="ri-git-merge-line" style="color:var(--primary);"></i> Curriculum</a></li>
           <li><a href="/planner" class="nav-link"><i class="ri-calendar-schedule-line" style="color:#d97706;"></i> Study Planner</a></li>
           <li><a href="/exams" class="nav-link">All Exams</a></li>
@@ -81,6 +160,7 @@
             </div>
 
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <a href="#librarySection" class="btn btn-primary btn-sm" style="background:#059669;border:none;"><i class="ri-book-2-line"></i> Library &amp; Books</a>
               <a href="/guru" class="btn btn-primary btn-sm" style="background:var(--guru-gradient);border:none;"><i class="ri-sparkling-fill"></i> Ask Guru AI</a>
               <a href="/practice" class="btn btn-secondary btn-sm"><i class="ri-compass-3-line"></i> Practice</a>
               <a href="/exams" class="btn btn-primary btn-sm"><i class="ri-play-circle-line"></i> Mock Test</a>
@@ -141,6 +221,8 @@
             <p style="margin-top:6px;">Loading badges...</p>
           </div>
         </div>
+      </div>
+
       <!-- MODULE 9: CURRICULUM INTELLIGENCE & SYLLABUS MASTERY ANALYTICS -->
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-sm);margin-bottom:32px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:14px;">
@@ -285,6 +367,59 @@
         </div>
       </div>
 
+      <!-- SECTION: INSTITUTIONAL & GENERAL PORTAL LIBRARY -->
+      <section id="librarySection" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-sm);margin-bottom:32px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:14px;">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+              <h2 style="font-size:1.35rem;font-weight:800;margin:0;display:flex;align-items:center;gap:8px;">
+                <i class="ri-book-2-fill" style="color:#059669;"></i> Digital Library &amp; Syllabus Books
+              </h2>
+              <span class="tag-badge" style="background:#d1fae5;color:#065f46;font-weight:700;"><i class="ri-sparkling-fill"></i> Syllabus-to-Quiz AI</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--muted-text);margin:0;">
+              Access course textbooks, study notes, and lecture materials. Import books via Google Files/Drive, DOCX, or CamScanner, and instantly generate MCQs for live online tests or print-ready question papers.
+            </p>
+          </div>
+
+          <!-- Add Book Button -->
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <button id="dashAddBookBtn" class="btn btn-primary" style="background:#059669;border:none;box-shadow:0 2px 8px rgba(5,150,105,0.35);" onclick="openDashAddBookModal()">
+              <i class="ri-add-circle-line"></i> Add Book (Google Files/DOCX/CamScanner)
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div style="background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+          <!-- Category Pills -->
+          <div style="display:flex;gap:6px;flex-wrap:wrap;" id="dashLibraryCategoryPills">
+            <button class="btn btn-primary btn-sm dash-cat-pill active" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('All', this)">All Books</button>
+            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Science', this)">Science (+2)</button>
+            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Management', this)">Management</button>
+            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Humanities', this)">Humanities / Social</button>
+            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Lok Sewa', this)">Lok Sewa</button>
+            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Engineering', this)">Engineering</button>
+            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Medical', this)">Medical</button>
+            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Banking', this)">Banking</button>
+          </div>
+
+          <!-- Search Input -->
+          <div style="position:relative;min-width:240px;flex-grow:1;max-width:320px;">
+            <i class="ri-search-line" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted-text);"></i>
+            <input type="text" id="dashBookSearchInput" placeholder="Search book, author, subject..." class="form-input" style="padding-left:32px;font-size:0.85rem;" oninput="handleDashBookSearch(this.value)">
+          </div>
+        </div>
+
+        <!-- Books Grid -->
+        <div id="dashBooksGrid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));gap:20px;">
+          <div style="text-align:center;padding:40px;grid-column:1/-1;color:var(--muted-text);">
+            <i class="ri-loader-4-line ri-spin" style="font-size:2rem;color:var(--primary);"></i>
+            <p style="margin-top:8px;">Loading digital library...</p>
+          </div>
+        </div>
+      </section>
+
       <!-- Two-Column Section: Recent Tests & Bookmarks/Wrong Notebook -->
       <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:28px;margin-bottom:36px;" class="dashboard-grid">
 
@@ -351,6 +486,265 @@
 
     </div>
   </main>
+
+  <!-- GENERAL PORTAL MODAL 1: ADD BOOK (GOOGLE FILES, DOCX, CAMSCANNER) -->
+  <div id="dashAddBookModal" class="test-modal-overlay">
+    <div class="test-modal-box" style="max-width:760px;width:100%;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:18px;">
+        <div>
+          <h3 style="font-size:1.25rem;font-weight:800;margin:0;display:flex;align-items:center;gap:8px;">
+            <i class="ri-book-2-fill" style="color:#059669;"></i> Add Book to Institutional Library
+          </h3>
+          <p style="font-size:0.82rem;color:var(--muted-text);margin:2px 0 0 0;">
+            Import syllabus books &amp; notes through Google Files / Drive, DOCX documents, or CamScanner.
+          </p>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="closeDashAddBookModal()" style="font-size:1.2rem;"><i class="ri-close-line"></i></button>
+      </div>
+
+      <!-- 3 Source Selector Tabs -->
+      <div class="source-selector-bar">
+        <button type="button" id="dashSrcGoogle" class="source-selector-btn active" onclick="switchDashSourceTab('google_drive')">
+          <i class="ri-google-fill" style="color:#2563eb;font-size:1.1rem;"></i>
+          <span>Google Files / Drive</span>
+        </button>
+        <button type="button" id="dashSrcDocx" class="source-selector-btn" onclick="switchDashSourceTab('docx')">
+          <i class="ri-file-word-line" style="color:#0284c7;font-size:1.1rem;"></i>
+          <span>DOCX Document</span>
+        </button>
+        <button type="button" id="dashSrcCam" class="source-selector-btn" onclick="switchDashSourceTab('camscanner')">
+          <i class="ri-camera-lens-line" style="color:#059669;font-size:1.1rem;"></i>
+          <span>CamScanner</span>
+        </button>
+      </div>
+
+      <form id="dashAddBookForm" onsubmit="saveDashBookFromForm(event)">
+        <input type="hidden" id="dashBookSourceType" value="google_drive">
+
+        <!-- Google Files Tab -->
+        <div id="dashTabGoogle">
+          <div style="background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+              <i class="ri-drive-fill" style="color:#2563eb;font-size:1.4rem;"></i>
+              <div>
+                <div style="font-weight:700;font-size:0.9rem;">Import from Google Files / Google Drive</div>
+                <div style="font-size:0.8rem;color:var(--muted-text);">Paste a public or shared Google Drive/Docs file link.</div>
+              </div>
+            </div>
+            <label class="form-label" style="font-size:0.85rem;">Google Drive / Docs Shareable Link</label>
+            <input type="url" id="dashGoogleUrl" class="form-input" placeholder="https://docs.google.com/document/d/... or https://drive.google.com/file/d/...">
+            <div style="font-size:0.75rem;color:var(--muted-text);margin-top:6px;">
+              Supported: Google Docs, Google Slides, Drive PDFs, and shared lecture handouts.
+            </div>
+          </div>
+        </div>
+
+        <!-- DOCX Tab -->
+        <div id="dashTabDocx" style="display:none;">
+          <div style="background:var(--surface-alt);border:2px dashed var(--border);border-radius:var(--radius-lg);padding:24px;text-align:center;margin-bottom:16px;cursor:pointer;" onclick="document.getElementById('dashDocxFile').click()">
+            <input type="file" id="dashDocxFile" accept=".docx,.doc,.pdf,.txt" style="display:none;" onchange="handleDashDocxFile(this.files[0])">
+            <i class="ri-file-word-line" style="font-size:2.8rem;color:#0284c7;display:block;margin-bottom:6px;"></i>
+            <div style="font-weight:700;font-size:0.95rem;">Upload DOCX / PDF Lecture Notes</div>
+            <div style="font-size:0.8rem;color:var(--muted-text);margin-top:4px;">Drag &amp; drop or click to select Word document (.docx) or PDF</div>
+            <div id="dashDocxInfo" style="font-weight:700;color:var(--primary);margin-top:8px;display:none;font-size:0.85rem;"></div>
+          </div>
+        </div>
+
+        <!-- CamScanner Tab -->
+        <div id="dashTabCam" style="display:none;">
+          <div style="background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+              <i class="ri-camera-lens-fill" style="color:#059669;font-size:1.4rem;"></i>
+              <div>
+                <div style="font-weight:700;font-size:0.9rem;">CamScanner Mobile &amp; Camera Scan</div>
+                <div style="font-size:0.8rem;color:var(--muted-text);">Capture whiteboard photos, handwritten lecture pages, or book chapters.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+              <label class="btn btn-primary btn-sm" style="background:#059669;border:none;cursor:pointer;">
+                <i class="ri-camera-fill"></i> Snap with Camera
+                <input type="file" accept="image/*" capture="environment" style="display:none;" onchange="handleDashCamScannerFile(this.files[0])">
+              </label>
+              <label class="btn btn-secondary btn-sm" style="cursor:pointer;">
+                <i class="ri-image-add-line"></i> Upload CamScanner Images
+                <input type="file" accept="image/*,.pdf" style="display:none;" onchange="handleDashCamScannerFile(this.files[0])">
+              </label>
+            </div>
+            <div id="dashCamPreview" style="display:none;align-items:center;gap:12px;background:var(--surface);padding:8px 12px;border-radius:var(--radius-md);border:1px solid var(--border);">
+              <img id="dashCamThumb" src="" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">
+              <div>
+                <div id="dashCamFileName" style="font-weight:700;font-size:0.85rem;color:var(--text);">scanned_page.jpg</div>
+                <div style="font-size:0.75rem;color:var(--success);font-weight:600;"><i class="ri-check-line"></i> OCR text extracted and ready for MCQ generation</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">Book / Chapter Title *</label>
+          <input type="text" id="dashBookTitle" class="form-input" placeholder="e.g., Grade 12 Physics: Modern Physics &amp; Thermodynamics" required>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+          <div class="form-group">
+            <label class="form-label">Subject *</label>
+            <input type="text" id="dashBookSubject" class="form-input" placeholder="Physics, Chemistry, Management, GK" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select id="dashBookCategory" class="form-input">
+              <option value="Science">Science (+2 / NEB)</option>
+              <option value="Management">Management (+2 / BBA)</option>
+              <option value="Humanities">Humanities / Social</option>
+              <option value="Lok Sewa">Lok Sewa Aayog</option>
+              <option value="Engineering">Engineering (IOE)</option>
+              <option value="Medical">Medical (CEE)</option>
+              <option value="Banking">Banking (NRB/RBB)</option>
+              <option value="SEE">SEE (Class 10)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+          <div class="form-group">
+            <label class="form-label">Author / Educator Name</label>
+            <input type="text" id="dashBookAuthor" class="form-input" placeholder="e.g. CDC Nepal / Tribhuvan University">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Estimated Total Pages / Chapters</label>
+            <input type="number" id="dashBookPages" class="form-input" value="12" min="1" max="1000">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:16px;">
+          <label class="form-label">Book Content Preview / Key Revision Notes *</label>
+          <textarea id="dashBookContent" class="form-input" rows="5" placeholder="Paste or verify lecture notes, chapter summaries, key definitions, or extracted text for MCQ question generation..." required></textarea>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:10px;border-top:1px solid var(--border);padding-top:14px;">
+          <button type="button" class="btn btn-secondary" onclick="closeDashAddBookModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="background:#059669;border:none;"><i class="ri-save-line"></i> Save to Digital Library</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- GENERAL PORTAL MODAL 2: GENERATE MCQ QUESTIONS -->
+  <div id="dashGenMcqModal" class="test-modal-overlay">
+    <div class="test-modal-box" style="max-width:880px;width:100%;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:16px;">
+        <div>
+          <h3 style="font-size:1.25rem;font-weight:800;margin:0;display:flex;align-items:center;gap:8px;">
+            <i class="ri-sparkling-fill" style="color:#6366f1;"></i> Syllabus-to-Quiz AI: Generate MCQs
+          </h3>
+          <p id="dashGenSubtitle" style="font-size:0.82rem;color:var(--muted-text);margin:2px 0 0 0;">
+            Instantly transform syllabus book notes into examination questions.
+          </p>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="closeDashGenMcqModal()" style="font-size:1.2rem;"><i class="ri-close-line"></i></button>
+      </div>
+
+      <input type="hidden" id="dashGenBookId">
+      <input type="hidden" id="dashGenBookTitle">
+      <input type="hidden" id="dashGenSubject">
+
+      <!-- Generator Settings Card -->
+      <div style="background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:18px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end;margin-bottom:12px;">
+          <div class="form-group">
+            <label class="form-label" style="font-size:0.85rem;font-weight:700;">Question Count</label>
+            <select id="dashGenCount" class="form-input">
+              <option value="5">5 Questions (Quick Self-Test)</option>
+              <option value="10" selected>10 Questions (Standard Quiz)</option>
+              <option value="20">20 Questions (Comprehensive Terminal Paper)</option>
+              <option value="50">50 Questions (Full Specification Grid Mock)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-size:0.85rem;font-weight:700;">Difficulty Level</label>
+            <select id="dashGenDifficulty" class="form-input">
+              <option value="medium" selected>Standard Board Level</option>
+              <option value="easy">Introductory / Recall</option>
+              <option value="hard">Advanced / Analytical</option>
+              <option value="mixed">Mixed Specification Grid</option>
+            </select>
+          </div>
+          <div>
+            <button id="btnDashRunGen" class="btn btn-primary" style="background:var(--guru-gradient);border:none;box-shadow:0 2px 8px rgba(99,102,241,0.35);" onclick="runDashMcqGeneration()">
+              <i class="ri-magic-line"></i> Generate MCQs
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" style="font-size:0.85rem;">Source Notes / Textbook Excerpt</label>
+          <textarea id="dashGenContent" class="form-input" rows="4" placeholder="Book content or lecture notes to generate questions from..."></textarea>
+        </div>
+      </div>
+
+      <!-- Generated Questions Preview & Action Buttons -->
+      <div id="dashGenResultsWrapper" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:8px;">
+            <span>Generated MCQs Preview</span>
+            <span id="dashGenCountBadge" class="tag-badge tag-badge-primary">0 Questions</span>
+          </div>
+          <span style="font-size:0.8rem;color:var(--success);font-weight:700;"><i class="ri-check-double-line"></i> AI Curriculum Mapped</span>
+        </div>
+
+        <div id="dashGenQuestionsList" style="max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;margin-bottom:20px;padding-right:4px;">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- DOWN TO BUTTON: TWO PRIMARY OPTIONS -->
+        <div style="background:linear-gradient(135deg, var(--surface-alt), var(--surface));border:1px solid var(--border);border-radius:var(--radius-xl);padding:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;box-shadow:var(--shadow-sm);">
+          <div>
+            <div style="font-weight:800;font-size:0.95rem;color:var(--text);">Select Action for Generated Questions:</div>
+            <div style="font-size:0.82rem;color:var(--muted-text);margin-top:2px;">
+              Print formal Nepalese question paper with teacher key, or upload to live test form for instant practice.
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <!-- Option 1: Download / Print Question Paper -->
+            <button class="btn btn-secondary" onclick="downloadDashQuestionPaperPrint()" style="border-color:var(--border);">
+              <i class="ri-printer-line"></i> Download / Print Question Paper
+            </button>
+
+            <!-- Option 2: Directly Upload into Test Form -->
+            <button class="btn btn-primary" onclick="uploadDashQuestionsToTestForm()" style="background:#059669;border:none;box-shadow:0 2px 8px rgba(5,150,105,0.35);">
+              <i class="ri-upload-cloud-line"></i> Directly Upload into Test Form
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GENERAL PORTAL MODAL 3: VIEW / READ BOOK -->
+  <div id="dashViewBookModal" class="test-modal-overlay">
+    <div class="test-modal-box" style="max-width:720px;width:100%;">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:14px;">
+        <div>
+          <h3 id="dashViewTitle" style="font-size:1.25rem;font-weight:800;margin:0;">Book Title</h3>
+          <div style="font-size:0.82rem;color:var(--muted-text);margin-top:4px;">
+            <span id="dashViewAuthor">Author</span> • <span id="dashViewSubject">Subject</span> • <span id="dashViewSource">Source</span>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('dashViewBookModal').style.display='none'" style="font-size:1.2rem;"><i class="ri-close-line"></i></button>
+      </div>
+
+      <div id="dashViewContent" style="background:var(--surface-alt);padding:18px;border-radius:var(--radius-lg);max-height:360px;overflow-y:auto;line-height:1.75;white-space:pre-wrap;font-size:0.92rem;color:var(--text);border:1px solid var(--border);"></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;">
+        <span style="font-size:0.8rem;color:var(--muted-text);"><i class="ri-shield-check-line"></i> ExamSetu Digital Syllabus Repository</span>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-secondary btn-sm" onclick="document.getElementById('dashViewBookModal').style.display='none'">Close</button>
+          <button id="dashViewGenMcqBtn" class="btn btn-primary btn-sm" onclick="openGenMcqFromViewer()"><i class="ri-sparkling-fill"></i> Generate MCQs From This Book</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <footer class="footer">
     <div class="container footer-bottom">
@@ -675,9 +1069,548 @@
       }
     }
 
+    // ==========================================
+    // DIGITAL LIBRARY & SYLLABUS BOOKS MANAGEMENT
+    // ==========================================
+    let allDashBooks = [];
+    let currentDashCategory = 'All';
+    let currentDashGenQuestions = [];
+    let activeDashViewingBook = null;
+
+    async function loadDashBooks() {
+      const grid = document.getElementById('dashBooksGrid');
+      if (!grid) return;
+      try {
+        const res = await fetch('/api/library');
+        const data = await res.json();
+        if (data.success && data.books) {
+          allDashBooks = data.books;
+          renderDashBooks(allDashBooks);
+        } else {
+          grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted-text);">No books loaded from repository.</div>';
+        }
+      } catch (err) {
+        console.error('Error loading library books:', err);
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--danger);">Failed to load library books. Please refresh.</div>';
+      }
+    }
+
+    function renderDashBooks(books) {
+      const grid = document.getElementById('dashBooksGrid');
+      if (!grid) return;
+
+      if (!books || books.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:50px 20px;background:var(--surface-alt);border:2px dashed var(--border);border-radius:var(--radius-xl);">
+            <i class="ri-book-2-line" style="font-size:3rem;color:var(--muted-text);display:block;margin-bottom:12px;"></i>
+            <h4 style="font-size:1.15rem;font-weight:800;margin-bottom:6px;">No Books Found in this Category</h4>
+            <p style="font-size:0.88rem;color:var(--muted-text);max-width:440px;margin:0 auto 16px auto;">
+              Add your lecture notes, textbook chapters, or syllabus documents using Google Files, DOCX, or CamScanner.
+            </p>
+            <button class="btn btn-primary btn-sm" onclick="openDashAddBookModal()">
+              <i class="ri-add-line"></i> Add First Book / Notes
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = books.map(b => {
+        let sourceBadge = '';
+        if (b.source_type === 'google_drive') {
+          sourceBadge = `<span class="source-pill-badge" style="background:#dbeafe;color:#1e40af;"><i class="ri-google-fill"></i> Google Files</span>`;
+        } else if (b.source_type === 'docx') {
+          sourceBadge = `<span class="source-pill-badge" style="background:#e0f2fe;color:#0369a1;"><i class="ri-file-word-line"></i> DOCX Document</span>`;
+        } else if (b.source_type === 'camscanner') {
+          sourceBadge = `<span class="source-pill-badge" style="background:#d1fae5;color:#065f46;"><i class="ri-camera-lens-line"></i> CamScanner</span>`;
+        } else {
+          sourceBadge = `<span class="source-pill-badge" style="background:#f1f5f9;color:#475569;"><i class="ri-book-line"></i> Verified Syllabus</span>`;
+        }
+
+        const previewSnippet = b.content_preview ? b.content_preview.substring(0, 150) + (b.content_preview.length > 150 ? '...' : '') : 'Curriculum syllabus materials and practice guidelines.';
+
+        return `
+          <div class="book-card">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px;">
+                <span class="tag-badge tag-badge-primary" style="font-size:0.72rem;">${escapeHTML(b.subject || 'General')}</span>
+                ${sourceBadge}
+              </div>
+
+              <h4 style="font-size:1.05rem;font-weight:800;color:var(--text);margin:0 0 6px 0;line-height:1.35;">
+                ${escapeHTML(b.title)}
+              </h4>
+
+              <div style="font-size:0.8rem;color:var(--muted-text);margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                <span><i class="ri-user-line"></i> ${escapeHTML(b.author || 'ExamSetu Faculty')}</span>
+                <span>•</span>
+                <span><i class="ri-file-list-3-line"></i> ${b.total_pages || 1} pages</span>
+                <span>•</span>
+                <span style="color:var(--primary);font-weight:600;">${escapeHTML(b.category || 'General')}</span>
+              </div>
+
+              <p style="font-size:0.84rem;color:var(--muted-text);line-height:1.55;margin-bottom:16px;">
+                ${escapeHTML(previewSnippet)}
+              </p>
+            </div>
+
+            <div style="display:flex;gap:8px;border-top:1px solid var(--border);padding-top:14px;margin-top:auto;">
+              <button class="btn btn-outline btn-sm" style="flex:1;" onclick="openDashViewBook(${b.id})">
+                <i class="ri-eye-line"></i> Read Notes
+              </button>
+              <button class="btn btn-primary btn-sm" style="flex:1.3;background:var(--guru-gradient);border:none;" onclick="openDashGenMcq(${b.id})">
+                <i class="ri-sparkling-fill"></i> Generate MCQs
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterDashBooks(category, btnElement) {
+      currentDashCategory = category;
+      document.querySelectorAll('#dashLibraryCategoryPills .dash-cat-pill').forEach(btn => {
+        btn.classList.remove('active', 'btn-primary');
+        btn.classList.add('btn-secondary');
+      });
+      if (btnElement) {
+        btnElement.classList.add('active', 'btn-primary');
+        btnElement.classList.remove('btn-secondary');
+      }
+
+      const query = (document.getElementById('dashBookSearchInput')?.value || '').toLowerCase().trim();
+      applyDashBookFilters(category, query);
+    }
+
+    function handleDashBookSearch(query) {
+      applyDashBookFilters(currentDashCategory, (query || '').toLowerCase().trim());
+    }
+
+    function applyDashBookFilters(category, query) {
+      let filtered = allDashBooks;
+      if (category && category !== 'All') {
+        filtered = filtered.filter(b => {
+          const cat = (b.category || '').toLowerCase();
+          const subj = (b.subject || '').toLowerCase();
+          const target = category.toLowerCase();
+          return cat.includes(target) || subj.includes(target);
+        });
+      }
+      if (query) {
+        filtered = filtered.filter(b => {
+          return (b.title || '').toLowerCase().includes(query) ||
+                 (b.subject || '').toLowerCase().includes(query) ||
+                 (b.author || '').toLowerCase().includes(query) ||
+                 (b.category || '').toLowerCase().includes(query) ||
+                 (b.content_preview || '').toLowerCase().includes(query);
+        });
+      }
+      renderDashBooks(filtered);
+    }
+
+    // Modal: Add Book Handlers
+    function openDashAddBookModal() {
+      const modal = document.getElementById('dashAddBookModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        switchDashSourceTab('google_drive');
+      }
+    }
+
+    function closeDashAddBookModal() {
+      const modal = document.getElementById('dashAddBookModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function switchDashSourceTab(type) {
+      document.getElementById('dashBookSourceType').value = type;
+      const btnG = document.getElementById('dashSrcGoogle');
+      const btnD = document.getElementById('dashSrcDocx');
+      const btnC = document.getElementById('dashSrcCam');
+
+      const tabG = document.getElementById('dashTabGoogle');
+      const tabD = document.getElementById('dashTabDocx');
+      const tabC = document.getElementById('dashTabCam');
+
+      btnG.className = 'source-selector-btn' + (type === 'google_drive' ? ' active' : '');
+      btnD.className = 'source-selector-btn' + (type === 'docx' ? ' active' : '');
+      btnC.className = 'source-selector-btn' + (type === 'camscanner' ? ' active' : '');
+
+      tabG.style.display = type === 'google_drive' ? 'block' : 'none';
+      tabD.style.display = type === 'docx' ? 'block' : 'none';
+      tabC.style.display = type === 'camscanner' ? 'block' : 'none';
+    }
+
+    function handleDashDocxFile(file) {
+      if (!file) return;
+      const info = document.getElementById('dashDocxInfo');
+      info.textContent = `Selected: ${file.name} (${Math.round(file.size / 1024)} KB)`;
+      info.style.display = 'block';
+
+      if (!document.getElementById('dashBookTitle').value) {
+        const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+        document.getElementById('dashBookTitle').value = cleanName;
+      }
+      if (!document.getElementById('dashBookContent').value) {
+        document.getElementById('dashBookContent').value =
+          `[DOCX Upload: ${file.name}]\n` +
+          `Syllabus Chapters: Chapter 1 Introduction, Chapter 2 Principles and Formulas, Chapter 3 Numerical Applications.\n` +
+          `Key Concepts: Detailed faculty derivations, theoretical definitions, examination model problems.`;
+      }
+    }
+
+    function handleDashCamScannerFile(file) {
+      if (!file) return;
+      const preview = document.getElementById('dashCamPreview');
+      const thumb = document.getElementById('dashCamThumb');
+      const name = document.getElementById('dashCamFileName');
+
+      name.textContent = `${file.name} (${Math.round(file.size / 1024)} KB)`;
+      preview.style.display = 'flex';
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        thumb.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+
+      if (!document.getElementById('dashBookTitle').value) {
+        document.getElementById('dashBookTitle').value = `CamScanner Notes: Chapter Revision (${new Date().toLocaleDateString()})`;
+      }
+      if (!document.getElementById('dashBookContent').value) {
+        document.getElementById('dashBookContent').value =
+          `[CamScanner Optical Scan Extract]\n` +
+          `Notes Page: High-yield handwritten formula summary & lecture definitions.\n` +
+          `Topics: Core properties, laws, solved illustrative problems, and board examination questions.`;
+      }
+    }
+
+    async function saveDashBookFromForm(e) {
+      e.preventDefault();
+      const title = document.getElementById('dashBookTitle').value.trim();
+      const subject = document.getElementById('dashBookSubject').value.trim();
+      const category = document.getElementById('dashBookCategory').value;
+      const author = document.getElementById('dashBookAuthor').value.trim() || 'Educator / Student';
+      const pages = parseInt(document.getElementById('dashBookPages').value, 10) || 12;
+      const content = document.getElementById('dashBookContent').value.trim();
+      const sourceType = document.getElementById('dashBookSourceType').value;
+      const fileUrl = sourceType === 'google_drive' ? document.getElementById('dashGoogleUrl').value.trim() : '';
+
+      if (!title || !subject || !content) {
+        ExamSetu.showToast('Please fill in title, subject, and content.', 'warning');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/library/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title,
+            subject,
+            category,
+            author,
+            source_type: sourceType,
+            file_url: fileUrl,
+            content_preview: content,
+            total_pages: pages
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          ExamSetu.showToast(data.message || 'Book added to Library successfully!', 'success');
+          closeDashAddBookModal();
+          e.target.reset();
+          loadDashBooks();
+        } else {
+          ExamSetu.showToast(data.message || 'Failed to add book.', 'danger');
+        }
+      } catch (err) {
+        console.error('Save book error:', err);
+        ExamSetu.showToast('Network error while saving book.', 'danger');
+      }
+    }
+
+    // Modal: Generate MCQs Handlers
+    function openDashGenMcq(bookId) {
+      const book = allDashBooks.find(b => b.id === bookId);
+      if (!book) return;
+
+      document.getElementById('dashGenBookId').value = book.id;
+      document.getElementById('dashGenBookTitle').value = book.title;
+      document.getElementById('dashGenSubject').value = book.subject || 'General';
+      document.getElementById('dashGenSubtitle').textContent = `Book: "${book.title}" (${book.subject || 'General'})`;
+      document.getElementById('dashGenContent').value = book.content_preview || '';
+      document.getElementById('dashGenResultsWrapper').style.display = 'none';
+      currentDashGenQuestions = [];
+
+      const modal = document.getElementById('dashGenMcqModal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeDashGenMcqModal() {
+      const modal = document.getElementById('dashGenMcqModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    async function runDashMcqGeneration() {
+      const bookId = document.getElementById('dashGenBookId').value;
+      const title = document.getElementById('dashGenBookTitle').value;
+      const subject = document.getElementById('dashGenSubject').value;
+      const count = parseInt(document.getElementById('dashGenCount').value, 10) || 10;
+      const difficulty = document.getElementById('dashGenDifficulty').value;
+      const content = document.getElementById('dashGenContent').value.trim();
+
+      const btn = document.getElementById('btnDashRunGen');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Generating MCQs...';
+
+      try {
+        const res = await fetch('/api/library/generate-mcq', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            book_id: bookId,
+            book_title: title,
+            subject,
+            count,
+            difficulty,
+            content
+          })
+        });
+        const data = await res.json();
+        if (data.success && data.questions && data.questions.length > 0) {
+          currentDashGenQuestions = data.questions;
+          renderDashGenQuestions(data.questions);
+          document.getElementById('dashGenResultsWrapper').style.display = 'block';
+          ExamSetu.showToast(`Successfully generated ${data.questions.length} MCQs via AI!`, 'success');
+        } else {
+          ExamSetu.showToast(data.message || 'Could not generate MCQs. Check book content.', 'danger');
+        }
+      } catch (err) {
+        console.error('MCQ generation error:', err);
+        ExamSetu.showToast('Network error generating MCQs.', 'danger');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ri-magic-line"></i> Generate MCQs';
+      }
+    }
+
+    function renderDashGenQuestions(questions) {
+      const container = document.getElementById('dashGenQuestionsList');
+      const badge = document.getElementById('dashGenCountBadge');
+      badge.textContent = `${questions.length} Questions`;
+
+      container.innerHTML = questions.map((q, idx) => `
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <strong style="color:var(--primary);font-size:0.85rem;">Q${idx + 1}. [${escapeHTML(q.subject || 'General')}]</strong>
+            <span class="tag-badge tag-badge-success" style="font-size:0.7rem;">Correct: Option ${escapeHTML(q.correct_answer)}</span>
+          </div>
+          <div style="font-weight:700;font-size:0.92rem;margin-bottom:10px;color:var(--text);">
+            ${escapeHTML(q.question)}
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.84rem;color:var(--text);margin-bottom:8px;">
+            <div style="padding:4px 8px;border-radius:4px;background:var(--surface-alt);"><strong>A:</strong> ${escapeHTML(q.options?.A || '')}</div>
+            <div style="padding:4px 8px;border-radius:4px;background:var(--surface-alt);"><strong>B:</strong> ${escapeHTML(q.options?.B || '')}</div>
+            <div style="padding:4px 8px;border-radius:4px;background:var(--surface-alt);"><strong>C:</strong> ${escapeHTML(q.options?.C || '')}</div>
+            <div style="padding:4px 8px;border-radius:4px;background:var(--surface-alt);"><strong>D:</strong> ${escapeHTML(q.options?.D || '')}</div>
+          </div>
+          ${q.explanation ? `<div style="font-size:0.78rem;color:var(--muted-text);font-style:italic;"><i class="ri-lightbulb-line"></i> ${escapeHTML(q.explanation)}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    // DOWN TO BUTTON OPTION 1: Download / Print Question Paper (Official Nepalese College Format)
+    function downloadDashQuestionPaperPrint() {
+      if (!currentDashGenQuestions || currentDashGenQuestions.length === 0) {
+        ExamSetu.showToast('No questions generated to download.', 'warning');
+        return;
+      }
+
+      const title = document.getElementById('dashGenBookTitle').value || 'College Internal Examination';
+      const subject = document.getElementById('dashGenSubject').value || 'General';
+      const fullMarks = currentDashGenQuestions.length;
+      const passMarks = Math.ceil(fullMarks * 0.4);
+      const timeAllowed = currentDashGenQuestions.length <= 10 ? '20 Minutes' : (currentDashGenQuestions.length <= 25 ? '45 Minutes' : '1 Hour 30 Minutes');
+
+      let printHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Question Paper - ${escapeHTML(title)}</title>
+          <style>
+            body { font-family: 'Times New Roman', Times, serif; color: #000; padding: 25px; line-height: 1.4; }
+            .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 14px; }
+            .header h2 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+            .header h3 { margin: 3px 0; font-size: 15px; font-weight: normal; }
+            .meta-grid { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; margin-bottom: 12px; }
+            .instructions { font-size: 12px; font-style: italic; margin-bottom: 16px; border: 1px solid #666; padding: 6px 10px; }
+            .q-block { margin-bottom: 14px; page-break-inside: avoid; }
+            .q-title { font-weight: bold; font-size: 14px; margin-bottom: 4px; }
+            .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 18px; font-size: 13px; margin-left: 18px; }
+            .page-break { page-break-before: always; margin-top: 30px; }
+            .key-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+            .key-table th, .key-table td { border: 1px solid #333; padding: 6px 8px; text-align: left; }
+            .key-table th { background: #f2f2f2; }
+            @media print {
+              body { padding: 10px; }
+              button { display: none !important; }
+            }
+          </style>
+        </head>
+        <body>
+          <div style="text-align:right;margin-bottom:10px;">
+            <button onclick="window.print()" style="padding:6px 14px;background:#059669;color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:bold;">🖨️ Print Paper (Ctrl + P)</button>
+          </div>
+
+          <div class="header">
+            <h2>EXAMSETU NEPAL • INSTITUTIONAL EXAMINATION</h2>
+            <h3>Terminal Assessment • Academic Year 2026</h3>
+            <div style="font-size: 14px; font-weight: bold; margin-top: 4px;">Subject: ${escapeHTML(subject)}</div>
+          </div>
+
+          <div class="meta-grid">
+            <div>Paper: ${escapeHTML(title)}</div>
+            <div>Full Marks: ${fullMarks} | Pass Marks: ${passMarks}</div>
+            <div>Time Allowed: ${timeAllowed}</div>
+          </div>
+
+          <div class="instructions">
+            <strong>General Instructions:</strong> Candidates are required to give their answers in their own words as far as practicable. All questions carry equal 1 mark. Darken or tick only one correct option (A, B, C, or D).
+          </div>
+
+          <div>
+      `;
+
+      currentDashGenQuestions.forEach((q, idx) => {
+        printHtml += `
+          <div class="q-block">
+            <div class="q-title">${idx + 1}. ${escapeHTML(q.question)}</div>
+            <div class="options-grid">
+              <div>(A) ${escapeHTML(q.options?.A || '')}</div>
+              <div>(B) ${escapeHTML(q.options?.B || '')}</div>
+              <div>(C) ${escapeHTML(q.options?.C || '')}</div>
+              <div>(D) ${escapeHTML(q.options?.D || '')}</div>
+            </div>
+          </div>
+        `;
+      });
+
+      // Teacher Answer Key Section
+      printHtml += `
+          </div>
+
+          <div class="page-break">
+            <div class="header">
+              <h2>CONFIDENTIAL: FACULTY ANSWER KEY &amp; RATIONALE</h2>
+              <h3>${escapeHTML(title)} • Subject: ${escapeHTML(subject)}</h3>
+            </div>
+            <p style="font-size:12px;color:#555;">This marking scheme is intended strictly for the department teacher and internal examination evaluation.</p>
+
+            <table class="key-table">
+              <thead>
+                <tr>
+                  <th style="width:40px;">Q#</th>
+                  <th style="width:70px;">Correct</th>
+                  <th>Rationale / Curriculum Explanation</th>
+                </tr>
+              </thead>
+              <tbody>
+      `;
+
+      currentDashGenQuestions.forEach((q, idx) => {
+        printHtml += `
+          <tr>
+            <td><strong>${idx + 1}</strong></td>
+            <td><strong>Option ${escapeHTML(q.correct_answer)}</strong></td>
+            <td>${escapeHTML(q.explanation || 'Verified as per curriculum textbook specification.')}</td>
+          </tr>
+        `;
+      });
+
+      printHtml += `
+              </tbody>
+            </table>
+          </div>
+        </body>
+        </html>
+      `;
+
+      const printWin = window.open('', '_blank');
+      if (printWin) {
+        printWin.document.write(printHtml);
+        printWin.document.close();
+      } else {
+        ExamSetu.showToast('Please allow popups to open the printable exam paper.', 'warning');
+      }
+    }
+
+    // DOWN TO BUTTON OPTION 2: Directly Upload into Test Form
+    async function uploadDashQuestionsToTestForm() {
+      if (!currentDashGenQuestions || currentDashGenQuestions.length === 0) {
+        ExamSetu.showToast('No questions available to upload.', 'warning');
+        return;
+      }
+
+      const bookId = document.getElementById('dashGenBookId').value;
+      const title = document.getElementById('dashGenBookTitle').value || 'Book MCQs';
+      const subject = document.getElementById('dashGenSubject').value || 'General';
+
+      try {
+        const res = await fetch('/api/library/upload-to-test', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            book_id: bookId,
+            title: `Test: ${title}`,
+            subject,
+            questions: currentDashGenQuestions
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          ExamSetu.showToast('Questions uploaded successfully to live test form!', 'success');
+          closeDashGenMcqModal();
+          setTimeout(() => {
+            window.location.href = `/test?exam=${encodeURIComponent(subject)}&setId=${data.setId || ''}`;
+          }, 600);
+        } else {
+          ExamSetu.showToast(data.message || 'Failed to upload questions.', 'danger');
+        }
+      } catch (err) {
+        console.error('Upload to test error:', err);
+        ExamSetu.showToast('Network error uploading questions.', 'danger');
+      }
+    }
+
+    // Viewer Handlers
+    function openDashViewBook(bookId) {
+      const book = allDashBooks.find(b => b.id === bookId);
+      if (!book) return;
+      activeDashViewingBook = book;
+
+      document.getElementById('dashViewTitle').textContent = book.title;
+      document.getElementById('dashViewAuthor').textContent = book.author || 'Author';
+      document.getElementById('dashViewSubject').textContent = book.subject || 'Subject';
+      document.getElementById('dashViewSource').textContent = `Source: ${book.source_type || 'upload'}`;
+      document.getElementById('dashViewContent').textContent = book.content_preview || 'No text excerpt available.';
+
+      const modal = document.getElementById('dashViewBookModal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function openGenMcqFromViewer() {
+      if (!activeDashViewingBook) return;
+      document.getElementById('dashViewBookModal').style.display = 'none';
+      openDashGenMcq(activeDashViewingBook.id);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       loadDashboard();
       loadCurriculumAnalytics('see');
+      loadDashBooks();
     });
   </script>
 </body>

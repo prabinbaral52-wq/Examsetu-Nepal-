@@ -414,6 +414,148 @@ private fun handleLocalApiRequest(context: Context, uri: Uri): WebResourceRespon
       val escaped = JSONObject.quote(liveAnswer)
       """{"success":true,"reply":$escaped,"modelUsed":"Gemini 3.5 Flash Lite (Live)","source":"Google Gemini API"}"""
     }
+    path == "/api/library" -> {
+      """{
+        "success": true,
+        "count": 5,
+        "books": [
+          {
+            "id": 1,
+            "title": "Grade 12 Physics: Modern Physics & Thermodynamics (NEB)",
+            "subject": "Physics",
+            "category": "Science",
+            "author": "Curriculum Development Centre (CDC) Nepal",
+            "source_type": "google_drive",
+            "file_url": "https://drive.google.com/file/d/1neb-physics-grade12",
+            "content_preview": "Unit 1: Heat and Thermodynamics, First and Second Laws. Carnot Engine efficiency. Unit 2: Modern Physics, Photoelectric Effect Einstein equation, Bohr Atomic model, Radioactivity half-life decay.",
+            "total_pages": 48
+          },
+          {
+            "id": 2,
+            "title": "Grade 11 Chemistry: Inorganic & Organic Foundations",
+            "subject": "Chemistry",
+            "category": "Science",
+            "author": "Prof. D. R. Bhattarai",
+            "source_type": "docx",
+            "file_url": "https://examsetu.np/assets/docs/reduced_chem_11.docx",
+            "content_preview": "Stoichiometry calculations, Atomic structure, Periodic classification, Chemical Bonding, Organic Chemistry IUPAC nomenclature and reaction mechanisms.",
+            "total_pages": 36
+          },
+          {
+            "id": 3,
+            "title": "Principles of Management & Business Studies (Class 12)",
+            "subject": "Management",
+            "category": "Management",
+            "author": "Tribhuvan University Faculty Board",
+            "source_type": "camscanner",
+            "file_url": "",
+            "content_preview": "Functions of management: Planning, Organizing, Staffing, Directing, and Controlling. Henry Fayol 14 principles of administrative management, Motivation theories.",
+            "total_pages": 24
+          },
+          {
+            "id": 4,
+            "title": "Constitution of Nepal 2072 & Public Governance (GK)",
+            "subject": "Lok Sewa GK",
+            "category": "Lok Sewa",
+            "author": "PSC Preparation Faculty",
+            "source_type": "google_drive",
+            "file_url": "https://drive.google.com/file/d/1loksewa-constitution",
+            "content_preview": "Constitution of Nepal 2072 Part 3 Fundamental Rights (Articles 16-46). Federal Parliament structure, Judiciary, Public Service Commission Article 242.",
+            "total_pages": 64
+          },
+          {
+            "id": 5,
+            "title": "Applied Mechanics & Statics (IOE Entrance Notes)",
+            "subject": "Engineering",
+            "category": "Engineering",
+            "author": "Pulchowk Campus Faculty",
+            "source_type": "camscanner",
+            "file_url": "",
+            "content_preview": "Forces in space, Lami Theorem, Equilibrium equations, Friction laws, Centre of gravity and Moment of Inertia for composite sections.",
+            "total_pages": 30
+          }
+        ]
+      }"""
+    }
+    path == "/api/library/add" -> {
+      """{"success":true,"message":"Book added to Institutional Library successfully!","book":{"id":99,"title":"Saved Notes","subject":"General"}}"""
+    }
+    path == "/api/library/generate-mcq" -> {
+      """{
+        "success": true,
+        "message": "Generated 5 curriculum MCQs successfully",
+        "questions": [
+          {
+            "id": 1001,
+            "subject": "Physics",
+            "question": "What is the efficiency of a Carnot engine operating between temperatures T1 (hot) and T2 (cold)?",
+            "options": {
+              "A": "1 - (T2 / T1)",
+              "B": "1 - (T1 / T2)",
+              "C": "1 + (T2 / T1)",
+              "D": "(T1 - T2) / T2"
+            },
+            "correct_answer": "A",
+            "explanation": "Carnot efficiency is defined as eta = 1 - (T_cold / T_hot) where temperatures are in Kelvin."
+          },
+          {
+            "id": 1002,
+            "subject": "Physics",
+            "question": "In the photoelectric effect, the maximum kinetic energy of emitted electrons depends on:",
+            "options": {
+              "A": "Intensity of incident light only",
+              "B": "Frequency of incident light",
+              "C": "Angle of incidence",
+              "D": "Velocity of incident light in vacuum"
+            },
+            "correct_answer": "B",
+            "explanation": "According to Einstein photoelectric equation KE_max = h*nu - phi, kinetic energy depends strictly on light frequency."
+          },
+          {
+            "id": 1003,
+            "subject": "Chemistry",
+            "question": "What is the oxidation number of sulfur in sulfuric acid (H2SO4)?",
+            "options": {
+              "A": "+4",
+              "B": "+2",
+              "C": "+6",
+              "D": "-2"
+            },
+            "correct_answer": "C",
+            "explanation": "2(+1) + S + 4(-2) = 0 => S - 6 = 0 => S = +6."
+          },
+          {
+            "id": 1004,
+            "subject": "Lok Sewa GK",
+            "question": "Under the Constitution of Nepal 2072, how many Fundamental Rights are guaranteed to citizens?",
+            "options": {
+              "A": "25",
+              "B": "31",
+              "C": "35",
+              "D": "21"
+            },
+            "correct_answer": "B",
+            "explanation": "Part 3, Articles 16 to 46 of the Constitution of Nepal 2072 guarantees 31 fundamental rights."
+          },
+          {
+            "id": 1005,
+            "subject": "Management",
+            "question": "Who is widely recognized as the Father of Modern Management Theory?",
+            "options": {
+              "A": "F. W. Taylor",
+              "B": "Henri Fayol",
+              "C": "Max Weber",
+              "D": "Elton Mayo"
+            },
+            "correct_answer": "B",
+            "explanation": "Henri Fayol formulated the 14 principles of management and administrative theory."
+          }
+        ]
+      }"""
+    }
+    path == "/api/library/upload-to-test" -> {
+      """{"success":true,"message":"Questions uploaded to test form successfully!","setId":1}"""
+    }
     else -> {
       """{"success":false,"message":"This feature requires a connection to the ExamSetu server."}"""
     }

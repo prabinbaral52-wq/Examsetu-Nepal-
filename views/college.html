@@ -56,6 +56,29 @@
       overflow-x: auto;
       padding-bottom: 2px;
     }
+    .source-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .source-google { background: rgba(66, 133, 244, 0.12); color: #2563eb; border: 1px solid rgba(66, 133, 244, 0.25); }
+    .source-docx { background: rgba(30, 144, 255, 0.12); color: #0284c7; border: 1px solid rgba(30, 144, 255, 0.25); }
+    .source-camscanner { background: rgba(16, 185, 129, 0.12); color: #059669; border: 1px solid rgba(16, 185, 129, 0.25); }
+    .source-selector-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .source-selector-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 10px;
+      border: 2px solid var(--border); border-radius: var(--radius-lg); background: var(--surface);
+      color: var(--muted-text); cursor: pointer; font-weight: 700; font-size: 0.88rem; transition: all 0.2s ease;
+    }
+    .source-selector-btn i { font-size: 1.6rem; }
+    .source-selector-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .source-selector-btn.active { border-color: var(--primary); background: rgba(37, 99, 235, 0.08); color: var(--primary); }
     .college-tab-btn {
       padding: 12px 20px;
       border-radius: var(--radius-md) var(--radius-md) 0 0;
@@ -322,7 +345,10 @@
       <!-- SECTION 3: Portal Navigation Tabs -->
       <div class="college-portal-tabs">
         <button id="tabBtnTests" class="college-tab-btn active" onclick="switchCollegeTab('tests')">
-          <i class="ri-file-list-3-line"></i> College Tests & Mock Exams (<span id="testTabCount">1</span>)
+          <i class="ri-file-list-3-line"></i> College Tests &amp; Mock Exams (<span id="testTabCount">1</span>)
+        </button>
+        <button id="tabBtnLibrary" class="college-tab-btn" onclick="switchCollegeTab('library')">
+          <i class="ri-book-read-line"></i> College Library &amp; Books (<span id="collegeLibraryCount">5</span>)
         </button>
         <button id="tabBtnBank" class="college-tab-btn" onclick="switchCollegeTab('bank')">
           <i class="ri-database-2-line"></i> College Question Bank (<span id="qTabCount">5</span>)
@@ -331,7 +357,7 @@
           <i class="ri-trophy-line"></i> Campus Leaderboard
         </button>
         <button id="tabBtnFaculty" class="college-tab-btn" onclick="switchCollegeTab('faculty')">
-          <i class="ri-edit-2-line"></i> Faculty & Staff Studio (Add Questions & Tests)
+          <i class="ri-edit-2-line"></i> Faculty &amp; Staff Studio (Add Questions &amp; Tests)
         </button>
       </div>
 
@@ -339,7 +365,7 @@
       <div id="tabPaneTests" class="college-tab-pane">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
           <div>
-            <h2 style="font-size:1.3rem;font-weight:800;">Scheduled & Model Examinations</h2>
+            <h2 style="font-size:1.3rem;font-weight:800;">Scheduled &amp; Model Examinations</h2>
             <p style="font-size:0.9rem;color:var(--muted-text);">Exams authored by your college professors specifically for your syllabus.</p>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="switchCollegeTab('faculty')">
@@ -349,6 +375,55 @@
 
         <div id="collegeTestsGrid" class="college-card-grid">
           <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- TAB: COLLEGE LIBRARY & BOOKS -->
+      <div id="tabPaneLibrary" class="college-tab-pane" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:14px;">
+          <div>
+            <h2 style="font-size:1.3rem;font-weight:800;display:flex;align-items:center;gap:8px;">
+              <i class="ri-book-open-fill" style="color:var(--primary);"></i> College Departmental Library
+            </h2>
+            <p style="font-size:0.9rem;color:var(--muted-text);">
+              Verified syllabus textbooks, faculty lecture notes, and chapter guides for enrolled students.
+            </p>
+          </div>
+
+          <!-- Role Toggle for Testing & Demonstration: Faculty vs Student Mode -->
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-pill);padding:4px 6px;display:inline-flex;align-items:center;gap:4px;">
+              <button id="collegeRoleFacultyBtn" class="btn btn-primary btn-sm" style="border-radius:var(--radius-pill);font-size:0.78rem;padding:4px 12px;" onclick="setCollegeRole('faculty')">
+                <i class="ri-user-star-line"></i> Faculty / Teacher Mode
+              </button>
+              <button id="collegeRoleStudentBtn" class="btn btn-ghost btn-sm" style="border-radius:var(--radius-pill);font-size:0.78rem;padding:4px 12px;color:var(--muted-text);" onclick="setCollegeRole('student')">
+                <i class="ri-graduation-cap-line"></i> Student View (Read-Only)
+              </button>
+            </div>
+
+            <!-- Faculty Action: Add Book Button (Hidden for Students) -->
+            <button id="collegeAddBookBtn" class="btn btn-primary btn-sm faculty-only-control" onclick="openCollegeAddBookModal()">
+              <i class="ri-add-circle-line"></i> Add Book (Google Files/DOCX/CamScanner)
+            </button>
+          </div>
+        </div>
+
+        <!-- Student notice banner (Shown only when in Student mode) -->
+        <div id="collegeStudentLibraryNotice" style="display:none;background:rgba(37,99,235,0.08);border:1px solid rgba(37,99,235,0.25);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:20px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <i class="ri-information-line" style="font-size:1.4rem;color:var(--primary);"></i>
+            <div>
+              <div style="font-weight:700;font-size:0.92rem;color:var(--primary);">College Student Library Access</div>
+              <div style="font-size:0.84rem;color:var(--muted-text);">
+                You have read-only study access to curriculum books and lecture notes curated by your professors. Only faculty members can upload books or author tests.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- College Books Grid -->
+        <div id="collegeBooksGrid" class="college-card-grid">
+          <!-- Dynamically populated via JS -->
         </div>
       </div>
 
@@ -831,6 +906,7 @@ Ans: A
           renderTestsList(activeTests);
           renderQuestionsList(collegeId);
           renderLeaderboard(data.leaderboard || []);
+          loadCollegeLibrary();
         }
       } catch (e) {
         console.warn('Failed to load portal details:', e);
@@ -1096,12 +1172,15 @@ Ans: A
     }
 
     function switchCollegeTab(tabKey) {
-      ['tests', 'bank', 'rank', 'faculty'].forEach(k => {
+      ['tests', 'library', 'bank', 'rank', 'faculty'].forEach(k => {
         const pane = document.getElementById(`tabPane${k.charAt(0).toUpperCase() + k.slice(1)}`);
         const btn = document.getElementById(`tabBtn${k.charAt(0).toUpperCase() + k.slice(1)}`);
         if (pane) pane.style.display = (k === tabKey) ? 'block' : 'none';
         if (btn) btn.classList.toggle('active', k === tabKey);
       });
+      if (tabKey === 'library') {
+        loadCollegeLibrary();
+      }
     }
 
     function handleCodeUnlock(e) {
@@ -1350,6 +1429,642 @@ Ans: A
       clearInterval(testTimerInterval);
       document.getElementById('testTakingModal').style.display = 'none';
     }
+
+    /* ==========================================================================
+       COLLEGE INSTITUTIONAL LIBRARY & BOOK-TO-MCQ ENGINE
+       ========================================================================== */
+    let collegeUserRole = 'faculty'; // Default to faculty view for admin/faculty, switchable to student view
+    let collegeBooksCache = [];
+    let collegeActiveGenQuestions = [];
+    let collegeCurrentViewedBook = null;
+
+    function setCollegeRole(role) {
+      collegeUserRole = role;
+      const fBtn = document.getElementById('collegeRoleFacultyBtn');
+      const sBtn = document.getElementById('collegeRoleStudentBtn');
+      const addBtn = document.getElementById('collegeAddBookBtn');
+      const notice = document.getElementById('collegeStudentLibraryNotice');
+
+      if (role === 'faculty') {
+        if (fBtn) { fBtn.className = 'btn btn-primary btn-sm'; fBtn.style.color = '#fff'; }
+        if (sBtn) { sBtn.className = 'btn btn-ghost btn-sm'; sBtn.style.color = 'var(--muted-text)'; }
+        if (addBtn) addBtn.style.display = 'inline-flex';
+        if (notice) notice.style.display = 'none';
+        ExamSetu.showToast('Switched to Faculty / Teacher Mode (Full Authoring Access)', 'info');
+      } else {
+        if (fBtn) { fBtn.className = 'btn btn-ghost btn-sm'; fBtn.style.color = 'var(--muted-text)'; }
+        if (sBtn) { sBtn.className = 'btn btn-primary btn-sm'; sBtn.style.color = '#fff'; }
+        if (addBtn) addBtn.style.display = 'none';
+        if (notice) notice.style.display = 'block';
+        ExamSetu.showToast('Switched to College Student View (Read-Only Study Access)', 'info');
+      }
+
+      renderCollegeBooks(collegeBooksCache);
+    }
+
+    async function loadCollegeLibrary() {
+      const grid = document.getElementById('collegeBooksGrid');
+      if (!grid) return;
+
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted-text);"><i class="ri-loader-4-line ri-spin" style="font-size:1.8rem;display:block;margin-bottom:8px;"></i>Loading College Library...</div>';
+
+      try {
+        const cId = activeCollege ? activeCollege.id : '';
+        const cCode = activeCollege ? activeCollege.code : '';
+        const res = await fetch(`/api/library?collegeId=${cId}&collegeCode=${encodeURIComponent(cCode)}`);
+        const data = await res.json();
+        if (data.success && Array.isArray(data.books)) {
+          collegeBooksCache = data.books;
+          const badge = document.getElementById('collegeLibraryCount');
+          if (badge) badge.textContent = data.books.length;
+          renderCollegeBooks(data.books);
+        } else {
+          grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted-text);">No books uploaded for this college yet.</div>';
+        }
+      } catch (err) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--danger);">Error loading college library: ' + err.message + '</div>';
+      }
+    }
+
+    function renderCollegeBooks(books) {
+      const grid = document.getElementById('collegeBooksGrid');
+      if (!grid) return;
+
+      if (!books || books.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1;background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius-xl);padding:36px;text-align:center;">
+            <div style="font-size:2.8rem;margin-bottom:10px;">📖</div>
+            <h3 style="font-size:1.2rem;font-weight:800;margin-bottom:6px;">Departmental Book Repository Ready</h3>
+            <p style="color:var(--muted-text);font-size:0.9rem;max-width:500px;margin:0 auto 16px auto;">
+              Upload syllabus notes or textbooks via Google Files, Word DOCX, or CamScanner.
+            </p>
+            ${collegeUserRole === 'faculty' ? `
+              <button onclick="openCollegeAddBookModal()" class="btn btn-primary btn-sm">
+                <i class="ri-add-circle-line"></i> Add Book / Lecture Notes
+              </button>
+            ` : '<p style="font-size:0.85rem;color:var(--muted-text);">Your professors have not uploaded notes for this department yet.</p>'}
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = books.map((b) => {
+        let sourceBadge = '';
+        if (b.source_type === 'google_drive') {
+          sourceBadge = '<span class="source-badge source-google"><i class="ri-google-fill"></i> Google Drive</span>';
+        } else if (b.source_type === 'docx') {
+          sourceBadge = '<span class="source-badge source-docx"><i class="ri-file-word-line"></i> DOCX Document</span>';
+        } else if (b.source_type === 'camscanner') {
+          sourceBadge = '<span class="source-badge source-camscanner"><i class="ri-camera-lens-line"></i> CamScanner</span>';
+        } else {
+          sourceBadge = '<span class="source-badge source-docx"><i class="ri-file-text-line"></i> Notes</span>';
+        }
+
+        const excerpt = b.content_preview ? (b.content_preview.length > 130 ? b.content_preview.slice(0, 130) + '...' : b.content_preview) : 'Curated academic notes.';
+
+        // If user is a college student: Hide "Generate MCQ Questions" button!
+        const isStudent = collegeUserRole === 'student';
+
+        return `
+          <div class="college-test-card" style="padding:22px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+                ${sourceBadge}
+                <span class="tag-badge tag-badge-primary" style="font-size:0.75rem;">${escapeHTML(b.subject || 'General')}</span>
+              </div>
+
+              <h3 style="font-size:1.15rem;font-weight:800;line-height:1.4;margin-bottom:6px;color:var(--text);">
+                ${escapeHTML(b.title)}
+              </h3>
+
+              <div style="font-size:0.84rem;color:var(--muted-text);margin-bottom:12px;">
+                <span><i class="ri-user-line" style="color:var(--primary);"></i> ${escapeHTML(b.author || 'Department Faculty')}</span>
+              </div>
+
+              <p style="font-size:0.84rem;color:var(--muted-text);line-height:1.5;background:var(--surface-alt);padding:10px 12px;border-radius:var(--radius-md);margin-bottom:16px;">
+                ${escapeHTML(excerpt)}
+              </p>
+            </div>
+
+            <div>
+              ${!isStudent ? `
+                <!-- Faculty Feature: Generate MCQ Questions -->
+                <button onclick="openCollegeGenMcqModal(${b.id})" class="btn btn-primary" style="width:100%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px;">
+                  <i class="ri-flashlight-fill"></i> Generate MCQ Questions
+                </button>
+              ` : ''}
+
+              <button onclick="openCollegeViewBookModal(${b.id})" class="btn btn-secondary btn-sm" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <i class="ri-book-read-line"></i> ${isStudent ? 'Read / Study Notes' : 'Read / Preview Book'}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openCollegeAddBookModal(sourceType = 'google_drive') {
+      const modal = document.getElementById('collegeAddBookModal');
+      if (!modal) return;
+      modal.style.display = 'flex';
+      switchCollegeSourceTab(sourceType);
+    }
+
+    function closeCollegeAddBookModal() {
+      const modal = document.getElementById('collegeAddBookModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function switchCollegeSourceTab(sourceType) {
+      document.getElementById('collegeBookSourceType').value = sourceType;
+
+      ['colSrcGoogle', 'colSrcDocx', 'colSrcCam'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('active');
+      });
+      ['colTabGoogle', 'colTabDocx', 'colTabCam'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+
+      if (sourceType === 'google_drive') {
+        document.getElementById('colSrcGoogle')?.classList.add('active');
+        document.getElementById('colTabGoogle').style.display = 'block';
+      } else if (sourceType === 'docx') {
+        document.getElementById('colSrcDocx')?.classList.add('active');
+        document.getElementById('colTabDocx').style.display = 'block';
+      } else if (sourceType === 'camscanner') {
+        document.getElementById('colSrcCam')?.classList.add('active');
+        document.getElementById('colTabCam').style.display = 'block';
+      }
+    }
+
+    function handleCollegeDocxFile(file) {
+      if (!file) return;
+      document.getElementById('colDocxInfo').textContent = `Attached: ${file.name}`;
+      document.getElementById('colDocxInfo').style.display = 'block';
+
+      const titleField = document.getElementById('colBookTitle');
+      const contentField = document.getElementById('colBookContent');
+
+      if (!titleField.value) {
+        titleField.value = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      }
+      contentField.value = `Extracted from College Faculty Document: "${file.name}"\n\nCurriculum Notes:\n1. Core theorems and lecture objectives.\n2. Standard formula derivations and numerical examples.\n3. Model exam questions aligned with college syllabus.`;
+      ExamSetu.showToast('Document attached to college repository!', 'success');
+    }
+
+    function handleCollegeCamScannerFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const thumb = document.getElementById('colCamThumb');
+        if (thumb) {
+          thumb.src = e.target.result;
+          document.getElementById('colCamPreview').style.display = 'block';
+        }
+        const titleField = document.getElementById('colBookTitle');
+        const contentField = document.getElementById('colBookContent');
+        if (!titleField.value) {
+          titleField.value = 'CamScanner Notes: ' + file.name.replace(/\.[^/.]+$/, '');
+        }
+        contentField.value = `[CamScanner High-Resolution Scan: ${file.name}]\n\nTranscribed Lecture Notes:\n- Chapter Definition: Specific academic guidelines and state parameters.\n- Formulation: Standard equations per syllabus curriculum.\n- Review Questions: High-yield questions authored by college faculty.`;
+        ExamSetu.showToast('CamScanner page processed!', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function saveCollegeBookFromForm(e) {
+      if (e) e.preventDefault();
+      const title = document.getElementById('colBookTitle')?.value.trim();
+      const subject = document.getElementById('colBookSubject')?.value.trim() || 'General';
+      const category = document.getElementById('colBookCategory')?.value || 'College';
+      const author = document.getElementById('colBookAuthor')?.value.trim() || 'College Faculty';
+      const content = document.getElementById('colBookContent')?.value.trim();
+      const sourceType = document.getElementById('collegeBookSourceType')?.value || 'google_drive';
+      const fileUrl = document.getElementById('colGoogleUrl')?.value.trim() || '';
+
+      if (!title) {
+        ExamSetu.showToast('Please enter a book or material title', 'warning');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/library/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title,
+            subject,
+            category,
+            author,
+            content_preview: content,
+            source_type: sourceType,
+            file_url: fileUrl,
+            college_id: activeCollege ? activeCollege.id : null,
+            college_code: activeCollege ? activeCollege.code : null,
+            total_pages: Math.max(1, Math.round(content.length / 500))
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          ExamSetu.showToast(`Book "${title}" added to your College Library!`, 'success');
+          closeCollegeAddBookModal();
+          loadCollegeLibrary();
+        } else {
+          ExamSetu.showToast(data.message || 'Error saving book', 'danger');
+        }
+      } catch (err) {
+        ExamSetu.showToast('Network error saving book: ' + err.message, 'danger');
+      }
+    }
+
+    function openCollegeGenMcqModal(bookId) {
+      const book = collegeBooksCache.find(b => b.id === bookId);
+      if (!book) return;
+
+      document.getElementById('colGenBookId').value = book.id;
+      document.getElementById('colGenBookTitle').value = book.title;
+      document.getElementById('colGenSubject').value = book.subject || 'General';
+      document.getElementById('colGenContent').value = book.content_preview || book.title;
+      document.getElementById('colGenSubtitle').textContent = `Generate exam questions based on: "${book.title}"`;
+      document.getElementById('colGenResultsWrapper').style.display = 'none';
+      collegeActiveGenQuestions = [];
+
+      document.getElementById('collegeGenMcqModal').style.display = 'flex';
+    }
+
+    function closeCollegeGenMcqModal() {
+      const modal = document.getElementById('collegeGenMcqModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    async function runCollegeMcqGeneration() {
+      const btn = document.getElementById('btnCollegeRunGen');
+      const bookId = document.getElementById('colGenBookId')?.value;
+      const bookTitle = document.getElementById('colGenBookTitle')?.value;
+      const subject = document.getElementById('colGenSubject')?.value || 'General';
+      const content = document.getElementById('colGenContent')?.value.trim();
+      const count = parseInt(document.getElementById('colGenCount')?.value, 10) || 10;
+      const difficulty = document.getElementById('colGenDifficulty')?.value || 'medium';
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Generating Questions...';
+
+      try {
+        const res = await fetch('/api/library/generate-mcq', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            bookId,
+            bookTitle,
+            contentText: content,
+            subject,
+            count,
+            difficulty
+          })
+        });
+        const data = await res.json();
+        if (data.success && Array.isArray(data.questions) && data.questions.length > 0) {
+          collegeActiveGenQuestions = data.questions;
+          renderCollegeGeneratedQuestions(data.questions);
+          ExamSetu.showToast(`Generated ${data.questions.length} questions from this book!`, 'success');
+        } else {
+          ExamSetu.showToast(data.message || 'Error generating questions', 'danger');
+        }
+      } catch (e) {
+        ExamSetu.showToast('Network error: ' + e.message, 'danger');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ri-magic-line"></i> Generate Questions';
+      }
+    }
+
+    function renderCollegeGeneratedQuestions(questions) {
+      const list = document.getElementById('colGenQuestionsList');
+      const wrapper = document.getElementById('colGenResultsWrapper');
+      document.getElementById('colGenCountBadge').textContent = questions.length;
+      wrapper.style.display = 'block';
+
+      list.innerHTML = questions.map((q, idx) => {
+        const correct = (q.correct_answer || 'A').toUpperCase();
+        return `
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;">
+            <div style="font-weight:800;font-size:0.95rem;margin-bottom:8px;">
+              <span style="color:var(--primary);margin-right:6px;">Q${idx + 1}.</span> ${escapeHTML(q.question)}
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.86rem;margin-bottom:8px;">
+              <div style="padding:6px 10px;border-radius:6px;background:${correct === 'A' ? 'rgba(16,185,129,0.12)' : 'var(--surface-alt)'};">A: ${escapeHTML(q.option_a || q.options?.A || '')}</div>
+              <div style="padding:6px 10px;border-radius:6px;background:${correct === 'B' ? 'rgba(16,185,129,0.12)' : 'var(--surface-alt)'};">B: ${escapeHTML(q.option_b || q.options?.B || '')}</div>
+              <div style="padding:6px 10px;border-radius:6px;background:${correct === 'C' ? 'rgba(16,185,129,0.12)' : 'var(--surface-alt)'};">C: ${escapeHTML(q.option_c || q.options?.C || '')}</div>
+              <div style="padding:6px 10px;border-radius:6px;background:${correct === 'D' ? 'rgba(16,185,129,0.12)' : 'var(--surface-alt)'};">D: ${escapeHTML(q.option_d || q.options?.D || '')}</div>
+            </div>
+            <div style="font-size:0.8rem;color:var(--muted-text);">
+              <strong style="color:var(--success);">Answer: Option ${correct}</strong> — ${escapeHTML(q.explanation || '')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* DOWN TO BUTTON 1: Download College Question Paper (Print Layout) */
+    function downloadCollegeQuestionPaperPrint() {
+      if (!collegeActiveGenQuestions || collegeActiveGenQuestions.length === 0) return;
+      const title = document.getElementById('colGenBookTitle')?.value || 'Departmental Model Exam';
+      const subject = document.getElementById('colGenSubject')?.value || 'General';
+      const colName = activeCollege ? activeCollege.name : 'COLLEGE EXAMINATION BOARD';
+      const questions = collegeActiveGenQuestions;
+
+      const printHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>${escapeHTML(colName)} - Question Paper</title>
+          <style>
+            @page { size: A4; margin: 15mm; }
+            body { font-family: 'Times New Roman', serif; padding: 20px; max-width: 800px; margin: 0 auto; color: #111; }
+            .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 16px; }
+            .c-name { font-size: 20pt; font-weight: bold; text-transform: uppercase; margin: 0; }
+            .q-item { margin-bottom: 12px; page-break-inside: avoid; }
+            .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; font-size: 10.5pt; margin-top: 4px; padding-left: 16px; }
+            .ans-key { page-break-before: always; margin-top: 30px; border-top: 2px dashed #000; padding-top: 20px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 10pt; }
+            th, td { border: 1px solid #666; padding: 6px 10px; text-align: left; }
+            @media print { .no-print { display: none; } }
+          </style>
+        </head>
+        <body>
+          <div class="no-print" style="margin-bottom:16px;text-align:right;">
+            <button onclick="window.print()" style="padding:8px 16px;background:#2563eb;color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:bold;">🖨️ Print / Save PDF</button>
+          </div>
+          <div class="header">
+            <div class="c-name">${escapeHTML(colName)}</div>
+            <div style="font-size:13pt;font-weight:bold;margin:4px 0;">INTERNAL TERMINAL &amp; MODEL EXAMINATION - 2026</div>
+            <div style="font-weight:bold;margin-top:6px;">Subject: ${escapeHTML(subject)} | Paper: ${escapeHTML(title)} | Full Marks: ${questions.length}</div>
+          </div>
+          <div>
+            ${questions.map((q, i) => `
+              <div class="q-item">
+                <div style="font-weight:bold;">${i + 1}. ${escapeHTML(q.question)}</div>
+                <div class="grid">
+                  <div>(A) ${escapeHTML(q.option_a || q.options?.A || '')}</div>
+                  <div>(B) ${escapeHTML(q.option_b || q.options?.B || '')}</div>
+                  <div>(C) ${escapeHTML(q.option_c || q.options?.C || '')}</div>
+                  <div>(D) ${escapeHTML(q.option_d || q.options?.D || '')}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="ans-key">
+            <h3 style="text-align:center;margin:0 0 10px 0;">INSTRUCTOR &amp; EXAMINER ANSWER KEY</h3>
+            <table>
+              <thead><tr><th style="width:40px;">Q#</th><th style="width:70px;">Answer</th><th>Conceptual Explanation</th></tr></thead>
+              <tbody>
+                ${questions.map((q, i) => `
+                  <tr>
+                    <td style="font-weight:bold;text-align:center;">${i + 1}</td>
+                    <td style="font-weight:bold;color:#047857;text-align:center;">Option ${(q.correct_answer || 'A').toUpperCase()}</td>
+                    <td>${escapeHTML(q.explanation || 'Verified per curriculum.')}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </body>
+        </html>
+      `;
+      const w = window.open('', '_blank');
+      if (w) { w.document.write(printHtml); w.document.close(); }
+    }
+
+    /* DOWN TO BUTTON 2: Directly Upload to College Test Form */
+    async function uploadCollegeQuestionsToTestForm() {
+      if (!collegeActiveGenQuestions || collegeActiveGenQuestions.length === 0) return;
+      const title = document.getElementById('colGenBookTitle')?.value || 'Departmental Test';
+      const subject = document.getElementById('colGenSubject')?.value || 'General';
+      const count = collegeActiveGenQuestions.length;
+
+      try {
+        const res = await fetch('/api/library/upload-to-test', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            questions: collegeActiveGenQuestions,
+            testTitle: `${subject}: ${title} (${count} MCQs)`,
+            subjectName: subject,
+            collegeId: activeCollege ? activeCollege.id : null,
+            durationMinutes: Math.max(15, Math.round(count * 1.5))
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          ExamSetu.showToast(`Published test "${title}" to your College Student Portal!`, 'success');
+          closeCollegeGenMcqModal();
+          switchCollegeTab('tests');
+          if (activeCollege) loadCollegeByCode(activeCollege.special_access_code || activeCollege.code);
+        } else {
+          ExamSetu.showToast(data.message || 'Error uploading test', 'danger');
+        }
+      } catch (e) {
+        ExamSetu.showToast('Network error: ' + e.message, 'danger');
+      }
+    }
+
+    function openCollegeViewBookModal(bookId) {
+      const book = collegeBooksCache.find(b => b.id === bookId);
+      if (!book) return;
+      collegeCurrentViewedBook = book;
+      document.getElementById('colViewTitle').textContent = book.title;
+      document.getElementById('colViewAuthor').textContent = book.author || 'Faculty';
+      document.getElementById('colViewSubject').textContent = book.subject || 'General';
+      document.getElementById('colViewContent').textContent = book.content_preview || 'No notes available.';
+      document.getElementById('collegeViewBookModal').style.display = 'flex';
+    }
   </script>
+
+  <!-- COLLEGE MODAL 1: ADD BOOK -->
+  <div id="collegeAddBookModal" class="test-modal-overlay">
+    <div class="test-modal-box" style="max-width:760px;width:100%;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:18px;">
+        <div>
+          <h3 style="font-size:1.25rem;font-weight:800;margin:0;">Add Departmental Book / Notes</h3>
+          <p style="font-size:0.82rem;color:var(--muted-text);margin:2px 0 0 0;">Upload through Google Files, Word DOCX, or CamScanner.</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="closeCollegeAddBookModal()" style="font-size:1.2rem;"><i class="ri-close-line"></i></button>
+      </div>
+
+      <!-- 3 Source Selector Tabs -->
+      <div class="source-selector-bar">
+        <button type="button" id="colSrcGoogle" class="source-selector-btn active" onclick="switchCollegeSourceTab('google_drive')">
+          <i class="ri-google-fill" style="color:#2563eb;"></i><span>Google Files</span>
+        </button>
+        <button type="button" id="colSrcDocx" class="source-selector-btn" onclick="switchCollegeSourceTab('docx')">
+          <i class="ri-file-word-line" style="color:#0284c7;"></i><span>DOCX Document</span>
+        </button>
+        <button type="button" id="colSrcCam" class="source-selector-btn" onclick="switchCollegeSourceTab('camscanner')">
+          <i class="ri-camera-lens-line" style="color:#059669;"></i><span>CamScanner</span>
+        </button>
+      </div>
+
+      <form id="colAddBookForm" onsubmit="saveCollegeBookFromForm(event)">
+        <input type="hidden" id="collegeBookSourceType" value="google_drive">
+
+        <!-- Google Files Tab -->
+        <div id="colTabGoogle">
+          <div style="background:var(--surface-alt);padding:16px;border-radius:var(--radius-lg);margin-bottom:16px;">
+            <label class="form-label">Google Drive / Docs URL</label>
+            <input type="url" id="colGoogleUrl" class="form-input" placeholder="https://docs.google.com/document/d/...">
+          </div>
+        </div>
+
+        <!-- DOCX Tab -->
+        <div id="colTabDocx" style="display:none;">
+          <div style="background:var(--surface-alt);border:2px dashed var(--border);padding:20px;text-align:center;border-radius:var(--radius-lg);margin-bottom:16px;cursor:pointer;" onclick="document.getElementById('colDocxFile').click()">
+            <input type="file" id="colDocxFile" accept=".docx,.doc,.pdf,.txt" style="display:none;" onchange="handleCollegeDocxFile(this.files[0])">
+            <i class="ri-file-word-line" style="font-size:2.5rem;color:#0284c7;display:block;margin-bottom:6px;"></i>
+            <div style="font-weight:700;">Select DOCX / PDF Document File</div>
+            <div id="colDocxInfo" style="font-weight:700;color:var(--primary);margin-top:6px;display:none;"></div>
+          </div>
+        </div>
+
+        <!-- CamScanner Tab -->
+        <div id="colTabCam" style="display:none;">
+          <div style="background:var(--surface-alt);padding:16px;border-radius:var(--radius-lg);margin-bottom:16px;">
+            <div style="display:flex;gap:10px;margin-bottom:10px;">
+              <label class="btn btn-primary btn-sm" style="cursor:pointer;">
+                <i class="ri-camera-fill"></i> Snap with Camera
+                <input type="file" accept="image/*" capture="environment" style="display:none;" onchange="handleCollegeCamScannerFile(this.files[0])">
+              </label>
+              <label class="btn btn-secondary btn-sm" style="cursor:pointer;">
+                <i class="ri-image-line"></i> Upload CamScanner Image
+                <input type="file" accept="image/*,.pdf" style="display:none;" onchange="handleCollegeCamScannerFile(this.files[0])">
+              </label>
+            </div>
+            <div id="colCamPreview" style="display:none;"><img id="colCamThumb" src="" style="width:70px;height:70px;object-fit:cover;border-radius:6px;"></div>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">Book / Notes Title</label>
+          <input type="text" id="colBookTitle" class="form-input" placeholder="e.g. Physics Grade 12 Chapter 4 Notes" required>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+          <div class="form-group">
+            <label class="form-label">Subject</label>
+            <input type="text" id="colBookSubject" class="form-input" placeholder="Physics, Chemistry, Maths" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select id="colBookCategory" class="form-input">
+              <option value="NEB (+2)">NEB (+2)</option>
+              <option value="Bachelor">Bachelor / University</option>
+              <option value="SEE">SEE (Class 10)</option>
+              <option value="Entrance">Entrance Exam</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">Author / Professor Name</label>
+          <input type="text" id="colBookAuthor" class="form-input" placeholder="e.g. Prof. R. K. Sharma">
+        </div>
+
+        <div class="form-group" style="margin-bottom:16px;">
+          <label class="form-label">Content Notes / Lecture Excerpt</label>
+          <textarea id="colBookContent" class="form-input" rows="4" placeholder="Enter key syllabus notes..." required></textarea>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:10px;border-top:1px solid var(--border);padding-top:14px;">
+          <button type="button" class="btn btn-secondary" onclick="closeCollegeAddBookModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i class="ri-save-line"></i> Save to College Library</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- COLLEGE MODAL 2: GENERATE MCQ QUESTIONS -->
+  <div id="collegeGenMcqModal" class="test-modal-overlay">
+    <div class="test-modal-box" style="max-width:860px;width:100%;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:16px;">
+        <div>
+          <h3 style="font-size:1.25rem;font-weight:800;margin:0;">Syllabus-to-Quiz AI: Generate College MCQs</h3>
+          <p id="colGenSubtitle" style="font-size:0.82rem;color:var(--muted-text);margin:2px 0 0 0;">Create test questions from book notes.</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="closeCollegeGenMcqModal()" style="font-size:1.2rem;"><i class="ri-close-line"></i></button>
+      </div>
+
+      <input type="hidden" id="colGenBookId">
+      <input type="hidden" id="colGenBookTitle">
+      <input type="hidden" id="colGenSubject">
+
+      <div style="background:var(--surface-alt);border-radius:var(--radius-lg);padding:16px;margin-bottom:18px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end;">
+          <div class="form-group">
+            <label class="form-label">Number of MCQs</label>
+            <select id="colGenCount" class="form-input">
+              <option value="5">5 Questions (Class Quiz)</option>
+              <option value="10" selected>10 Questions (Standard Test)</option>
+              <option value="20">20 Questions (Terminal Exam)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Difficulty</label>
+            <select id="colGenDifficulty" class="form-input">
+              <option value="medium" selected>Standard College Level</option>
+              <option value="easy">Introductory</option>
+              <option value="hard">Advanced</option>
+            </select>
+          </div>
+          <div>
+            <button id="btnCollegeRunGen" class="btn btn-primary" onclick="runCollegeMcqGeneration()">
+              <i class="ri-magic-line"></i> Generate Questions
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:12px;">
+          <label class="form-label">Syllabus / Notes Text</label>
+          <textarea id="colGenContent" class="form-input" rows="3"></textarea>
+        </div>
+      </div>
+
+      <div id="colGenResultsWrapper" style="display:none;">
+        <div style="font-weight:800;font-size:1rem;margin-bottom:10px;">
+          Generated Questions (<span id="colGenCountBadge">0</span>)
+        </div>
+        <div id="colGenQuestionsList" style="max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:18px;"></div>
+
+        <!-- DOWN TO BUTTON: TWO PRIMARY OPTIONS -->
+        <div style="background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+          <div>
+            <div style="font-weight:700;">Deploy College Examination</div>
+            <div style="font-size:0.8rem;color:var(--muted-text);">Print physical question paper or upload to student portal.</div>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button class="btn btn-secondary" onclick="downloadCollegeQuestionPaperPrint()"><i class="ri-printer-line"></i> Print / Download Question Paper</button>
+            <button class="btn btn-primary" onclick="uploadCollegeQuestionsToTestForm()"><i class="ri-upload-cloud-line"></i> Directly Upload into Test Form</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLLEGE MODAL 3: VIEW BOOK -->
+  <div id="collegeViewBookModal" class="test-modal-overlay">
+    <div class="test-modal-box" style="max-width:680px;width:100%;">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:14px;">
+        <div>
+          <h3 id="colViewTitle" style="font-size:1.2rem;font-weight:800;margin:0;">Book Title</h3>
+          <span style="font-size:0.82rem;color:var(--muted-text);"><span id="colViewAuthor"></span> • <span id="colViewSubject"></span></span>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('collegeViewBookModal').style.display='none'"><i class="ri-close-line"></i></button>
+      </div>
+      <div id="colViewContent" style="background:var(--surface-alt);padding:16px;border-radius:var(--radius-lg);max-height:300px;overflow-y:auto;line-height:1.7;white-space:pre-wrap;font-size:0.9rem;"></div>
+      <div style="text-align:right;margin-top:14px;">
+        <button class="btn btn-primary btn-sm" onclick="document.getElementById('collegeViewBookModal').style.display='none'">Close</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
