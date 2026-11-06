@@ -3,22 +3,138 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Practice Exam in Progress - ExamSetu Nepal</title>
-  <meta name="description" content="Online timed MCQ examination for Lok Sewa, SEE, NEB, and Banking. Answer questions with instant palette navigation.">
+  <title>Mock Test &amp; NEB Exam Hall - ExamSetu Nepal</title>
+  <meta name="description" content="Online high-security timed examination for NEB, SEE, and Lok Sewa with 15-minute warning chime, anti-cheat protection, and model sets.">
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="apple-touch-icon" href="/images/logo.png">
   <link rel="stylesheet" href="/css/remixicon.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    /* Wireframe 3 Custom Styles */
+    .exam-hero-banner {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: 0 8px 24px rgba(30, 58, 138, 0.25);
+    }
+    .motto-badge {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .motto-badge span {
+      color: #fbbf24;
+    }
+    .filter-panel {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      align-items: center;
+    }
+    .filter-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted-text);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .filter-select {
+      width: 100%;
+      padding: 9px 14px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.9rem;
+      outline: none;
+      cursor: pointer;
+    }
+    .filter-select:focus {
+      border-color: var(--primary);
+    }
+
+    /* Anti-Cheat Banner */
+    .security-bar {
+      background: rgba(220, 38, 38, 0.08);
+      border: 1.5px solid rgba(220, 38, 38, 0.25);
+      border-radius: 14px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      color: #b91c1c;
+      font-weight: 700;
+    }
+    .security-bar.ok {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.25);
+      color: #047857;
+    }
+
+    /* Bell Sound Alert Toast */
+    #bellNotificationToast {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      z-index: 99999;
+      background: #dc2626;
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4);
+      font-weight: 800;
+      align-items: center;
+      gap: 12px;
+      animation: bellPulse 1.2s infinite alternate;
+    }
+    @keyframes bellPulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.05); }
+    }
+  </style>
 </head>
 <body id="practiceTestPage">
+
+  <!-- Bell Sound Alert Banner -->
+  <div id="bellNotificationToast">
+    <i class="ri-notification-3-fill" style="font-size: 1.5rem;"></i>
+    <div>
+      <div>🔔 15 MINUTES WARNING BELL!</div>
+      <div style="font-size: 0.78rem; opacity: 0.9; font-weight: 600;">Time is concluding. Review all answers before auto-submission.</div>
+    </div>
+  </div>
 
   <!-- Minimal Sticky Exam Header -->
   <header class="navbar">
     <div class="container nav-container">
       <a href="/" class="brand" onclick="return confirm('Leaving now will pause your timer. Are you sure you want to exit?')">
-        <div class="brand-icon"><i class="ri-book-open-fill"></i></div>
-        <div class="brand-title">
-          <span class="brand-name">ExamSetu <span>Nepal</span></span>
-        </div>
+        <div class="brand-icon"><img src="/images/logo.png" alt="ExamSetu Logo"></div>
+        <div class="brand-title"><span class="brand-name">ExamSetu <span>Nepal</span></span></div>
       </a>
 
       <!-- Center Timer Display -->
@@ -27,50 +143,111 @@
       </div>
 
       <div class="nav-actions">
-        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle dark mode">
-          <i class="ri-moon-line"></i>
+        <!-- Test Bell Chime Button -->
+        <button id="testBellBtn" class="btn btn-secondary btn-sm" onclick="playExamWarningBell()" title="Test Bell Sound Chime">
+          <i class="ri-volume-up-line"></i> Bell Sound
         </button>
+
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle dark mode"><i class="ri-moon-line"></i></button>
         <button id="submitTestBtn" class="btn btn-primary btn-sm">
-          <i class="ri-check-double-line"></i> Finish & Submit
+          <i class="ri-check-double-line"></i> Finish &amp; Submit
         </button>
       </div>
     </div>
   </header>
 
-  <main class="main-content">
+  <main class="main-content" style="padding-top: calc(var(--header-height, 68px) + 12px);">
     <div class="container">
 
-      <!-- Test Configuration Bar: Custom Count & Shuffle -->
-      <div style="background:var(--glass-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:12px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;box-shadow:var(--clay-shadow);">
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-          <label for="testCountSelect" style="font-size:0.88rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;">
-            <i class="ri-list-check-2" style="color:var(--primary);font-size:1.1rem;"></i> Test Length:
-          </label>
-          <select id="testCountSelect" onchange="TestEngine.changeTestCount(this.value)" style="padding:6px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);font-weight:700;color:var(--text);outline:none;cursor:pointer;">
-            <option value="10">10 Questions (10 Mins)</option>
-            <option value="25">25 Questions (25 Mins)</option>
-            <option value="50">50 Questions (45 Mins)</option>
-            <option value="100">100 Questions (90 Mins)</option>
-            <option value="150">150 Questions (135 Mins)</option>
-            <option value="200">200 Questions (180 Mins)</option>
-            <option value="299">299 Questions (Full Mock Marathon)</option>
-          </select>
+      <!-- WIREFRAME 3 HEADER BANNER: "Practice makes man perfect" -->
+      <div class="exam-hero-banner">
+        <div>
+          <div class="motto-badge">
+            <i class="ri-medal-fill" style="color: #fbbf24;"></i>
+            <span>Practice makes man perfect</span>
+          </div>
+          <div style="font-size: 0.88rem; opacity: 0.9; margin-top: 4px;">
+            Believe in yourself <strong>"You can do it"</strong> • Nepal Examinations Board &amp; Lok Sewa Model Exam Hall
+          </div>
         </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary btn-sm" onclick="toggleFullScreenFocus()" style="color: #fff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.15); font-weight: 700;">
+            <i class="ri-fullscreen-line"></i> Fullscreen Exam Lock
+          </button>
+        </div>
+      </div>
 
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button onclick="window.print()" class="btn btn-secondary btn-sm" title="Print this mock paper or save as PDF">
-            <i class="ri-printer-line"></i> 🖨️ Print Exam
-          </button>
-          <button onclick="TestEngine.shuffleNewTest()" class="btn btn-secondary btn-sm" title="Generate a fresh random mock test with new questions">
-            <i class="ri-refresh-line"></i> 🎲 Generate New Questions (Shuffle)
-          </button>
+      <!-- WIREFRAME 3 FILTERS: stream/grade -> subject -> lesson choose -->
+      <div class="filter-panel">
+        <div class="filter-grid">
+          <div class="filter-group">
+            <label for="filterGradeStream">Grade / Stream</label>
+            <select id="filterGradeStream" class="filter-select" onchange="handleFilterChange()">
+              <option value="11-science">Grade 11 - Science</option>
+              <option value="11-management">Grade 11 - Management</option>
+              <option value="12-science">Grade 12 - Science</option>
+              <option value="12-management">Grade 12 - Management</option>
+              <option value="see-general">SEE (Grade 10) - General</option>
+              <option value="loksewa-gk" selected>Lok Sewa - Civil Service</option>
+              <option value="tsc-license">TSC - Teaching License</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="filterSubject">Subject</label>
+            <select id="filterSubject" class="filter-select" onchange="handleFilterChange()">
+              <option value="General Knowledge" selected>General Knowledge</option>
+              <option value="Physics">Physics</option>
+              <option value="Chemistry">Chemistry</option>
+              <option value="Biology">Biology</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Accountancy">Accountancy</option>
+              <option value="Nepali">Nepali</option>
+              <option value="English">English</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="filterLesson">Lesson / Chapter</label>
+            <select id="filterLesson" class="filter-select" onchange="handleFilterChange()">
+              <option value="All Lessons" selected>All Lessons (Full Syllabus)</option>
+              <option value="Mechanics">Mechanics &amp; Motion</option>
+              <option value="Heat & Thermodynamics">Heat &amp; Thermodynamics</option>
+              <option value="Wave & Optics">Wave &amp; Optics</option>
+              <option value="Electricity & Magnetism">Electricity &amp; Magnetism</option>
+              <option value="Modern Physics">Modern Physics</option>
+              <option value="Nepal Constitution">Constitution of Nepal 2072</option>
+              <option value="Geography of Nepal">Geography of Nepal</option>
+              <option value="Stoichiometry">Stoichiometry &amp; Mole Concept</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="testModeChoice">Exam Mode</label>
+            <select id="testModeChoice" class="filter-select" onchange="handleModeChange()">
+              <option value="mcq" selected>Custom MCQ Test (Timed)</option>
+              <option value="neb_exam">NEB Board Exam Mode (Strict 75 Marks)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- WIREFRAME 3 ANTI-CHEAT & HIGH SECURITY NOTICE -->
+      <div id="securityBar" class="security-bar ok">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <i class="ri-shield-check-fill" style="font-size: 1.2rem;"></i>
+          <span>Live Test High-Security Active: Zero Chance of Cheating • Tab switches &amp; window exits are strictly monitored</span>
+        </div>
+        <div id="violationCounter" style="background: rgba(0,0,0,0.06); padding: 3px 10px; border-radius: 99px; font-size: 0.8rem;">
+          Violations: 0
         </div>
       </div>
 
       <!-- Test Header Details -->
       <div class="progress-container">
         <div class="progress-header">
-          <span id="testExamTitle" style="font-weight:700;color:var(--text);">Lok Sewa • General Practice</span>
+          <span id="testExamTitle" style="font-weight:700;color:var(--text);">Lok Sewa • General Knowledge</span>
           <span id="progressText">0% Answered</span>
         </div>
         <div class="progress-bar-track">
@@ -84,10 +261,9 @@
         <!-- Question Main Area -->
         <div class="test-main-card">
           <div id="questionDisplayArea">
-            <!-- Dynamic Question injected here by test.js -->
             <div style="text-align:center;padding:50px;">
               <i class="ri-loader-4-line ri-spin" style="font-size:2.5rem;color:var(--primary);"></i>
-              <p style="margin-top:12px;color:var(--muted-text);">Loading question bank...</p>
+              <p style="margin-top:12px;color:var(--muted-text);">Loading questions aligned with NEB syllabus...</p>
             </div>
           </div>
 
@@ -125,27 +301,20 @@
           </div>
 
           <div class="palette-legend">
-            <div class="legend-item">
-              <span class="legend-dot dot-answered"></span>
-              <span>Answered</span>
-            </div>
-            <div class="legend-item">
-              <span class="legend-dot dot-flagged"></span>
-              <span>Flagged</span>
-            </div>
-            <div class="legend-item">
-              <span class="legend-dot dot-unattempted"></span>
-              <span>Unattempted</span>
-            </div>
-            <div class="legend-item">
-              <span class="legend-dot dot-current"></span>
-              <span>Current</span>
-            </div>
+            <div class="legend-item"><span class="legend-dot dot-answered"></span><span>Answered</span></div>
+            <div class="legend-item"><span class="legend-dot dot-flagged"></span><span>Flagged</span></div>
+            <div class="legend-item"><span class="legend-dot dot-unattempted"></span><span>Unattempted</span></div>
+            <div class="legend-item"><span class="legend-dot dot-current"></span><span>Current</span></div>
           </div>
 
-          <!-- Keyboard Shortcuts Tip -->
-          <div style="margin-top:20px;padding:12px;background:var(--surface-alt);border-radius:var(--radius-sm);font-size:0.75rem;color:var(--muted-text);line-height:1.4;">
-            <i class="ri-keyboard-line"></i> <strong>Pro Tip:</strong> Press keys <kbd>A</kbd>, <kbd>B</kbd>, <kbd>C</kbd>, <kbd>D</kbd> to pick options, or Arrow Keys <kbd>←</kbd> <kbd>→</kbd> to navigate.
+          <!-- Motivational Card from Wireframe 3 -->
+          <div style="margin-top:20px;padding:14px;background:rgba(37,99,235,0.06);border:1px solid rgba(37,99,235,0.2);border-radius:var(--radius-md);text-align:center;">
+            <div style="font-size:1.1rem;margin-bottom:4px;">🌟</div>
+            <div style="font-weight:800;color:var(--primary);font-size:0.92rem;">Believe in yourself</div>
+            <div style="font-size:0.8rem;color:var(--text);font-style:italic;margin-top:2px;">"You can do it!"</div>
+            <div style="font-size:0.75rem;color:var(--muted-text);margin-top:8px;">
+              Bell rings 15 min prior to time completion.
+            </div>
           </div>
         </aside>
 
@@ -156,5 +325,121 @@
 
   <script src="/js/main.js"></script>
   <script src="/js/test.js"></script>
+  <script>
+    // Web Audio Synthesizer for 15-Minute Warning Bell Sound (Wireframe 3)
+    let audioCtx = null;
+    function playExamWarningBell() {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const now = audioCtx.currentTime;
+
+        // Two harmonizing bell frequencies (880 Hz A5 + 1760 Hz A6)
+        const osc1 = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(880, now);
+        osc1.frequency.exponentialRampToValueAtTime(440, now + 2.5);
+
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(1760, now);
+        osc2.frequency.exponentialRampToValueAtTime(880, now + 2.0);
+
+        gain.gain.setValueAtTime(0.8, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 2.8);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 3.0);
+        osc2.stop(now + 3.0);
+
+        // Show Toast
+        const toast = document.getElementById('bellNotificationToast');
+        if (toast) {
+          toast.style.display = 'flex';
+          setTimeout(() => { toast.style.display = 'none'; }, 6000);
+        }
+      } catch (e) {
+        console.warn('Audio bell error:', e);
+      }
+    }
+
+    // High-Security Anti-Cheat Detection (Wireframe 3)
+    let violationCount = 0;
+    function recordAntiCheatViolation(reason) {
+      violationCount++;
+      const counterEl = document.getElementById('violationCounter');
+      const barEl = document.getElementById('securityBar');
+      if (counterEl) counterEl.textContent = `Violations: ${violationCount} (${reason})`;
+      if (barEl) {
+        barEl.className = 'security-bar';
+      }
+
+      // Record in session
+      window.lastCheatCount = violationCount;
+
+      alert(`⚠️ ANTI-CHEAT SECURITY VIOLATION #${violationCount}!\n\nReason: ${reason}\n\nWarning: In this live test section, security is high. Window blurs or tab switches are permanently recorded in your faculty progress report!`);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        recordAntiCheatViolation('Switched browser tab or minimized window');
+      }
+    });
+
+    window.addEventListener('blur', () => {
+      recordAntiCheatViolation('Focus lost to external window');
+    });
+
+    function toggleFullScreenFocus() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    function handleFilterChange() {
+      const gradeStream = document.getElementById('filterGradeStream').value;
+      const sub = document.getElementById('filterSubject').value;
+      const lesson = document.getElementById('filterLesson').value;
+
+      let exam = 'NEB';
+      if (gradeStream.includes('see')) exam = 'SEE';
+      else if (gradeStream.includes('loksewa')) exam = 'Lok Sewa';
+      else if (gradeStream.includes('tsc')) exam = 'TSC';
+
+      const url = new URL(window.location.href);
+      url.searchParams.set('exam', exam);
+      url.searchParams.set('subject', sub);
+      url.searchParams.set('lesson', lesson);
+      url.searchParams.set('shuffle', Date.now());
+      window.location.href = url.pathname + url.search;
+    }
+
+    function handleModeChange() {
+      const mode = document.getElementById('testModeChoice').value;
+      const url = new URL(window.location.href);
+      if (mode === 'neb_exam') {
+        url.searchParams.set('count', '50');
+        url.searchParams.set('time', '180');
+      } else {
+        url.searchParams.set('count', '10');
+      }
+      url.searchParams.set('shuffle', Date.now());
+      window.location.href = url.pathname + url.search;
+    }
+  </script>
 </body>
 </html>

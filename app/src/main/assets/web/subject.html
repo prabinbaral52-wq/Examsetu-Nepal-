@@ -3,288 +3,886 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Subject Practice Hub - ExamSetu Nepal</title>
-  <meta name="description" content="Practice chapter-wise MCQs with instant explanations or take timed mock tests for Lok Sewa, SEE, NEB, and Banking.">
+  <title>Subject Drilldown &amp; NEB Generator - ExamSetu Nepal</title>
+  <meta name="description" content="Select Grade 10, 11, 12 or Lok Sewa, choose streams, generate NEB model questions and upload textbooks through Drive/PDF.">
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="apple-touch-icon" href="/images/logo.png">
   <link rel="stylesheet" href="/css/remixicon.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/guru.css">
+  <style>
+    .subject-page-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px 12px 90px 12px;
+    }
+    .step-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 24px 20px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.03);
+    }
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .step-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+    .step-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 0;
+    }
+    .step-subtitle {
+      font-size: 0.82rem;
+      color: var(--muted-text);
+      margin: 0;
+    }
+
+    /* Pill & Card Selectors */
+    .selector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+    }
+    .select-pill {
+      background: var(--surface-alt);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .select-pill i {
+      font-size: 1.4rem;
+      color: var(--muted-text);
+    }
+    .select-pill:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .select-pill.active {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--primary);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.18);
+    }
+    .select-pill.active i {
+      color: var(--primary);
+    }
+
+    /* Subject Cards */
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .subject-pill-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+    .subject-pill-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .subject-pill-card.active {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.08);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.15);
+    }
+    .subject-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    /* Feature Tabs */
+    .feature-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 4px;
+    }
+    .feat-tab-btn {
+      padding: 10px 18px;
+      border-radius: 12px 12px 0 0;
+      border: none;
+      background: transparent;
+      color: var(--muted-text);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .feat-tab-btn.active {
+      color: var(--primary);
+      border-bottom: 3px solid var(--primary);
+      background: rgba(37, 99, 235, 0.06);
+    }
+
+    /* Upload Box */
+    .upload-dropzone {
+      border: 2px dashed var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      background: var(--surface-alt);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .upload-dropzone:hover {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.04);
+    }
+
+    /* Question Display Card */
+    .quiz-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    }
+    .quiz-option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+    .quiz-option-btn:hover {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.05);
+    }
+    .quiz-option-btn.correct {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.12);
+      color: #065f46;
+    }
+    .quiz-option-btn.wrong {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.12);
+      color: #991b1b;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- Top App Navigation -->
   <header class="navbar">
-    <div class="container nav-container">
+    <div class="container nav-container" style="justify-content: space-between;">
       <a href="/" class="brand">
-        <div class="brand-icon"><i class="ri-book-open-fill"></i></div>
+        <div class="brand-icon"><img src="/images/logo.png" alt="ExamSetu Logo"></div>
         <div class="brand-title"><span class="brand-name">ExamSetu <span>Nepal</span></span></div>
       </a>
-      <nav>
-        <ul class="nav-links" id="navLinks">
-          <li><a href="/" class="nav-link">Home</a></li>
-          <li><a href="/exams" class="nav-link">All Exams</a></li>
-          <li><a href="/practice" class="nav-link"><i class="ri-compass-3-line"></i> Practice Mode</a></li>
-          <li><a href="/subject?slug=general-knowledge" class="nav-link active">Subjects</a></li>
-          <li><a href="/about" class="nav-link">About</a></li>
-        </ul>
-      </nav>
+      <div style="font-weight: 800; font-size: 0.95rem; color: var(--primary); display: flex; align-items: center; gap: 6px;">
+        <i class="ri-node-tree"></i> Subject Hub
+      </div>
       <div class="nav-actions">
         <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle dark mode"><i class="ri-moon-line"></i></button>
-        <div id="navAuthSlot">
-          <a href="/login" class="btn btn-secondary btn-sm">Login</a>
-        </div>
-        <button class="nav-toggle" id="navToggle"><i class="ri-menu-line"></i></button>
+        <a href="/" class="btn btn-secondary btn-sm"><i class="ri-home-4-line"></i> Home</a>
       </div>
     </div>
   </header>
 
-  <main class="main-content">
-    <div class="container">
+  <main class="main-content" style="padding-top: calc(var(--header-height, 68px) + 12px);">
+    <div class="subject-page-container">
 
-      <!-- Breadcrumbs -->
-      <div style="font-size:0.85rem;color:var(--muted-text);margin-bottom:20px;">
-        <a href="/" style="color:var(--muted-text);"><i class="ri-home-4-line"></i> Home</a> /
-        <a href="/exams" style="color:var(--muted-text);">Exams</a> /
-        <span id="breadcrumbSubject" style="color:var(--text);font-weight:600;">Subject Practice Hub</span>
+      <!-- Breadcrumbs & Active Status -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+        <div style="font-size: 0.84rem; color: var(--muted-text);">
+          <a href="/" style="color: var(--muted-text);"><i class="ri-home-line"></i> Home</a> /
+          <span style="color: var(--text); font-weight: 700;">Subject Explorer &amp; Generator</span>
+        </div>
+        <span class="tag-badge tag-badge-primary" id="selectedContextBadge">Grade 11 Science • Physics</span>
       </div>
 
-      <!-- Subject Hero Header -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:36px;box-shadow:var(--shadow-sm);margin-bottom:36px;">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:20px;">
-          <div style="max-width:700px;">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
-              <span id="subjectExamBadge" class="tag-badge tag-badge-primary">Exam</span>
-              <span class="tag-badge" style="background:var(--success-light);color:var(--success);"><i class="ri-shield-check-line"></i> Syllabus Aligned</span>
-              <span class="tag-badge" style="background:var(--accent-light);color:var(--accent);"><i class="ri-translate-2"></i> Nepali + English</span>
+      <!-- STEP 1: CHOOSE GRADE (Wireframe 1) -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-badge">1</div>
+          <div>
+            <h2 class="step-title">Choose Grade</h2>
+            <p class="step-subtitle">Select your academic grade or competitive category</p>
+          </div>
+        </div>
+
+        <div class="selector-grid" id="gradeSelectorGrid">
+          <button type="button" class="select-pill active" onclick="selectGrade('11')">
+            <i class="ri-graduation-cap-line"></i>
+            <span>Grade 11</span>
+          </button>
+          <button type="button" class="select-pill" onclick="selectGrade('12')">
+            <i class="ri-award-line"></i>
+            <span>Grade 12</span>
+          </button>
+          <button type="button" class="select-pill" onclick="selectGrade('SEE')">
+            <i class="ri-book-read-line"></i>
+            <span>SEE (Class 10)</span>
+          </button>
+          <button type="button" class="select-pill" onclick="selectGrade('Lok Sewa')">
+            <i class="ri-government-line"></i>
+            <span>Lok Sewa Aayog</span>
+          </button>
+          <button type="button" class="select-pill" onclick="selectGrade('TSC/Bachelor')">
+            <i class="ri-user-star-line"></i>
+            <span>TSC / Bachelor</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: CHOOSE STREAM (Conditional: For Grade 11 & 12 only; Omitted for SEE) -->
+      <div class="step-card" id="streamStepCard">
+        <div class="step-header">
+          <div class="step-badge">2</div>
+          <div>
+            <h2 class="step-title">Choose Stream</h2>
+            <p class="step-subtitle" id="streamSubtitle">Select educational faculty stream for +2 Higher Secondary</p>
+          </div>
+        </div>
+
+        <div class="selector-grid" id="streamSelectorGrid">
+          <button type="button" class="select-pill active" onclick="selectStream('Science')">
+            <i class="ri-microscope-line"></i>
+            <span>Science</span>
+          </button>
+          <button type="button" class="select-pill" onclick="selectStream('Management')">
+            <i class="ri-line-chart-line"></i>
+            <span>Management</span>
+          </button>
+          <button type="button" class="select-pill" onclick="selectStream('Humanities')">
+            <i class="ri-book-mark-line"></i>
+            <span>Humanities</span>
+          </button>
+          <button type="button" class="select-pill" onclick="selectStream('Law')">
+            <i class="ri-scales-3-line"></i>
+            <span>Law</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: CHOOSE SUBJECT (Wireframe 1) -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-badge" id="subjectStepBadgeNum">3</div>
+          <div>
+            <h2 class="step-title">Choose Subject</h2>
+            <p class="step-subtitle" id="subjectSubtitle">Select curriculum subject to practice, generate model sets, or read books</p>
+          </div>
+        </div>
+
+        <div class="subject-grid" id="subjectsContainer">
+          <!-- Populated dynamically based on grade + stream -->
+        </div>
+      </div>
+
+      <!-- UNDER-TAB SUBJECT FEATURES (Wireframe 1) -->
+      <div class="step-card" style="border-top: 4px solid var(--primary);">
+        <div class="feature-tabs">
+          <button class="feat-tab-btn active" id="tabGenerateBtn" onclick="switchFeatureTab('generate')">
+            <i class="ri-sparkling-fill"></i> Generate MCQ / NEB Model Set
+          </button>
+          <button class="feat-tab-btn" id="tabUploadBtn" onclick="switchFeatureTab('upload')">
+            <i class="ri-upload-cloud-2-line"></i> Upload Book (Drive/Files/PDF)
+          </button>
+        </div>
+
+        <!-- FEATURE A: GENERATE MCQ QUESTIONS OR MODEL SET BASED ON NEB -->
+        <div id="featureGenerateSection">
+          <div style="background: rgba(37, 99, 235, 0.06); border: 1.5px solid rgba(37, 99, 235, 0.2); border-radius: 14px; padding: 14px 18px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <div style="font-weight: 800; font-size: 0.98rem; color: var(--primary);">
+                <i class="ri-cpu-line"></i> NEB Question Generation Engine
+              </div>
+              <div style="font-size: 0.82rem; color: var(--muted-text);">
+                Specification grid compliant questions with mark distributions &amp; step solutions.
+              </div>
             </div>
-            <h1 id="subjectTitle" style="font-size:2.2rem;font-weight:800;margin-bottom:8px;">Subject Practice Hub</h1>
-            <p id="subjectDescription" style="color:var(--muted-text);font-size:1.05rem;line-height:1.5;">
-              Master this subject through chapter-wise self-paced study or full timed mock examinations.
+
+            <!-- Mode Switcher -->
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-sm btn-primary" id="modeMcqBtn" onclick="setGenerationMode('mcq')">
+                <i class="ri-list-check-2"></i> MCQ Questions
+              </button>
+              <button class="btn btn-sm btn-secondary" id="modeNebBtn" onclick="setGenerationMode('neb_model')">
+                <i class="ri-file-paper-2-line"></i> NEB Model Set
+              </button>
+            </div>
+          </div>
+
+          <!-- Generation Controls Bar -->
+          <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label for="questionCountSelect" style="font-size: 0.85rem; font-weight: 700; color: var(--text);">Question Count:</label>
+              <select id="questionCountSelect" style="padding: 8px 14px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--surface); color: var(--text); font-weight: 700;">
+                <option value="5">5 Questions (Quick Quiz)</option>
+                <option value="10" selected>10 Questions (Standard)</option>
+                <option value="20">20 Questions (Intensive)</option>
+                <option value="30">30 Questions (Full Unit)</option>
+              </select>
+            </div>
+
+            <button class="btn btn-primary" onclick="generateSubjectQuestions()" style="font-weight: 800;">
+              <i class="ri-refresh-line"></i> Generate Now
+            </button>
+
+            <a id="launchMockTestDirectBtn" href="/test" class="btn btn-secondary" style="margin-left: auto; font-weight: 700;">
+              <i class="ri-timer-line"></i> Launch Full Timed Mock Test
+            </a>
+          </div>
+
+          <!-- Dynamic Quiz Display Container -->
+          <div id="quizDisplayContainer">
+            <div style="text-align: center; padding: 40px 20px; color: var(--muted-text); background: var(--surface-alt); border-radius: 16px;">
+              <i class="ri-loader-4-line ri-spin" style="font-size: 2.2rem; color: var(--primary);"></i>
+              <div style="margin-top: 10px; font-weight: 700;">Preparing NEB Curriculum Questions...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FEATURE B: UPLOAD BOOK THROUGH DRIVE / FILES / PDF -->
+        <div id="featureUploadSection" style="display: none;">
+          <div style="margin-bottom: 20px;">
+            <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px;">Upload Textbook, Syllabus, or Notes</h3>
+            <p style="font-size: 0.85rem; color: var(--muted-text);">
+              Upload your textbook or lecture notes directly via Google Drive link or PDF file. It will be permanently saved to your user dashboard!
             </p>
           </div>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <a id="heroPracticeBtn" href="/practice" class="btn btn-secondary btn-lg" style="justify-content:center;">
-              <i class="ri-questionnaire-line"></i> Instant Practice Mode
-            </a>
-            <a id="heroMockBtn" href="/test" class="btn btn-primary btn-lg" style="justify-content:center;">
-              <i class="ri-timer-line"></i> Timed Mock Exam
-            </a>
-          </div>
-        </div>
-      </div>
 
-      <!-- Mode Selector Guide -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px;margin-bottom:36px;">
-        <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:var(--radius-md);padding:18px 20px;">
-          <h4 style="font-size:1rem;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px;">
-            <i class="ri-flashlight-line" style="color:var(--primary);"></i> Self-Paced Practice Mode
-          </h4>
-          <p style="font-size:0.88rem;color:var(--muted-text);">
-            No countdown timer. Immediate feedback after selecting an option, comprehensive explanations, bookmarking, and error reporting.
-          </p>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:var(--radius-md);padding:18px 20px;">
-          <h4 style="font-size:1rem;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px;">
-            <i class="ri-timer-flash-line" style="color:var(--accent);"></i> Timed Mock Test Mode
-          </h4>
-          <p style="font-size:0.88rem;color:var(--muted-text);">
-            Strict countdown clock with negative marking simulation, question palette navigation, auto-submit, and full diagnostic scorecards.
-          </p>
-        </div>
-      </div>
+          <form id="uploadBookForm" onsubmit="handleBookUpload(event)" style="display: grid; gap: 14px;">
+            <div>
+              <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Book / Document Title *</label>
+              <input type="text" id="bookTitleInput" class="form-control" placeholder="e.g. Grade 11 Modern Physics &amp; Thermodynamics CDC Textbook" required style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--surface-alt); color: var(--text);">
+            </div>
 
-      <!-- Chapter / Topic Wise Section -->
-      <div id="topicsSection" style="margin-bottom:44px;">
-        <div class="section-header" style="text-align:left;margin-bottom:20px;">
-          <h2 style="font-size:1.5rem;font-weight:800;display:flex;align-items:center;gap:10px;">
-            <i class="ri-node-tree" style="color:var(--primary);"></i> Chapter & Topic Breakdown
-          </h2>
-          <p style="color:var(--muted-text);font-size:0.95rem;">Focus your preparation on specific high-weightage syllabus topics.</p>
-        </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Author / CDC Source</label>
+                <input type="text" id="bookAuthorInput" class="form-control" placeholder="e.g. CDC Sanothimi / Prof. D.R. Bhattarai" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--surface-alt); color: var(--text);">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Source Channel</label>
+                <select id="bookSourceSelect" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--surface-alt); color: var(--text); font-weight: 600;">
+                  <option value="google_drive">Google Drive Link</option>
+                  <option value="pdf_file">Local PDF / Device File</option>
+                </select>
+              </div>
+            </div>
 
-        <div id="topicsGrid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:20px;">
-          <div style="text-align:center;padding:30px;grid-column:1/-1;color:var(--muted-text);">
-            <i class="ri-loader-4-line ri-spin" style="font-size:2rem;color:var(--primary);"></i>
-            <p style="margin-top:8px;">Loading topic syllabus...</p>
-          </div>
-        </div>
-      </div>
+            <!-- Drive Link Input -->
+            <div id="driveLinkWrap">
+              <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Google Drive Shareable URL</label>
+              <input type="url" id="driveUrlInput" class="form-control" placeholder="https://drive.google.com/file/d/..." style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--surface-alt); color: var(--text);">
+            </div>
 
-      <!-- Standard Full-Length Model Sets -->
-      <div class="section-header" style="text-align:left;margin-bottom:20px;">
-        <h2 style="font-size:1.5rem;font-weight:800;display:flex;align-items:center;gap:10px;">
-          <i class="ri-file-list-3-line" style="color:var(--primary);"></i> Full-Length Model Sets
-        </h2>
-        <p style="color:var(--muted-text);font-size:0.95rem;">Balanced question papers covering all chapters according to official exam patterns.</p>
-      </div>
+            <!-- Local File Input -->
+            <div id="localFileWrap" style="display: none;">
+              <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Select PDF File</label>
+              <input type="file" id="pdfFileInput" accept=".pdf,.doc,.docx" style="width: 100%; padding: 10px; border: 1.5px dashed var(--border); border-radius: 10px; background: var(--surface-alt);">
+            </div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:24px;margin-bottom:36px;" id="practiceSetsList">
-        <!-- Set Card 1 -->
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-            <span class="tag-badge tag-badge-primary">Model Set 01</span>
-            <span style="font-size:0.8rem;color:var(--muted-text);font-weight:600;"><i class="ri-timer-line"></i> 10 Mins</span>
-          </div>
-          <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">Standard Set 1 (10 Questions)</h3>
-          <p style="font-size:0.9rem;color:var(--muted-text);margin-bottom:20px;flex-grow:1;">High-yield mixed questions covering the most frequently asked concepts.</p>
-          <div style="display:flex;gap:10px;padding-top:14px;border-top:1px solid var(--border);">
-            <a id="set1PracticeBtn" href="/practice" class="btn btn-secondary btn-sm" style="flex:1;justify-content:center;">
-              <i class="ri-compass-3-line"></i> Practice
-            </a>
-            <a id="set1MockBtn" href="/test" class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">
-              <i class="ri-play-line"></i> Mock Test
-            </a>
+            <button type="submit" class="btn btn-primary" style="padding: 12px 24px; font-weight: 800; border-radius: 12px; margin-top: 6px;">
+              <i class="ri-save-line"></i> Save Permanently to Dashboard
+            </button>
+          </form>
+
+          <!-- Permanently Saved User Library Books -->
+          <div style="margin-top: 30px;">
+            <h4 style="font-size: 1rem; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+              <i class="ri-book-shelf-line" style="color: var(--primary);"></i> Available &amp; Uploaded Textbooks
+            </h4>
+            <div id="userBooksList" style="display: grid; gap: 10px;">
+              <!-- Populated dynamically -->
+            </div>
           </div>
         </div>
 
-        <!-- Set Card 2 -->
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-            <span class="tag-badge tag-badge-warning">Model Set 02</span>
-            <span style="font-size:0.8rem;color:var(--muted-text);font-weight:600;"><i class="ri-timer-line"></i> 20 Mins</span>
-          </div>
-          <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">Comprehensive Set 2 (20 Questions)</h3>
-          <p style="font-size:0.9rem;color:var(--muted-text);margin-bottom:20px;flex-grow:1;">Full endurance test simulating the actual examination hall experience.</p>
-          <div style="display:flex;gap:10px;padding-top:14px;border-top:1px solid var(--border);">
-            <a id="set2PracticeBtn" href="/practice" class="btn btn-secondary btn-sm" style="flex:1;justify-content:center;">
-              <i class="ri-compass-3-line"></i> Practice
-            </a>
-            <a id="set2MockBtn" href="/test" class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">
-              <i class="ri-play-line"></i> Mock Test
-            </a>
-          </div>
-        </div>
-
-        <!-- Set Card 3: Rapid Fire -->
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-            <span class="tag-badge" style="background:#fee2e2;color:#dc2626;">Speed Drill</span>
-            <span style="font-size:0.8rem;color:var(--muted-text);font-weight:600;"><i class="ri-timer-line"></i> 5 Mins</span>
-          </div>
-          <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">5-Minute Rapid Drill</h3>
-          <p style="font-size:0.9rem;color:var(--muted-text);margin-bottom:20px;flex-grow:1;">Fast-paced 5 questions drill to test reflex recall and accuracy.</p>
-          <div style="display:flex;gap:10px;padding-top:14px;border-top:1px solid var(--border);">
-            <a id="set3PracticeBtn" href="/practice" class="btn btn-secondary btn-sm" style="flex:1;justify-content:center;">
-              <i class="ri-compass-3-line"></i> Practice
-            </a>
-            <a id="set3MockBtn" href="/test" class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">
-              <i class="ri-play-line"></i> Mock Test
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- In-Page Ad Container -->
-      <div class="ad-container" style="margin-top:40px;">
-        <div class="ad-label">Advertisement</div>
-        <div class="ad-slot-responsive">
-          <span>Responsive Ad Slot • ExamSetu Nepal Practice Sets</span>
-        </div>
       </div>
 
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="container footer-bottom">
-      <div>&copy; 2026 ExamSetu Nepal. All rights reserved.</div>
-      <div><a href="/disclaimer" style="color:var(--muted-text);">Practice Disclaimer</a></div>
-    </div>
-  </footer>
-
   <script src="/js/main.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const slug = urlParams.get('slug') || 'general-knowledge';
-      const examParam = urlParams.get('exam') || '';
+    // State
+    let currentGrade = '11';
+    let currentStream = 'Science';
+    let currentSubject = 'Physics';
+    let generationMode = 'mcq';
+    let loadedQuestions = [];
 
-      let displaySubject = 'General Knowledge';
-      let displayExam = examParam || 'Lok Sewa';
-
-      if (slug.includes('computer')) { displaySubject = 'Computer/IT'; displayExam = 'Lok Sewa'; }
-      else if (slug.includes('science')) { displaySubject = 'Science'; displayExam = 'SEE'; }
-      else if (slug.includes('math')) { displaySubject = 'Mathematics'; displayExam = 'SEE'; }
-      else if (slug.includes('banking')) { displaySubject = 'Banking Law & Economy'; displayExam = 'Banking'; }
-      else if (slug.includes('tsc') || slug.includes('education')) { displaySubject = 'Education Pedagogy'; displayExam = 'TSC'; }
-      else if (slug.includes('iq')) { displaySubject = 'General Mental Ability (IQ)'; displayExam = 'Lok Sewa'; }
-      else if (slug.includes('entrance')) { displaySubject = 'Engineering / Medical Aptitude'; displayExam = 'Entrance'; }
-
-      document.getElementById('subjectTitle').textContent = `${displaySubject} Practice Hub`;
-      document.getElementById('breadcrumbSubject').textContent = displaySubject;
-      document.getElementById('subjectExamBadge').textContent = displayExam;
-
-      const basePracticeUrl = `/practice?exam=${encodeURIComponent(displayExam)}&subject=${encodeURIComponent(displaySubject)}`;
-      const baseMockUrl = `/test?exam=${encodeURIComponent(displayExam)}&subject=${encodeURIComponent(displaySubject)}`;
-
-      document.getElementById('heroPracticeBtn').href = `${basePracticeUrl}&limit=20`;
-      document.getElementById('heroMockBtn').href = `${baseMockUrl}&count=10`;
-
-      document.getElementById('set1PracticeBtn').href = `${basePracticeUrl}&limit=10`;
-      document.getElementById('set1MockBtn').href = `${baseMockUrl}&count=10`;
-
-      document.getElementById('set2PracticeBtn').href = `${basePracticeUrl}&limit=20`;
-      document.getElementById('set2MockBtn').href = `${baseMockUrl}&count=20`;
-
-      document.getElementById('set3PracticeBtn').href = `${basePracticeUrl}&limit=5`;
-      document.getElementById('set3MockBtn').href = `${baseMockUrl}&count=5`;
-
-      // Fetch dynamic topics for this subject
-      const topicsContainer = document.getElementById('topicsGrid');
-      try {
-        const res = await fetch(`/api/subjects/${encodeURIComponent(slug)}/topics`);
-        const data = await res.json();
-        if (data.success && data.topics && data.topics.length > 0) {
-          topicsContainer.innerHTML = data.topics.map(t => {
-            const topicPracticeUrl = `/practice?exam=${encodeURIComponent(displayExam)}&subject=${encodeURIComponent(displaySubject)}&topic=${encodeURIComponent(t.name)}`;
-            const topicMockUrl = `/test?exam=${encodeURIComponent(displayExam)}&subject=${encodeURIComponent(displaySubject)}&topic=${encodeURIComponent(t.name)}`;
-            return `
-              <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;display:flex;flex-direction:column;box-shadow:var(--shadow-sm);">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                  <span class="tag-badge tag-badge-primary"><i class="ri-bookmark-3-line"></i> Chapter</span>
-                  <span style="font-size:0.75rem;color:var(--muted-text);"><i class="ri-check-double-line"></i> Verified Qs</span>
-                </div>
-                <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:6px;">${escapeHTML(t.name)}</h3>
-                <p style="font-size:0.88rem;color:var(--muted-text);margin-bottom:16px;flex-grow:1;">${escapeHTML(t.description || 'Topic specific questions with answer keys and explanations.')}</p>
-                <div style="display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border);">
-                  <a href="${topicPracticeUrl}" class="btn btn-secondary btn-sm" style="flex:1;justify-content:center;">
-                    <i class="ri-compass-3-line"></i> Practice
-                  </a>
-                  <a href="${topicMockUrl}" class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">
-                    <i class="ri-play-line"></i> Mock
-                  </a>
-                </div>
-              </div>
-            `;
-          }).join('');
-        } else {
-          // Fallback popular topics for this subject
-          const defaultTopics = [
-            { name: 'Core Foundations', desc: 'Fundamental definitions, articles, theorems, and essential principles.' },
-            { name: 'High-Yield Past Questions', desc: 'Questions frequently repeated in previous examinations.' },
-            { name: 'Advanced Applied Problems', desc: 'Scenario-based analytical questions designed for top scorers.' }
-          ];
-          topicsContainer.innerHTML = defaultTopics.map(t => `
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;display:flex;flex-direction:column;box-shadow:var(--shadow-sm);">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                <span class="tag-badge tag-badge-primary"><i class="ri-bookmark-3-line"></i> Module</span>
-                <span style="font-size:0.75rem;color:var(--muted-text);">Active</span>
-              </div>
-              <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:6px;">${escapeHTML(t.name)}</h3>
-              <p style="font-size:0.88rem;color:var(--muted-text);margin-bottom:16px;flex-grow:1;">${escapeHTML(t.desc)}</p>
-              <div style="display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border);">
-                <a href="${basePracticeUrl}" class="btn btn-secondary btn-sm" style="flex:1;justify-content:center;">
-                  <i class="ri-compass-3-line"></i> Practice
-                </a>
-                <a href="${baseMockUrl}" class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">
-                  <i class="ri-play-line"></i> Mock
-                </a>
-              </div>
-            </div>
-          `).join('');
-        }
-      } catch (err) {
-        console.warn('Error fetching topics:', err);
+    // Subject Matrix per Wireframe Spec
+    const subjectCatalog = {
+      '11': {
+        'Science': [
+          { name: 'Physics', icon: 'ri-flashlight-line', color: '#2563eb', bg: 'rgba(37,99,235,0.1)' },
+          { name: 'Chemistry', icon: 'ri-flask-line', color: '#059669', bg: 'rgba(5,150,105,0.1)' },
+          { name: 'Biology', icon: 'ri-microscope-line', color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
+          { name: 'Computer Science', icon: 'ri-terminal-box-line', color: '#6366f1', bg: 'rgba(99,102,241,0.1)' },
+          { name: 'Mathematics', icon: 'ri-calculator-line', color: '#d97706', bg: 'rgba(217,119,6,0.1)' },
+          { name: 'Nepali', icon: 'ri-book-open-line', color: '#dc2626', bg: 'rgba(220,38,38,0.1)' },
+          { name: 'English', icon: 'ri-global-line', color: '#0284c7', bg: 'rgba(2,132,199,0.1)' }
+        ],
+        'Management': [
+          { name: 'Accountancy', icon: 'ri-funds-box-line', color: '#059669', bg: 'rgba(5,150,105,0.1)' },
+          { name: 'Economics', icon: 'ri-line-chart-line', color: '#2563eb', bg: 'rgba(37,99,235,0.1)' },
+          { name: 'Business Studies', icon: 'ri-briefcase-line', color: '#d97706', bg: 'rgba(217,119,6,0.1)' },
+          { name: 'Business Math', icon: 'ri-calculator-line', color: '#6366f1', bg: 'rgba(99,102,241,0.1)' },
+          { name: 'Nepali', icon: 'ri-book-open-line', color: '#dc2626', bg: 'rgba(220,38,38,0.1)' },
+          { name: 'English', icon: 'ri-global-line', color: '#0284c7', bg: 'rgba(2,132,199,0.1)' }
+        ],
+        'Humanities': [
+          { name: 'Sociology', icon: 'ri-team-line', color: '#6366f1', bg: 'rgba(99,102,241,0.1)' },
+          { name: 'Rural Development', icon: 'ri-plant-line', color: '#059669', bg: 'rgba(5,150,105,0.1)' },
+          { name: 'Mass Communication', icon: 'ri-broadcast-line', color: '#2563eb', bg: 'rgba(37,99,235,0.1)' },
+          { name: 'Nepali', icon: 'ri-book-open-line', color: '#dc2626', bg: 'rgba(220,38,38,0.1)' },
+          { name: 'English', icon: 'ri-global-line', color: '#0284c7', bg: 'rgba(2,132,199,0.1)' }
+        ],
+        'Law': [
+          { name: 'Jurisprudence', icon: 'ri-scales-3-line', color: '#854d0e', bg: 'rgba(133,77,14,0.1)' },
+          { name: 'Constitutional Law', icon: 'ri-government-line', color: '#2563eb', bg: 'rgba(37,99,235,0.1)' },
+          { name: 'Procedural Law', icon: 'ri-file-shield-line', color: '#dc2626', bg: 'rgba(220,38,38,0.1)' },
+          { name: 'Nepali', icon: 'ri-book-open-line', color: '#dc2626', bg: 'rgba(220,38,38,0.1)' },
+          { name: 'English', icon: 'ri-global-line', color: '#0284c7', bg: 'rgba(2,132,199,0.1)' }
+        ]
+      },
+      '12': {
+        'Science': [
+          { name: 'Physics', icon: 'ri-flashlight-line', color: '#2563eb', bg: 'rgba(37,99,235,0.1)' },
+          { name: 'Chemistry', icon: 'ri-flask-line', color: '#059669', bg: 'rgba(5,150,105,0.1)' },
+          { name: 'Biology', icon: 'ri-microscope-line', color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
+          { name: 'Computer Science', icon: 'ri-terminal-box-line', color: '#6366f1', bg: 'rgba(99,102,241,0.1)' },
+          { name: 'Mathematics', icon: 'ri-calculator-line', color: '#d97706', bg: 'rgba(217,119,6,0.1)' },
+          { name: 'Nepali', icon: 'ri-book-open-line', color: '#dc2626', bg: 'rgba(220,38,38,0.1)' },
+          { name: 'English', icon: 'ri-global-line', color: '#0284c7', bg: 'rgba(2,132,199,0.1)' }
+        ],
+        'Management': [
+          { name: 'Accountancy', icon: 'ri-funds-box-line', color: '#059669', bg: 'rgba(5,150,105,0.1)' },
+          { name: 'Economics', icon: 'ri-line-chart-line', color: '#2563eb', bg: 'rgba(37,99,235,0.1)' },
+          { name: 'Business Studies', icon: 'ri-briefcase-line', color: '#d97706', bg: 'rgba(217,119,6,0.1)' },
+          { name: 'Business Math', icon: 'ri-calculator-line', color: '#6366f1', bg: 'rgba(99,102,241,0.1)' },
+          { name: 'Nepali', icon: 'ri-book-open-line', color: '#dc2626', bg: 'rgba(220,38,38,0.1)' },
+          { name: 'English', icon: 'ri-global-line', color: '#0284c7', bg: 'rgba(2,132,199,0.1)' }
+        ]
+      },
+      'SEE': {
+        'all': [
+          { name: 'Science', icon: 'ri-microscope-line', color: '#059669', bg: 'rgba(5,150,105,0.1)' },
+          { name: 'Compulsory Mathematics', icon: 'ri-calculator-line', color: '#2563eb', bg: 'rgba(37,99,235,0.1)' },
+          { name: 'Nepali', icon: 'ri-book-open-line', color: '#dc2626', bg: 'rgba(220,38,38,0.1)' },
+          { name: 'English', icon: 'ri-global-line', color: '#0284c7', bg: 'rgba(2,132,199,0.1)' },
+          { name: 'Social Studies', icon: 'ri-earth-line', color: '#d97706', bg: 'rgba(217,119,6,0.1)' },
+          { name: 'Computer Science', icon: 'ri-terminal-box-line', color: '#6366f1', bg: 'rgba(99,102,241,0.1)' },
+          { name: 'Accountancy', icon: 'ri-funds-box-line', color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
+          { name: 'Optional Mathematics', icon: 'ri-functions', color: '#9333ea', bg: 'rgba(147,51,234,0.1)' }
+        ]
+      },
+      'Lok Sewa': {
+        'all': [
+          { name: 'General Knowledge', icon: 'ri-compass-3-line', color: '#2563eb', bg: 'rgba(37,99,235,0.1)' },
+          { name: 'Nepal Constitution', icon: 'ri-government-line', color: '#dc2626', bg: 'rgba(220,38,38,0.1)' },
+          { name: 'Public Administration', icon: 'ri-briefcase-line', color: '#059669', bg: 'rgba(5,150,105,0.1)' },
+          { name: 'General Mental Ability (IQ)', icon: 'ri-brain-line', color: '#9333ea', bg: 'rgba(147,51,234,0.1)' }
+        ]
+      },
+      'TSC/Bachelor': {
+        'all': [
+          { name: 'General Pedagogy', icon: 'ri-presentation-line', color: '#059669', bg: 'rgba(5,150,105,0.1)' },
+          { name: 'Curriculum & Evaluation', icon: 'ri-file-chart-line', color: '#2563eb', bg: 'rgba(37,99,235,0.1)' },
+          { name: 'Educational Psychology', icon: 'ri-mental-health-line', color: '#6366f1', bg: 'rgba(99,102,241,0.1)' }
+        ]
       }
+    };
+
+    function selectGrade(grade) {
+      currentGrade = grade;
+      document.querySelectorAll('#gradeSelectorGrid .select-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.includes(grade));
+      });
+
+      const streamCard = document.getElementById('streamStepCard');
+      const subjectBadge = document.getElementById('subjectStepBadgeNum');
+
+      if (grade === '11' || grade === '12') {
+        streamCard.style.display = 'block';
+        subjectBadge.textContent = '3';
+        currentStream = 'Science';
+      } else {
+        // Wireframe 2: "If they tap Grade 10 (SEE), no choose stream appears, directly subjects chosen appears"
+        streamCard.style.display = 'none';
+        subjectBadge.textContent = '2';
+        currentStream = 'all';
+      }
+
+      renderSubjects();
+      updateContextBadge();
+      generateSubjectQuestions();
+      renderUploadedBooks();
+    }
+
+    function selectStream(stream) {
+      currentStream = stream;
+      document.querySelectorAll('#streamSelectorGrid .select-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.includes(stream));
+      });
+      renderSubjects();
+      updateContextBadge();
+      generateSubjectQuestions();
+      renderUploadedBooks();
+    }
+
+    function selectSubject(subjectName) {
+      currentSubject = subjectName;
+      document.querySelectorAll('.subject-pill-card').forEach(c => {
+        c.classList.toggle('active', c.dataset.name === subjectName);
+      });
+      updateContextBadge();
+      generateSubjectQuestions();
+      renderUploadedBooks();
+    }
+
+    function renderSubjects() {
+      const container = document.getElementById('subjectsContainer');
+      const gradeSet = subjectCatalog[currentGrade] || subjectCatalog['11'];
+      const streamSet = gradeSet[currentStream] || gradeSet['Science'] || gradeSet['all'] || [];
+
+      if (!streamSet.find(s => s.name === currentSubject)) {
+        currentSubject = streamSet[0]?.name || 'Physics';
+      }
+
+      container.innerHTML = streamSet.map(s => {
+        const isActive = s.name === currentSubject;
+        return `
+          <div class="subject-pill-card ${isActive ? 'active' : ''}" data-name="${s.name}" onclick="selectSubject('${s.name}')">
+            <div class="subject-icon-box" style="background:${s.bg};color:${s.color};">
+              <i class="${s.icon}"></i>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:0.92rem;color:var(--text);">${s.name}</div>
+              <div style="font-size:0.75rem;color:var(--muted-text);">NEB CDC Syllabus</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateContextBadge() {
+      const streamText = currentStream !== 'all' ? ` ${currentStream}` : '';
+      const text = `Grade ${currentGrade}${streamText} • ${currentSubject}`;
+      document.getElementById('selectedContextBadge').textContent = text;
+      document.getElementById('launchMockTestDirectBtn').href = `/test?exam=${encodeURIComponent(currentGrade)}&subject=${encodeURIComponent(currentSubject)}`;
+    }
+
+    function switchFeatureTab(tab) {
+      const genSec = document.getElementById('featureGenerateSection');
+      const upSec = document.getElementById('featureUploadSection');
+      const genBtn = document.getElementById('tabGenerateBtn');
+      const upBtn = document.getElementById('tabUploadBtn');
+
+      if (tab === 'generate') {
+        genSec.style.display = 'block';
+        upSec.style.display = 'none';
+        genBtn.classList.add('active');
+        upBtn.classList.remove('active');
+      } else {
+        genSec.style.display = 'none';
+        upSec.style.display = 'block';
+        genBtn.classList.remove('active');
+        upBtn.classList.add('active');
+        renderUploadedBooks();
+      }
+    }
+
+    function setGenerationMode(mode) {
+      generationMode = mode;
+      document.getElementById('modeMcqBtn').className = mode === 'mcq' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-secondary';
+      document.getElementById('modeNebBtn').className = mode === 'neb_model' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-secondary';
+      generateSubjectQuestions();
+    }
+
+    async function generateSubjectQuestions() {
+      const container = document.getElementById('quizDisplayContainer');
+      const count = parseInt(document.getElementById('questionCountSelect').value, 10) || 10;
+      container.innerHTML = `
+        <div style="text-align: center; padding: 40px 20px; color: var(--muted-text);">
+          <i class="ri-loader-4-line ri-spin" style="font-size: 2rem; color: var(--primary);"></i>
+          <div style="margin-top: 10px; font-weight: 700;">Generating ${generationMode === 'mcq' ? 'MCQs' : 'NEB Model Set'} for ${currentSubject}...</div>
+        </div>
+      `;
+
+      try {
+        const res = await fetch('/api/practice/questions');
+        const data = await res.json();
+        let allQs = data.questions || [];
+
+        // Filter for matching subject or fallback gracefully
+        let matched = allQs.filter(q => {
+          const matchSub = q.subject && q.subject.toLowerCase().includes(currentSubject.toLowerCase());
+          const matchGrade = q.grade ? q.grade === currentGrade : true;
+          return matchSub;
+        });
+
+        if (matched.length === 0) {
+          matched = allQs.filter(q => q.subject && q.subject.toLowerCase().includes('physics')) || allQs.slice(0, count);
+        }
+
+        // Shuffle & slice
+        const questions = [...matched].sort(() => 0.5 - Math.random()).slice(0, count);
+        loadedQuestions = questions;
+
+        if (generationMode === 'neb_model') {
+          renderNebModelSet(container, questions);
+        } else {
+          renderMcqQuiz(container, questions);
+        }
+      } catch (e) {
+        container.innerHTML = `<div style="padding:20px;color:#ef4444;text-align:center;">Error loading questions: ${e.message}</div>`;
+      }
+    }
+
+    function renderMcqQuiz(container, questions) {
+      if (!questions.length) {
+        container.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted-text);">No questions found for this topic.</div>`;
+        return;
+      }
+
+      container.innerHTML = `
+        <div style="margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:0.85rem;font-weight:700;color:var(--text);">${questions.length} Questions Ready</span>
+          <span style="font-size:0.8rem;color:#10b981;font-weight:700;"><i class="ri-checkbox-circle-line"></i> Instant Checking Enabled</span>
+        </div>
+        ${questions.map((q, idx) => `
+          <div class="quiz-card" id="quizCard_${q.id}">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <span class="tag-badge tag-badge-primary">Q ${idx + 1} of ${questions.length}</span>
+              <span style="font-size:0.75rem;color:var(--muted-text);font-weight:600;">${q.topic || q.lesson || 'General'}</span>
+            </div>
+            <div style="font-weight:700;font-size:1rem;color:var(--text);margin-bottom:14px;line-height:1.4;">
+              ${q.question}
+            </div>
+            <div style="display:grid;gap:6px;">
+              ${Object.entries(q.options || {}).map(([key, val]) => `
+                <button type="button" class="quiz-option-btn" onclick="checkAnswer(${q.id}, '${key}', '${q.correct_answer}')">
+                  <span style="width:24px;height:24px;border-radius:6px;background:rgba(0,0,0,0.06);display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:0.8rem;">${key}</span>
+                  <span>${val}</span>
+                </button>
+              `).join('')}
+            </div>
+            <div id="explanation_${q.id}" style="display:none;margin-top:12px;padding:12px;background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:8px;font-size:0.85rem;color:var(--text);">
+              <strong>Explanation:</strong> ${q.explanation || 'According to standard NEB specification.'}
+            </div>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    function renderNebModelSet(container, questions) {
+      container.innerHTML = `
+        <div style="border:2px solid var(--border);border-radius:18px;padding:24px;background:var(--surface);margin-bottom:20px;">
+          <div style="text-align:center;border-bottom:2px dashed var(--border);padding-bottom:16px;margin-bottom:20px;">
+            <div style="font-size:0.85rem;font-weight:800;color:var(--muted-text);text-transform:uppercase;">National Examinations Board (NEB) Model Question</div>
+            <h3 style="font-size:1.4rem;font-weight:900;margin:6px 0;">Grade ${currentGrade} • ${currentSubject}</h3>
+            <div style="font-size:0.85rem;color:var(--muted-text);">Full Marks: 75 • Pass Marks: 27 • Time: 3 Hours</div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-weight:800;color:var(--primary);font-size:1rem;margin-bottom:10px;">Group 'A' : Multiple Choice Questions (11 x 1 = 11 Marks)</div>
+            ${questions.slice(0, 5).map((q, i) => `
+              <div style="margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);">
+                <div style="font-weight:700;font-size:0.92rem;margin-bottom:6px;">${i + 1}. ${q.question}</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.85rem;color:var(--muted-text);">
+                  ${Object.entries(q.options || {}).map(([k, v]) => `<div>(${k}) ${v}</div>`).join('')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-weight:800;color:var(--primary);font-size:1rem;margin-bottom:10px;">Group 'B' : Short Answer Questions (8 x 5 = 40 Marks)</div>
+            <div style="font-size:0.9rem;line-height:1.6;color:var(--text);">
+              <p><strong>1.</strong> State and prove the law of conservation of linear momentum. Derive the expression for elastic collision in one dimension. [1+4=5]</p>
+              <p><strong>2.</strong> Define Carnot engine. Calculate the thermal efficiency when operating between 500 K and 300 K. [2+3=5]</p>
+              <p><strong>3.</strong> State Gauss's Law in electrostatics and apply it to find the electric field intensity due to a uniformly charged thin spherical shell. [1+4=5]</p>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-weight:800;color:var(--primary);font-size:1rem;margin-bottom:10px;">Group 'C' : Long Answer Questions (3 x 8 = 24 Marks)</div>
+            <div style="font-size:0.9rem;line-height:1.6;color:var(--text);">
+              <p><strong>1.</strong> Explain Einstein's photoelectric equation. Describe the experimental verification of the photoelectric effect. [3+5=8]</p>
+              <p><strong>2.</strong> Discuss the Bohr atomic model for hydrogen atom and derive the radius and energy expression of the n-th orbit. [8]</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function checkAnswer(qId, selectedKey, correctKey) {
+      const card = document.getElementById(`quizCard_${qId}`);
+      if (!card) return;
+
+      const buttons = card.querySelectorAll('.quiz-option-btn');
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        const optKey = btn.querySelector('span').textContent.trim();
+        if (optKey === correctKey) {
+          btn.classList.add('correct');
+        } else if (optKey === selectedKey) {
+          btn.classList.add('wrong');
+        }
+      });
+
+      const exp = document.getElementById(`explanation_${qId}`);
+      if (exp) exp.style.display = 'block';
+    }
+
+    // Book Upload & Permanent LocalStorage Persistence
+    document.getElementById('bookSourceSelect')?.addEventListener('change', (e) => {
+      const val = e.target.value;
+      document.getElementById('driveLinkWrap').style.display = val === 'google_drive' ? 'block' : 'none';
+      document.getElementById('localFileWrap').style.display = val === 'pdf_file' ? 'block' : 'none';
+    });
+
+    function handleBookUpload(e) {
+      e.preventDefault();
+      const title = document.getElementById('bookTitleInput').value.trim();
+      const author = document.getElementById('bookAuthorInput').value.trim() || 'Curriculum Development Centre (CDC)';
+      const source = document.getElementById('bookSourceSelect').value;
+      const driveUrl = document.getElementById('driveUrlInput').value.trim() || 'https://drive.google.com/file/d/cdc-sample-notes';
+
+      const newBook = {
+        id: Date.now(),
+        title,
+        author,
+        grade: currentGrade,
+        stream: currentStream,
+        subject: currentSubject,
+        source_type: source,
+        file_url: driveUrl,
+        uploaded_at: 'Just now'
+      };
+
+      // Save to localStorage
+      const saved = JSON.parse(localStorage.getItem('examsetu_user_books') || '[]');
+      saved.unshift(newBook);
+      localStorage.setItem('examsetu_user_books', JSON.stringify(saved));
+
+      // Reset form
+      document.getElementById('uploadBookForm').reset();
+      if (window.ExamSetu && window.ExamSetu.showToast) {
+        window.ExamSetu.showToast('Book uploaded permanently to your dashboard!', 'success');
+      } else {
+        alert('Book saved permanently to your dashboard!');
+      }
+
+      renderUploadedBooks();
+    }
+
+    function renderUploadedBooks() {
+      const container = document.getElementById('userBooksList');
+      if (!container) return;
+
+      const userBooks = JSON.parse(localStorage.getItem('examsetu_user_books') || '[]');
+      const defaultBooks = [
+        {
+          id: 1,
+          title: `Grade ${currentGrade} ${currentSubject}: Official CDC Textbook`,
+          author: 'Curriculum Development Centre (CDC), Sanothimi',
+          grade: currentGrade,
+          subject: currentSubject,
+          source_type: 'google_drive',
+          file_url: 'https://moecdc.gov.np'
+        },
+        {
+          id: 2,
+          title: `Complete Model Question Solutions & Notes (${currentSubject})`,
+          author: 'National Examinations Board Faculty Committee',
+          grade: currentGrade,
+          subject: currentSubject,
+          source_type: 'pdf_file',
+          file_url: '#'
+        }
+      ];
+
+      const all = [...userBooks.filter(b => b.subject === currentSubject || b.grade === currentGrade), ...defaultBooks];
+
+      container.innerHTML = all.map(b => `
+        <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:40px;height:40px;border-radius:10px;background:rgba(37,99,235,0.1);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:1.3rem;">
+              <i class="${b.source_type === 'google_drive' ? 'ri-google-drive-fill' : 'ri-file-pdf-fill'}"></i>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:0.92rem;color:var(--text);">${b.title}</div>
+              <div style="font-size:0.78rem;color:var(--muted-text);">${b.author} • ${b.subject || currentSubject}</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <a href="${b.file_url}" target="_blank" class="btn btn-secondary btn-sm" style="font-weight:700;">
+              <i class="ri-eye-line"></i> Read Book
+            </a>
+            <button type="button" class="btn btn-primary btn-sm" onclick="generateSubjectQuestions()" style="font-weight:700;">
+              <i class="ri-sparkling-fill"></i> Generate Qs
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      selectGrade('11');
     });
   </script>
 </body>

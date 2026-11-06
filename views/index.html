@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>ExamSetu Nepal - Welcome to Online Exam Preparation</title>
   <meta name="description" content="Nepal's premier mobile exam prep platform. Prepare for Lok Sewa, SEE, NEB, and Banking with high-yield practice tests and AI guidance.">
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="apple-touch-icon" href="/images/logo.png">
   <link rel="stylesheet" href="/css/remixicon.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/responsive.css">
@@ -140,7 +142,7 @@
       <!-- Brand Logo in Center/Left -->
       <a href="/" class="brand" style="margin-right: auto; margin-left: 8px;">
         <div class="brand-icon">
-          <i class="ri-book-open-fill"></i>
+          <img src="/images/logo.png" alt="ExamSetu Nepal Logo">
         </div>
         <div class="brand-title">
           <span class="brand-name">ExamSetu <span>Nepal</span></span>
@@ -218,7 +220,7 @@
       <!-- Welcome Hero Card with ExamSetu Nepal Logo -->
       <div class="mobile-hero-card">
         <div class="app-logo-badge">
-          <i class="ri-book-open-fill"></i>
+          <img src="/images/logo.png" alt="ExamSetu Nepal Logo" style="width:100%;height:100%;object-fit:contain;">
         </div>
         <h1 class="welcome-title">Welcome to <span>ExamSetu Nepal</span></h1>
         <div class="welcome-nepali">अभ्यास गर्नुहोस्। तयारी गर्नुहोस्। सफल हुनुहोस्।</div>
@@ -236,38 +238,54 @@
         </div>
       </div>
 
-      <!-- Ambition Guru Style 4-Tile Quick Launcher -->
+      <!-- 4 Core Navigation Tiles (Matching Wireframe: Library, Guru AI, Subject, Mock Test) -->
       <div class="app-quick-grid">
-        <a href="/exams" class="app-tile">
-          <div class="app-tile-icon" style="background: rgba(37, 99, 235, 0.1); color: var(--primary);">
-            <i class="ri-file-list-3-fill"></i>
-          </div>
-          <div class="app-tile-title">Mock Tests</div>
-          <div class="app-tile-subtitle">Timed Practice &amp; Scores</div>
-        </a>
-
-        <a href="/dashboard#librarySection" class="app-tile">
-          <div class="app-tile-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+        <a href="/dashboard#librarySection" class="app-tile" id="tileLibrary" style="border-top: 3px solid #10b981;">
+          <div class="app-tile-icon" style="background: rgba(16, 185, 129, 0.12); color: #10b981;">
             <i class="ri-book-2-fill"></i>
           </div>
-          <div class="app-tile-title">Digital Library</div>
-          <div class="app-tile-subtitle">Books, Notes &amp; MCQs</div>
+          <div class="app-tile-title">Library</div>
+          <div class="app-tile-subtitle">CDC Books, Notes &amp; Drive Uploads</div>
         </a>
 
-        <a href="/guru" class="app-tile">
-          <div class="app-tile-icon" style="background: rgba(99, 102, 241, 0.1); color: #6366f1;">
+        <a href="/guru" class="app-tile" id="tileGuruAi" style="border-top: 3px solid #6366f1;">
+          <div class="app-tile-icon" style="background: rgba(99, 102, 241, 0.12); color: #6366f1;">
             <i class="ri-sparkling-fill"></i>
           </div>
-          <div class="app-tile-title">Guru AI Tutor</div>
-          <div class="app-tile-subtitle">24/7 Smart Guidance</div>
+          <div class="app-tile-title">Guru AI</div>
+          <div class="app-tile-subtitle">Gemini Tutor &amp; Weak Area Coach</div>
         </a>
 
-        <a href="/college" class="app-tile">
-          <div class="app-tile-icon" style="background: rgba(2, 132, 199, 0.1); color: #0284c7;">
-            <i class="ri-government-fill"></i>
+        <a href="/subject" class="app-tile" id="tileSubject" style="border-top: 3px solid #f59e0b;">
+          <div class="app-tile-icon" style="background: rgba(245, 158, 11, 0.12); color: #f59e0b;">
+            <i class="ri-node-tree"></i>
           </div>
-          <div class="app-tile-title">College Portal</div>
-          <div class="app-tile-subtitle">Campus &amp; Faculty Access</div>
+          <div class="app-tile-title">Subject</div>
+          <div class="app-tile-subtitle">Grades 10, 11, 12 &amp; Lok Sewa Drilldown</div>
+        </a>
+
+        <a href="/exams" class="app-tile" id="tileMockTest" style="border-top: 3px solid #2563eb;">
+          <div class="app-tile-icon" style="background: rgba(37, 99, 235, 0.12); color: var(--primary);">
+            <i class="ri-file-list-3-fill"></i>
+          </div>
+          <div class="app-tile-title">Mock Test</div>
+          <div class="app-tile-subtitle">NEB Model Sets &amp; Anti-Cheat Exams</div>
+        </a>
+      </div>
+
+      <!-- Institutional College & Faculty Quick Access Banner -->
+      <div style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.08) 0%, rgba(37, 99, 235, 0.08) 100%); border: 1.5px solid rgba(2, 132, 199, 0.25); border-radius: 18px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: #0284c7; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0;">
+            <i class="ri-community-line"></i>
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 0.92rem; color: var(--text);">Colleges Portal &amp; Faculty Studio</div>
+            <div style="font-size: 0.78rem; color: var(--muted-text);">Filter by 7 Provinces &amp; Districts • Faculty Verification</div>
+          </div>
+        </div>
+        <a href="/college" class="btn btn-primary btn-sm" style="border-radius: var(--radius-pill); font-weight: 700; white-space: nowrap; padding: 8px 16px;">
+          Enter Portal <i class="ri-arrow-right-line"></i>
         </a>
       </div>
 

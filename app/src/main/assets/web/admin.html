@@ -247,8 +247,8 @@
   <aside id="adminSidebarDrawer" class="admin-sidebar-drawer" aria-label="Admin Navigation Drawer">
     <div class="admin-drawer-header">
       <div style="display:flex;align-items:center;gap:10px;">
-        <div class="brand-icon" style="width:34px;height:34px;font-size:1.1rem;"><i class="ri-shield-keyhole-fill"></i></div>
-        <div style="font-weight:800;font-size:1.05rem;">Admin <span>Menu</span></div>
+        <div class="brand-icon" style="width:34px;height:34px;"><img src="/images/logo.png" alt="ExamSetu Logo"></div>
+        <div style="font-weight:800;font-size:1.05rem;">ExamSetu <span>Admin</span></div>
       </div>
       <button class="btn btn-ghost btn-sm" onclick="AdminPanel.toggleSidebarDrawer()" style="padding:6px 8px;" aria-label="Close Menu">
         <i class="ri-close-line" style="font-size:1.3rem;"></i>
@@ -325,7 +325,7 @@
           <i class="ri-menu-line"></i>
         </button>
         <a href="/" class="brand">
-          <div class="brand-icon"><i class="ri-shield-keyhole-fill"></i></div>
+          <div class="brand-icon"><img src="/images/logo.png" alt="ExamSetu Nepal Logo"></div>
           <div class="brand-title">
             <span class="brand-name">ExamSetu <span>Admin</span></span>
           </div>
@@ -692,15 +692,16 @@
       <!-- TAB 5: TEST ATTEMPTS -->
       <div id="tab-attempts" class="admin-tab-pane" style="display:none;">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);overflow-x:auto;">
-          <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:16px;">Candidate Mock Exam Attempts</h2>
+          <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:16px;">Candidate Mock Exam Attempts &amp; Anti-Cheat Logs</h2>
           <table style="width:100%;border-collapse:collapse;font-size:0.9rem;text-align:left;">
             <thead>
               <tr style="border-bottom:2px solid var(--border);color:var(--muted-text);">
                 <th style="padding:10px;">ID</th>
                 <th style="padding:10px;">Candidate</th>
-                <th style="padding:10px;">Exam & Subject</th>
+                <th style="padding:10px;">Exam &amp; Subject</th>
                 <th style="padding:10px;">Score</th>
                 <th style="padding:10px;">Time Spent</th>
+                <th style="padding:10px;">Security / Anti-Cheat</th>
                 <th style="padding:10px;">Date</th>
                 <th style="padding:10px;">View</th>
               </tr>
@@ -732,6 +733,77 @@
 
       <!-- TAB 7: COLLEGES & SPECIAL CODES -->
       <div id="tab-colleges" class="admin-tab-pane" style="display:none;">
+        
+        <!-- Pending Faculty Verifications (Wireframe 8 & 9) -->
+        <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:24px;box-shadow:var(--shadow-sm);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+            <div>
+              <h3 style="font-size:1.15rem;font-weight:800;display:flex;align-items:center;gap:8px;">
+                <i class="ri-id-card-fill" style="color:#0284c7;"></i> Pending Faculty ID Verifications (Wireframe 8)
+              </h3>
+              <p style="font-size:0.82rem;color:var(--muted-text);">
+                Review submitted teacher/HOD credentials and grant verified institutional permissions.
+              </p>
+            </div>
+            <span class="tag-badge tag-badge-primary" id="pendingFacultyCountBadge">2 Pending</span>
+          </div>
+          
+          <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:0.88rem;text-align:left;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--border);color:var(--muted-text);">
+                  <th style="padding:10px;">Faculty Name</th>
+                  <th style="padding:10px;">Institution</th>
+                  <th style="padding:10px;">Designation / Role</th>
+                  <th style="padding:10px;">ID Card Proof</th>
+                  <th style="padding:10px;">Submitted</th>
+                  <th style="padding:10px;text-align:right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminFacultyVerificationsList">
+                <tr style="border-bottom:1px solid var(--border);">
+                  <td style="padding:10px;font-weight:700;">Prabin Sharma</td>
+                  <td style="padding:10px;">Vinayak Siddha College, Chabahil</td>
+                  <td style="padding:10px;"><span class="tag-badge tag-badge-primary">Teacher (Physics)</span></td>
+                  <td style="padding:10px;">
+                    <span style="font-size:0.8rem;background:rgba(2,132,199,0.1);color:#0284c7;padding:3px 8px;border-radius:4px;">
+                      <i class="ri-attachment-line"></i> faculty_id_scan.png
+                    </span>
+                  </td>
+                  <td style="padding:10px;color:var(--muted-text);font-size:0.82rem;">2 mins ago</td>
+                  <td style="padding:10px;text-align:right;">
+                    <button onclick="AdminPanel.approveFacultyVerification('Prabin Sharma', 'Vinayak Siddha College')" class="btn btn-sm" style="background:#10b981;color:#fff;font-weight:700;border:none;padding:5px 12px;border-radius:6px;margin-right:6px;cursor:pointer;">
+                      <i class="ri-check-line"></i> Approve
+                    </button>
+                    <button onclick="AdminPanel.rejectFacultyVerification('Prabin Sharma')" class="btn btn-sm" style="background:#ef4444;color:#fff;font-weight:700;border:none;padding:5px 10px;border-radius:6px;cursor:pointer;">
+                      Reject
+                    </button>
+                  </td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border);">
+                  <td style="padding:10px;font-weight:700;">Dr. Ramesh Karki</td>
+                  <td style="padding:10px;">St. Xavier's College, Maitighar</td>
+                  <td style="padding:10px;"><span class="tag-badge tag-badge-warning">Head of Department (HOD)</span></td>
+                  <td style="padding:10px;">
+                    <span style="font-size:0.8rem;background:rgba(2,132,199,0.1);color:#0284c7;padding:3px 8px;border-radius:4px;">
+                      <i class="ri-attachment-line"></i> stx_hod_credentials.pdf
+                    </span>
+                  </td>
+                  <td style="padding:10px;color:var(--muted-text);font-size:0.82rem;">15 mins ago</td>
+                  <td style="padding:10px;text-align:right;">
+                    <button onclick="AdminPanel.approveFacultyVerification('Dr. Ramesh Karki', 'St. Xavier\'s College')" class="btn btn-sm" style="background:#10b981;color:#fff;font-weight:700;border:none;padding:5px 12px;border-radius:6px;margin-right:6px;cursor:pointer;">
+                      <i class="ri-check-line"></i> Approve
+                    </button>
+                    <button onclick="AdminPanel.rejectFacultyVerification('Dr. Ramesh Karki')" class="btn btn-sm" style="background:#ef4444;color:#fff;font-weight:700;border:none;padding:5px 10px;border-radius:6px;cursor:pointer;">
+                      Reject
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <div style="display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start;">
           
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);overflow-x:auto;">

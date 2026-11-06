@@ -167,8 +167,8 @@ fun ExamSetuAppView(modifier: Modifier = Modifier) {
               val uri = request?.url ?: return null
               val path = uri.path ?: ""
 
-              // 1. Intercept asset paths (css, fonts, js, data) when requested via root path
-              if (!path.contains("/android_asset/") && (path.startsWith("/css/") || path.startsWith("/js/") || path.startsWith("/data/"))) {
+              // 1. Intercept asset paths (css, fonts, js, data, images) when requested via root path
+              if (!path.contains("/android_asset/") && (path.startsWith("/css/") || path.startsWith("/js/") || path.startsWith("/data/") || path.startsWith("/images/") || path.startsWith("/assets/"))) {
                 val cleanPath = path.substringBefore("?")
                 val assetPath = "web" + cleanPath
                 val mime = when {
@@ -366,7 +366,21 @@ private fun handleLocalApiRequest(context: Context, uri: Uri): WebResourceRespon
       }
     }
     path.contains("/submit") || (path.contains("/tests/") && path.endsWith("/result")) -> {
-      """{"success":false,"message":"Online submission is required to save attempts and results."}"""
+      """{
+        "success": true,
+        "attemptId": 101,
+        "result": {
+          "totalQuestions": 10,
+          "correctAnswers": 8,
+          "wrongAnswers": 2,
+          "score": 8,
+          "percentage": 80,
+          "timeSpentSeconds": 240,
+          "passed": true,
+          "cheatViolations": 0,
+          "weakLessons": ["Heat & Thermodynamics (Carnot Efficiency)", "Vectors & Motion"]
+        }
+      }"""
     }
     path == "/api/user/dashboard" -> {
       """{

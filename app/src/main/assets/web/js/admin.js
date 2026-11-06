@@ -335,33 +335,68 @@ const AdminPanel = {
     }
   },
 
-  // 5. Test Attempts History
+  // 5. Test Attempts History & Anti-Cheat Security Logs (Wireframe 3 & 9)
   async loadAttempts() {
     const tbody = document.getElementById('adminAttemptsList');
     if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;">Loading attempts...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;">Loading attempts...</td></tr>';
 
     try {
-      const res = await fetch('/api/admin/attempts');
-      const data = await res.json();
-      if (!data.success || data.attempts.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted-text);">No test attempts recorded yet.</td></tr>';
+      let attempts = [];
+      try {
+        const res = await fetch('/api/admin/attempts');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.attempts)) {
+          attempts = data.attempts;
+        }
+      } catch (netErr) {
+        // Fallback to local storage attempts in offline/applet mode
+      }
+
+      const localAttempts = JSON.parse(localStorage.getItem('examsetu_all_attempts') || '[]');
+      if (localAttempts.length > 0) {
+        const mapped = localAttempts.map((la, idx) => ({
+          id: 500 + idx,
+          user_name: 'Current Student (You)',
+          exam_name: la.examName || 'Mock Exam',
+          subject_name: la.subjectName || 'NEB Subject',
+          score: la.score || 0,
+          total_questions: la.totalQuestions || 10,
+          percentage: la.percentage || 0,
+          time_taken_seconds: la.timeSpent || 180,
+          cheat_violations: la.cheatViolations || 0,
+          weak_lessons: la.weakLessons || [],
+          created_at: la.date || new Date().toISOString()
+        }));
+        attempts = [...mapped, ...attempts];
+      }
+
+      if (attempts.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted-text);">No test attempts recorded yet.</td></tr>';
         return;
       }
 
-      tbody.innerHTML = data.attempts.map((a) => `
-        <tr>
-          <td>#${a.id}</td>
-          <td><strong>${escapeHTML(a.user_name || 'Anonymous Student')}</strong></td>
-          <td>${escapeHTML(a.exam_name)} - ${escapeHTML(a.subject_name)}</td>
-          <td><strong style="color:${a.percentage >= 40 ? 'var(--success)' : 'var(--danger)'};">${a.percentage}% (${a.score}/${a.total_questions})</strong></td>
-          <td>${Math.floor(a.time_taken_seconds / 60)}m ${a.time_taken_seconds % 60}s</td>
-          <td>${new Date(a.created_at).toLocaleDateString()}</td>
-          <td><a href="/result?id=${a.id}" class="btn btn-outline btn-sm" target="_blank">View</a></td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = attempts.map((a) => {
+        const violations = a.cheat_violations ?? a.violations ?? 0;
+        const cheatBadge = violations > 0
+          ? `<span style="color:#dc2626;font-weight:700;"><i class="ri-alert-line"></i> ${violations} Violations</span>`
+          : `<span style="color:#10b981;font-weight:700;"><i class="ri-shield-check-line"></i> Clean (0)</span>`;
+
+        return `
+          <tr>
+            <td>#${a.id}</td>
+            <td><strong>${escapeHTML(a.user_name || 'Anonymous Student')}</strong></td>
+            <td>${escapeHTML(a.exam_name)} - ${escapeHTML(a.subject_name)}</td>
+            <td><strong style="color:${a.percentage >= 40 ? 'var(--success)' : 'var(--danger)'};">${a.percentage}% (${a.score}/${a.total_questions})</strong></td>
+            <td>${Math.floor(a.time_taken_seconds / 60)}m ${a.time_taken_seconds % 60}s</td>
+            <td>${cheatBadge}</td>
+            <td>${new Date(a.created_at).toLocaleDateString()}</td>
+            <td><a href="/result?id=${a.id}" class="btn btn-outline btn-sm" target="_blank">View</a></td>
+          </tr>
+        `;
+      }).join('');
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--danger);">${escapeHTML(e.message)}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--danger);">${escapeHTML(e.message)}</td></tr>`;
     }
   },
 

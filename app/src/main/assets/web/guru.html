@@ -17,7 +17,7 @@
     <div class="container nav-container">
       <a href="/" class="brand">
         <div class="brand-icon">
-          <i class="ri-book-open-fill"></i>
+          <img src="/images/logo.png" alt="ExamSetu Nepal Logo">
         </div>
         <div class="brand-title">
           <span class="brand-name">ExamSetu <span>Nepal</span></span>
@@ -220,24 +220,40 @@
               </div>
             </div>
 
-            <!-- 4 Dedicated AI Teaching Mode Buttons (Module 7) -->
+            <!-- Dedicated AI Teaching Mode Buttons (Including Wireframe 4 Weak Area Diagnostic Coach) -->
             <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
               <span style="font-size:0.75rem;font-weight:800;color:var(--primary);text-transform:uppercase;margin-right:4px;">Mode:</span>
+              
+              <!-- Wireframe 4: Results Weakness Diagnostic Button -->
+              <button id="weakAreaCoachBtn" class="btn btn-secondary btn-sm" onclick="toggleWeakAreaCoach()" style="background:rgba(220,38,38,0.08);color:#dc2626;border-color:rgba(220,38,38,0.3);font-weight:800;" title="Analyzes mock test failures and coaches you to turn failure into success">
+                <i class="ri-heart-pulse-fill"></i> Results Weakness: <span id="weakAreaLabel">OFF</span>
+              </button>
+
+              <!-- Chat History Drawer Toggle Button -->
+              <button id="chatHistoryToggleBtn" class="btn btn-secondary btn-sm" onclick="toggleChatHistoryDrawer()" title="View past study discussions">
+                <i class="ri-history-line"></i> Chat History
+              </button>
+
               <button id="modeExplainBtn" class="btn btn-secondary btn-sm" onclick="TutorEngine.teachChapterStepByStep()" title="Explain current chapter step-by-step with real-world examples">
                 <i class="ri-book-read-line" style="color:var(--primary);"></i> 📖 Step-by-Step Lesson
               </button>
               <button id="modeHintBtn" class="btn btn-secondary btn-sm" onclick="TutorEngine.toggleSocraticHintMode()" title="Socratic mode: Gives clues instead of direct answers">
                 <i class="ri-lightbulb-line" style="color:#d97706;"></i> <span id="hintBtnLabel">💡 Socratic Hints: OFF</span>
               </button>
-              <button id="modeGradeBtn" class="btn btn-secondary btn-sm" onclick="TutorEngine.openAnswerGraderModal()" title="Submit written answer for board examiner grading">
-                <i class="ri-edit-line" style="color:#16a34a;"></i> ✍️ Grade My Answer
-              </button>
-              <button id="modeFlashcardsBtn" class="btn btn-secondary btn-sm" onclick="TutorEngine.generateFlashcards()" title="High-yield flashcards & 150-word summary">
-                <i class="ri-file-list-3-line" style="color:#9333ea;"></i> 🗂️ Flashcards &amp; Notes
-              </button>
               <button id="modeSmartMcqBtn" class="btn btn-primary btn-sm" onclick="TutorEngine.generateSmartMcqs()" title="Generate 5 specification grid MCQs for this chapter">
                 <i class="ri-play-circle-line"></i> 🎯 Smart Chapter Drill
               </button>
+            </div>
+          </div>
+
+          <!-- Chat History Drawer (Wireframe 4) -->
+          <div id="chatHistoryDrawer" style="display:none;background:var(--surface);border-bottom:2px solid var(--border);padding:14px 20px;max-height:180px;overflow-y:auto;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <strong style="font-size:0.85rem;color:var(--text);"><i class="ri-history-line"></i> Recent Study Sessions</strong>
+              <button type="button" class="btn btn-secondary btn-sm" style="padding:2px 8px;font-size:0.75rem;" onclick="clearChatHistory()">Clear History</button>
+            </div>
+            <div id="chatHistoryList" style="display:grid;gap:6px;font-size:0.82rem;">
+              <div style="color:var(--muted-text);">No past study discussions yet. Start chatting below!</div>
             </div>
           </div>
 
@@ -247,34 +263,52 @@
             <div class="chat-msg msg-ai">
               <div class="chat-avatar"><i class="ri-sparkling-fill"></i></div>
               <div class="chat-bubble">
-                <p><strong>नमस्ते!</strong> I am your <strong>AI Exam Guru (परीक्षा गुरु)</strong>, powered by Gemini.</p>
-                <p>I am tracking your performance on the Nepal Leaderboard. Ask me any question from the Lok Sewa, Banking, or SEE syllabus, or request a strategy to climb past your nearest competitor!</p>
+                <p><strong>नमस्ते!</strong> I am your <strong>Smart-Guru (परीक्षा गुरु)</strong>, powered by Gemini.</p>
+                <p>I am strictly focused on your <strong>study, syllabus, and academic research</strong>. Select your Grade and Subject above to discuss concepts, or tap <strong>Results Weakness: ON</strong> to turn your mock test weaknesses into exam mastery!</p>
               </div>
             </div>
           </div>
 
           <!-- High-Yield Suggestion Chips -->
           <div class="guru-chips-scroll">
-            <button class="guru-chip" onclick="askPreset('How can I climb to #1 on the leaderboard?')">
-              🏆 Climb to #1 on Leaderboard
+            <button class="guru-chip" onclick="askPreset('Turn my weak test topics into success!')">
+              🎯 Diagnose My Weak Test Lessons
             </button>
-            <button class="guru-chip" onclick="askPreset('Explain Article 284 of Nepal Constitution (Constitutional Council)')">
-              🇳🇵 Article 284 Constitutional Council
+            <button class="guru-chip" onclick="askPreset('Explain Carnot Engine thermal efficiency formula (Grade 11 Physics)')">
+              ⚡ Carnot Engine Derivation
             </button>
             <button class="guru-chip" onclick="askPreset('What are the 31 Fundamental Rights in Part 3 of Nepal Constitution?')">
               📜 31 Fundamental Rights
             </button>
-            <button class="guru-chip" onclick="askPreset('Give me a memory trick for Karnali Province 10 districts')">
-              🗺️ Karnali 10 Districts Trick
+            <button class="guru-chip" onclick="askPreset('Explain Stoichiometry & Mole concept with an STP example')">
+              🧪 Stoichiometry &amp; Mole Concept
             </button>
-            <button class="guru-chip" onclick="askPreset('How should I manage time for 50 Lok Sewa MCQs in 45 minutes?')">
-              ⏱️ 50 MCQs in 45 Min Strategy
+            <button class="guru-chip" onclick="askPreset('Pascal Law hydraulic machine principle with diagrams (Grade 10 SEE)')">
+              🔬 Pascal Law Hydraulics
             </button>
           </div>
 
-          <!-- Input Area -->
-          <div class="guru-chat-input-area">
-            <input type="text" id="guruUserInput" class="guru-input" placeholder="Ask Guru anything (e.g. Constitution, Geography, IQ, Leaderboard strategy)..." autocomplete="off">
+          <!-- Attachment Preview Bar -->
+          <div id="attachmentPreviewBar" style="display:none;background:var(--surface-alt);border-top:1px solid var(--border);padding:6px 14px;font-size:0.8rem;align-items:center;gap:10px;">
+            <i class="ri-file-text-line" style="color:var(--primary);"></i>
+            <span id="attachmentFileName" style="font-weight:700;">attachment.pdf</span>
+            <button type="button" onclick="clearAttachment()" style="background:transparent;border:none;color:#ef4444;cursor:pointer;margin-left:auto;"><i class="ri-close-line"></i> Remove</button>
+          </div>
+
+          <!-- Input Area (Wireframe 4: Attachment & Voice Mic) -->
+          <div class="guru-chat-input-area" style="display:flex;align-items:center;gap:8px;">
+            <input type="file" id="guruAttachmentInput" style="display:none;" accept="image/*,.pdf,.doc,.docx" onchange="handleGuruAttachment(this)">
+            
+            <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('guruAttachmentInput').click()" title="Upload diagram, notes, or past question photo" style="border-radius:var(--radius-pill);padding:8px 12px;">
+              <i class="ri-attachment-2"></i>
+            </button>
+
+            <button type="button" id="guruMicBtn" class="btn btn-secondary btn-sm" onclick="toggleVoiceSpeechInput()" title="Voice Dictation" style="border-radius:var(--radius-pill);padding:8px 12px;">
+              <i class="ri-mic-line"></i>
+            </button>
+
+            <input type="text" id="guruUserInput" class="guru-input" placeholder="Ask Guru study concept or research question..." autocomplete="off" style="flex:1;">
+            
             <button id="guruSendBtn" class="guru-send-btn" onclick="sendGuruMessage()" aria-label="Send query">
               <i class="ri-send-plane-2-fill"></i>
             </button>
@@ -398,6 +432,119 @@
 
     const GEMINI_API_KEY = "";
 
+    let isWeakAreaCoachOn = false;
+    let currentAttachedFile = null;
+
+    // Wireframe 4: Results Weakness Diagnostic Button ("ON/OFF")
+    function toggleWeakAreaCoach() {
+      isWeakAreaCoachOn = !isWeakAreaCoachOn;
+      const btn = document.getElementById('weakAreaCoachBtn');
+      const label = document.getElementById('weakAreaLabel');
+
+      if (isWeakAreaCoachOn) {
+        btn.style.background = '#dc2626';
+        btn.style.color = '#ffffff';
+        label.textContent = 'ON';
+
+        // Load weak topics from recent mock tests
+        const weakTopics = JSON.parse(localStorage.getItem('examsetu_weak_topics') || '["Mechanics & Vectors", "Thermodynamics Carnot Efficiency", "Nepal Constitution Fundamental Rights"]');
+        const container = document.getElementById('guruMessagesContainer');
+        const aiDiv = document.createElement('div');
+        aiDiv.className = 'chat-msg msg-ai';
+        aiDiv.innerHTML = `
+          <div class="chat-avatar" style="background:#dc2626;"><i class="ri-heart-pulse-fill"></i></div>
+          <div class="chat-bubble" style="border:1.5px solid #dc2626;">
+            <p style="color:#b91c1c; font-weight:800;"><i class="ri-alert-line"></i> Weak Area Diagnostic Mode: ACTIVE</p>
+            <p>I reviewed your mock test results! You have room for high mark improvement in:</p>
+            <ul style="margin:6px 0 10px 18px; font-weight:700;">
+              ${weakTopics.map(t => `<li>${escapeHTML(t)}</li>`).join('')}
+            </ul>
+            <p><em>"Guru will respond based on that, and help make failure into success."</em></p>
+            <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+              <button class="btn btn-primary btn-sm" onclick="askPreset('Break down ${escapeHTML(weakTopics[0] || 'Physics')} step-by-step with formulas and past NEB questions so I never get it wrong again!')">
+                🎯 Master ${escapeHTML(weakTopics[0] || 'Weak Topic')}
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="askPreset('Give me 3 high-yield questions on ${escapeHTML(weakTopics[1] || 'Nepal Constitution')} with answer explanations')">
+                📝 3 Diagnostic Questions
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(aiDiv);
+        container.scrollTop = container.scrollHeight;
+      } else {
+        btn.style.background = 'rgba(220,38,38,0.08)';
+        btn.style.color = '#dc2626';
+        label.textContent = 'OFF';
+      }
+    }
+
+    // Wireframe 4: Chat History Drawer
+    function toggleChatHistoryDrawer() {
+      const drawer = document.getElementById('chatHistoryDrawer');
+      const isVisible = drawer.style.display === 'block';
+      drawer.style.display = isVisible ? 'none' : 'block';
+      if (!isVisible) renderChatHistoryList();
+    }
+
+    function renderChatHistoryList() {
+      const listEl = document.getElementById('chatHistoryList');
+      const history = JSON.parse(localStorage.getItem('examsetu_guru_history') || '[]');
+      if (history.length === 0) {
+        listEl.innerHTML = '<div style="color:var(--muted-text);">No past study discussions yet. Start chatting below!</div>';
+        return;
+      }
+      listEl.innerHTML = history.slice(0, 8).map(h => `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface-alt); padding:6px 12px; border-radius:8px; cursor:pointer;" onclick="askPreset('${escapeHTML(h.prompt).replace(/'/g, "\\'")}')">
+          <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:80%;">
+            <i class="ri-chat-1-line" style="color:var(--primary);"></i> <strong>${escapeHTML(h.prompt)}</strong>
+          </div>
+          <span style="font-size:0.75rem; color:var(--muted-text);">${h.time}</span>
+        </div>
+      `).join('');
+    }
+
+    function clearChatHistory() {
+      localStorage.removeItem('examsetu_guru_history');
+      renderChatHistoryList();
+    }
+
+    // Attachments Handling (Wireframe 4)
+    function handleGuruAttachment(input) {
+      if (input.files && input.files[0]) {
+        currentAttachedFile = input.files[0];
+        document.getElementById('attachmentPreviewBar').style.display = 'flex';
+        document.getElementById('attachmentFileName').textContent = `${currentAttachedFile.name} (${Math.round(currentAttachedFile.size / 1024)} KB)`;
+      }
+    }
+
+    function clearAttachment() {
+      currentAttachedFile = null;
+      document.getElementById('attachmentPreviewBar').style.display = 'none';
+      document.getElementById('guruAttachmentInput').value = '';
+    }
+
+    // Voice Dictation
+    function toggleVoiceSpeechInput() {
+      const micBtn = document.getElementById('guruMicBtn');
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert('Speech recognition is not supported in this browser. Please type your question.');
+        return;
+      }
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      micBtn.style.color = '#dc2626';
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('guruUserInput').value = transcript;
+        micBtn.style.color = '';
+      };
+      recognition.onerror = () => { micBtn.style.color = ''; };
+      recognition.onend = () => { micBtn.style.color = ''; };
+      recognition.start();
+    }
+
     function askPreset(prompt) {
       document.getElementById('guruUserInput').value = prompt;
       sendGuruMessage();
@@ -411,14 +558,55 @@
       input.value = '';
       const container = document.getElementById('guruMessagesContainer');
 
-      // Append User Message
+      // Append User Message with Attachment Badge if present
       const userDiv = document.createElement('div');
       userDiv.className = 'chat-msg msg-user';
+      let attachedBadge = '';
+      if (currentAttachedFile) {
+        attachedBadge = `<div style="font-size:0.75rem; background:rgba(255,255,255,0.2); padding:2px 8px; border-radius:6px; margin-bottom:4px; display:inline-flex; align-items:center; gap:4px;"><i class="ri-attachment-2"></i> ${escapeHTML(currentAttachedFile.name)}</div><br>`;
+        clearAttachment();
+      }
+
       userDiv.innerHTML = `
         <div class="chat-avatar"><i class="ri-user-smile-line"></i></div>
-        <div class="chat-bubble"><p>${escapeHTML(msg)}</p></div>
+        <div class="chat-bubble">
+          ${attachedBadge}
+          <p>${escapeHTML(msg)}</p>
+        </div>
       `;
       container.appendChild(userDiv);
+
+      // Save to chat history
+      const history = JSON.parse(localStorage.getItem('examsetu_guru_history') || '[]');
+      history.unshift({ prompt: msg, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+      localStorage.setItem('examsetu_guru_history', JSON.stringify(history.slice(0, 20)));
+
+      // WIREFRAME 4 STUDY GUARDRAIL:
+      // "Guru will only respond if the inputs are related to study, education and research. Not just funny things."
+      const lower = msg.toLowerCase();
+      const nonStudyPatterns = ['tell me a joke', 'make me laugh', 'funny story', 'who is messi', 'who is ronaldo', 'favorite movie', 'play a game', 'sing a song', 'gossip'];
+      const isFunnyOrNonAcademic = nonStudyPatterns.some(p => lower.includes(p));
+
+      if (isFunnyOrNonAcademic) {
+        const guardDiv = document.createElement('div');
+        guardDiv.className = 'chat-msg msg-ai';
+        guardDiv.innerHTML = `
+          <div class="chat-avatar"><i class="ri-sparkling-fill"></i></div>
+          <div class="chat-bubble" style="border-left:4px solid #f59e0b;">
+            <p><strong>नमस्ते!</strong> I am your <strong>ExamSetu Smart-Guru</strong>.</p>
+            <p>My mandate is strictly focused on your <strong>study, examinations, and academic research</strong> — not entertainment or casual chatter. Please ask me about your curriculum topics, such as:</p>
+            <ul style="margin:4px 0 8px 18px;">
+              <li>Physics derivations and Carnot engines</li>
+              <li>Chemistry reaction mechanisms and Stoichiometry</li>
+              <li>Lok Sewa Constitution articles and GK facts</li>
+              <li>SEE Mathematics and Science models</li>
+            </ul>
+          </div>
+        `;
+        container.appendChild(guardDiv);
+        container.scrollTop = container.scrollHeight;
+        return;
+      }
 
       const selectedModelVal = document.getElementById('guruModelSelect').value;
       const modelDisplayName = document.getElementById('guruModelSelect').options[document.getElementById('guruModelSelect').selectedIndex].text;

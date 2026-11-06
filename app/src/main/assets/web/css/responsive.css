@@ -428,18 +428,28 @@ button, input, select, textarea, a.btn {
     margin-bottom: 24px !important;
   }
 
-  .mobile-brand-emblem {
-    width: 72px !important;
-    height: 72px !important;
-    background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%) !important;
-    color: #ffffff !important;
+  .mobile-brand-emblem,
+  .app-logo-badge {
+    width: 88px !important;
+    height: 88px !important;
+    background-color: #ffffff !important;
+    background-image: url('/images/logo.png') !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    border: 1px solid var(--border) !important;
     border-radius: 20px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 2.2rem !important;
-    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
     margin-bottom: 14px !important;
+    overflow: hidden !important;
+  }
+
+  .mobile-brand-emblem i,
+  .app-logo-badge i {
+    display: none !important;
   }
 
   .mobile-launcher-grid {

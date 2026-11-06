@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Student Dashboard & Gamification - ExamSetu Nepal</title>
   <meta name="description" content="View your tests taken, average score, daily study streak, earned badges, wrong answer notebook, and saved bookmarks.">
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="apple-touch-icon" href="/images/logo.png">
   <link rel="stylesheet" href="/css/remixicon.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/responsive.css">
@@ -94,7 +96,7 @@
   <header class="navbar">
     <div class="container nav-container">
       <a href="/" class="brand">
-        <div class="brand-icon"><i class="ri-book-open-fill"></i></div>
+        <div class="brand-icon"><img src="/images/logo.png" alt="ExamSetu Nepal Logo"></div>
         <div class="brand-title"><span class="brand-name">ExamSetu <span>Nepal</span></span></div>
       </a>
       <nav>
@@ -124,8 +126,8 @@
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:32px;box-shadow:var(--shadow-sm);margin-bottom:32px;">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
           <div style="display:flex;align-items:center;gap:18px;">
-            <div style="width:72px;height:72px;background:linear-gradient(135deg, #1e40af, #2563eb);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:800;box-shadow:0 4px 12px rgba(37,99,235,0.35);">
-              <i class="ri-user-smile-line"></i>
+            <div style="width:72px;height:72px;background:#ffffff;border:1px solid var(--border);border-radius:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.08);overflow:hidden;flex-shrink:0;">
+              <img src="/images/logo.png" alt="ExamSetu Nepal Logo" style="width:100%;height:100%;object-fit:contain;">
             </div>
             <div>
               <div style="font-size:0.85rem;color:var(--primary);font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">
@@ -231,24 +233,39 @@
           </div>
         </div>
 
-        <!-- Filter & Search Toolbar -->
-        <div style="background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-          <!-- Category Pills -->
-          <div style="display:flex;gap:6px;flex-wrap:wrap;" id="dashLibraryCategoryPills">
-            <button class="btn btn-primary btn-sm dash-cat-pill active" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('All', this)">All Books</button>
-            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Science', this)">Science (+2)</button>
-            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Management', this)">Management</button>
-            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Humanities', this)">Humanities / Social</button>
-            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Lok Sewa', this)">Lok Sewa</button>
-            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Engineering', this)">Engineering</button>
-            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Medical', this)">Medical</button>
-            <button class="btn btn-secondary btn-sm dash-cat-pill" style="font-size:0.78rem;padding:4px 12px;border-radius:var(--radius-pill);" onclick="filterDashBooks('Banking', this)">Banking</button>
+        <!-- WIREFRAME 2: GRADE & STREAM HIERARCHICAL SELECTORS -->
+        <div style="background:var(--surface-alt);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:16px 20px;margin-bottom:16px;">
+          <!-- Grade Selection -->
+          <div style="margin-bottom:12px;">
+            <div style="font-size:0.8rem;font-weight:800;color:var(--muted-text);text-transform:uppercase;margin-bottom:6px;letter-spacing:0.5px;">
+              ① Select Grade:
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="libGradePills">
+              <button type="button" class="btn btn-primary btn-sm lib-grade-pill active" onclick="selectLibGrade('11', this)">Grade 11</button>
+              <button type="button" class="btn btn-secondary btn-sm lib-grade-pill" onclick="selectLibGrade('12', this)">Grade 12</button>
+              <button type="button" class="btn btn-secondary btn-sm lib-grade-pill" onclick="selectLibGrade('SEE', this)">SEE (Grade 10)</button>
+              <button type="button" class="btn btn-secondary btn-sm lib-grade-pill" onclick="selectLibGrade('Lok Sewa', this)">Lok Sewa</button>
+              <button type="button" class="btn btn-secondary btn-sm lib-grade-pill" onclick="selectLibGrade('All', this)">All Categories</button>
+            </div>
+          </div>
+
+          <!-- Stream Selection (Conditional for Grade 11 & 12; omitted for SEE) -->
+          <div id="libStreamRow" style="margin-bottom:12px;">
+            <div style="font-size:0.8rem;font-weight:800;color:var(--muted-text);text-transform:uppercase;margin-bottom:6px;letter-spacing:0.5px;">
+              ② Choose Stream (+2 Faculty):
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="libStreamPills">
+              <button type="button" class="btn btn-primary btn-sm lib-stream-pill active" onclick="selectLibStream('Science', this)">Science</button>
+              <button type="button" class="btn btn-secondary btn-sm lib-stream-pill" onclick="selectLibStream('Management', this)">Management</button>
+              <button type="button" class="btn btn-secondary btn-sm lib-stream-pill" onclick="selectLibStream('Humanities', this)">Humanities</button>
+              <button type="button" class="btn btn-secondary btn-sm lib-stream-pill" onclick="selectLibStream('Law', this)">Law</button>
+            </div>
           </div>
 
           <!-- Search Input -->
-          <div style="position:relative;min-width:240px;flex-grow:1;max-width:320px;">
+          <div style="position:relative;width:100%;">
             <i class="ri-search-line" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted-text);"></i>
-            <input type="text" id="dashBookSearchInput" placeholder="Search book, author, subject..." class="form-input" style="padding-left:32px;font-size:0.85rem;" oninput="handleDashBookSearch(this.value)">
+            <input type="text" id="dashBookSearchInput" placeholder="Search CDC textbooks, Grade 11 Physics, SEE Math, Drive notes..." class="form-input" style="padding-left:32px;font-size:0.85rem;width:100%;" oninput="handleDashBookSearch(this.value)">
           </div>
         </div>
 

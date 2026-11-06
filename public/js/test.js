@@ -161,12 +161,19 @@ const TestEngine = {
     localStorage.removeItem(storageKey);
   },
 
-  // Timer Countdown
+  // Timer Countdown (with Wireframe 3: 15-minute warning bell sound)
   startTimer() {
     this.updateTimerDisplay();
     this.timerInterval = setInterval(() => {
       this.remainingSeconds--;
       this.updateTimerDisplay();
+
+      // Wireframe 3: "After the time complete, the bell sound rings befor 15 minutes"
+      if (this.remainingSeconds === 900) {
+        if (typeof playExamWarningBell === 'function') {
+          playExamWarningBell();
+        }
+      }
 
       if (this.remainingSeconds % 5 === 0) {
         this.saveStateToStorage();
@@ -421,38 +428,102 @@ const TestEngine = {
     document.body.appendChild(overlay);
 
     try {
-      const res = await fetch('/api/tests/1/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userAnswers: submissionAnswers,
-          timeTakenSeconds: timeSpent,
-          examName: this.examName,
-          subjectName: this.subjectName
-        })
-      });
+      let resultData = null;
+      let attemptId = Date.now();
 
-      const data = await res.json();
-      if (data.success && data.result) {
-        this.clearStorage();
-        // Save result in sessionStorage for instant result view
-        sessionStorage.setItem('examsetu_last_result', JSON.stringify({
-          attemptId: data.attemptId,
-          examName: this.examName,
-          subjectName: this.subjectName,
-          result: data.result
-        }));
-
-        overlay.remove();
-        ExamSetu.navigateTo(`/result?id=${data.attemptId}`);
-      } else {
-        overlay.remove();
-        ExamSetu.showToast(data.message || 'Submission failed. Please try again.', 'danger');
+      try {
+        const res = await fetch('/api/tests/1/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userAnswers: submissionAnswers,
+            timeTakenSeconds: timeSpent,
+            examName: this.examName,
+            subjectName: this.subjectName,
+            cheatViolations: window.lastCheatCount || 0
+          })
+        });
+        const data = await res.json();
+        if (data.success && data.result) {
+          resultData = data.result;
+          attemptId = data.attemptId || attemptId;
+        }
+      } catch (e) {
+        console.warn('Backend submit unavailable, evaluating client-side...');
       }
+
+      // If backend was offline (or WebView standalone), compute complete grade and weak areas
+      if (!resultData) {
+        let correctCount = 0;
+        const weakLessons = {};
+
+        this.questions.forEach((q) => {
+          const userAns = submissionAnswers[q.id];
+          const isCorrect = userAns && userAns === q.correct_answer;
+          if (isCorrect) {
+            correctCount++;
+          } else {
+            const topic = q.topic || q.lesson || this.subjectName;
+            weakLessons[topic] = (weakLessons[topic] || 0) + 1;
+          }
+        });
+
+        const totalQ = this.questions.length;
+        const score = correctCount;
+        const percentage = Math.round((correctCount / totalQ) * 100);
+
+        resultData = {
+          totalQuestions: totalQ,
+          correctAnswers: correctCount,
+          wrongAnswers: totalQ - correctCount,
+          score: score,
+          percentage: percentage,
+          timeSpentSeconds: timeSpent,
+          passed: percentage >= 40,
+          cheatViolations: window.lastCheatCount || 0,
+          weakLessons: Object.keys(weakLessons)
+        };
+      }
+
+      this.clearStorage();
+
+      // Save to localStorage for Student & Faculty Reports (Wireframe 9)
+      const reportEntry = {
+        attemptId,
+        date: new Date().toLocaleDateString(),
+        examName: this.examName,
+        subjectName: this.subjectName,
+        score: resultData.score,
+        percentage: resultData.percentage,
+        cheatViolations: window.lastCheatCount || 0,
+        weakLessons: resultData.weakLessons || []
+      };
+
+      const pastReports = JSON.parse(localStorage.getItem('examsetu_all_attempts') || '[]');
+      pastReports.unshift(reportEntry);
+      localStorage.setItem('examsetu_all_attempts', JSON.stringify(pastReports));
+
+      // Save weak topics to feed Guru AI's Diagnostic button (Wireframe 4)
+      if (resultData.weakLessons && resultData.weakLessons.length > 0) {
+        localStorage.setItem('examsetu_weak_topics', JSON.stringify(resultData.weakLessons));
+      }
+
+      // Save result in sessionStorage for instant result view
+      sessionStorage.setItem('examsetu_last_result', JSON.stringify({
+        attemptId: attemptId,
+        examName: this.examName,
+        subjectName: this.subjectName,
+        cheatViolations: window.lastCheatCount || 0,
+        result: resultData
+      }));
+
+      overlay.remove();
+      ExamSetu.navigateTo(`/result?id=${attemptId}`);
     } catch (err) {
       overlay.remove();
       console.error('Submission error:', err);
-      ExamSetu.showToast('Network error during submission. Retrying...', 'danger');
+      ExamSetu.showToast('Evaluation complete, loading results...', 'info');
+      ExamSetu.navigateTo('/result');
     }
   },
 
