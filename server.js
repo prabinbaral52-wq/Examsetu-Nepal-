@@ -28,6 +28,7 @@ const apiRoutes = require('./routes/api');
 
 const app = express();
 const PORT = process.env.APP_PORT || (process.env.PORT && process.env.PORT !== '8080' ? process.env.PORT : 3000);
+const isProduction = process.env.NODE_ENV === 'production';
 
 // Initialize Database & seed tables
 DB.init();
@@ -45,11 +46,22 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: false, // works seamlessly on all proxies and local environments
+      secure: isProduction,
+      sameSite: 'lax',
       maxAge: 365 * 24 * 60 * 60 * 1000 // 365 days persistent login
     }
   })
 );
+
+// Health check (useful for Render, Railway, uptime monitors)
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    app: 'ExamSetu Nepal',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
 
 // Serve Static Assets
 app.use(express.static(path.join(__dirname, 'public')));
@@ -125,6 +137,8 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`====================================================`);
   console.log(`🇳🇵 ExamSetu Nepal Server running on http://localhost:${PORT}`);
   console.log(`Tagline: Practice. Prepare. Pass.`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`Configured administrator: ${process.env.ADMIN_EMAIL ? 'yes' : 'no'}`);
+  console.log(`Health check: http://localhost:${PORT}/health`);
   console.log(`====================================================`);
 });
