@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Challenge - ExamSetu Nepal</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+  <div class="container" style="max-width:800px;margin:40px auto;padding:20px;">
+    <h1>🎯 Daily Challenge</h1>
+    <p>Complete today's special quiz and earn bonus XP!</p>
+    <div id="challenge-status">Loading today's challenge...</div>
+    <div id="questions-container"></div>
+    <button id="submit-btn" style="display:none;margin-top:20px;padding:12px 24px;background:#2563eb;color:white;border:none;border-radius:8px;cursor:pointer;">Submit Challenge</button>
+    <div id="result" style="margin-top:20px;"></div>
+  </div>
+  <script>
+    async function loadChallenge() {
+      try {
+        const res = await fetch('/api/daily-challenge');
+        const data = await res.json();
+        if (!data.success) {
+          document.getElementById('challenge-status').innerHTML = 'Please <a href="/login">log in</a> to take the daily challenge.';
+          return;
+        }
+        document.getElementById('challenge-status').innerHTML = `<strong>Date:</strong> ${data.date} | Reward: ${data.rewardXp} XP`;
+        const container = document.getElementById('questions-container');
+        data.questions.forEach((q, i) => {
+          container.innerHTML += `
+            <div style="margin:20px 0;padding:16px;border:1px solid #e2e8f0;border-radius:12px;">
+              <p><strong>Q${i+1}.</strong> ${q.question}</p>
+              ${['A','B','C','D'].map(opt => `
+                <label style="display:block;margin:8px 0;">
+                  <input type="radio" name="q${q.id}" value="${opt}"> ${opt}. ${q.options[opt]}
+                </label>
+              `).join('')}
+            </div>
+          `;
+        });
+        document.getElementById('submit-btn').style.display = 'block';
+        document.getElementById('submit-btn').onclick = submitChallenge;
+      } catch (e) {
+        document.getElementById('challenge-status').innerHTML = 'Error loading challenge.';
+      }
+    }
+
+    async function submitChallenge() {
+      const answers = {};
+      document.querySelectorAll('input[type=radio]:checked').forEach(input => {
+        const qId = input.name.replace('q', '');
+        answers[qId] = input.value;
+      });
+      const res = await fetch('/api/daily-challenge/submit', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ answers, timeTakenSeconds: 300 })
+      });
+      const data = await res.json();
+      document.getElementById('result').innerHTML = `
+        <div style="padding:20px;background:#f0fdf4;border-radius:12px;">
+          <h3>Result</h3>
+          <p>Score: ${data.result.correct}/${data.result.total} (${data.result.percentage}%)</p>
+          <p>XP Earned: ${data.result.xpEarned}</p>
+          <p>${data.result.message}</p>
+        </div>
+      `;
+    }
+
+    loadChallenge();
+  </script>
+</body>
+</html>
