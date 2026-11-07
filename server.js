@@ -26,6 +26,7 @@ const cors = require('cors');
 const DB = require('./models/db');
 const apiRoutes = require('./routes/api');
 const leaderboardRoutes = require('./routes/leaderboard');
+const analyticsRoutes = require('./routes/analytics');
 
 const app = express();
 const PORT = process.env.APP_PORT || (process.env.PORT && process.env.PORT !== '8080' ? process.env.PORT : 3000);
@@ -54,7 +55,7 @@ app.use(
   })
 );
 
-// Health check (useful for Render, Railway, uptime monitors)
+// Health check
 app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -79,6 +80,7 @@ app.get('/sitemap.xml', (req, res) => {
 // Mount API routes
 app.use('/api', apiRoutes);
 app.use('/api', leaderboardRoutes);
+app.use('/api', analyticsRoutes);
 
 // View routing helper
 const sendView = (res, viewFile) => {
@@ -102,6 +104,8 @@ app.get('/guru', (req, res) => sendView(res, 'guru.html'));
 app.get('/college', (req, res) => sendView(res, 'college.html'));
 app.get('/colleges', (req, res) => sendView(res, 'college.html'));
 app.get('/admin', (req, res) => sendView(res, 'admin.html'));
+app.get('/daily', (req, res) => sendView(res, 'daily.html'));
+app.get('/leaderboard', (req, res) => sendView(res, 'leaderboard.html'));
 
 // Legal & Information Pages
 app.get('/about', (req, res) => sendView(res, 'legal/about.html'));
@@ -140,8 +144,9 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`🇳🇵 ExamSetu Nepal Server running on http://localhost:${PORT}`);
   console.log(`Tagline: Practice. Prepare. Pass.`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`Configured administrator: ${process.env.ADMIN_EMAIL ? 'yes' : 'no'}`);
-  console.log(`Health check: http://localhost:${PORT}/health`);
-  console.log(`Leaderboard & Daily Challenge: /api/leaderboard , /api/daily-challenge`);
+  console.log(`Health: http://localhost:${PORT}/health`);
+  console.log(`Daily Challenge: http://localhost:${PORT}/daily`);
+  console.log(`Leaderboard: http://localhost:${PORT}/leaderboard`);
+  console.log(`Analytics: /api/analytics/weak-topics`);
   console.log(`====================================================`);
 });
