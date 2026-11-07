@@ -1,0 +1,102 @@
+[
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Nepal Constitution",
+    "difficulty": "easy",
+    "question": "The Constitution of Nepal was promulgated on which date?",
+    "options": { "A": "20 September 2015", "B": "15 September 2015", "C": "25 September 2015", "D": "10 September 2015" },
+    "correct_answer": "A",
+    "explanation": "The Constitution of Nepal was promulgated on 20 September 2015 (3 Ashwin 2072)."
+  },
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Nepal Geography",
+    "difficulty": "medium",
+    "question": "Which is the largest province of Nepal by area?",
+    "options": { "A": "Koshi", "B": "Madhesh", "C": "Karnali", "D": "Sudurpashchim" },
+    "correct_answer": "C",
+    "explanation": "Karnali Province is the largest province of Nepal by area."
+  },
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "History",
+    "difficulty": "easy",
+    "question": "Who is known as the Father of the Nation of Nepal?",
+    "options": { "A": "Prithvi Narayan Shah", "B": "Jung Bahadur Rana", "C": "B.P. Koirala", "D": "King Tribhuvan" },
+    "correct_answer": "A",
+    "explanation": "Prithvi Narayan Shah is regarded as the Father of the Nation for unifying Nepal."
+  },
+  {
+    "exam": "SEE",
+    "subject": "Science",
+    "topic": "Physics",
+    "difficulty": "easy",
+    "question": "What is the SI unit of force?",
+    "options": { "A": "Joule", "B": "Newton", "C": "Watt", "D": "Pascal" },
+    "correct_answer": "B",
+    "explanation": "The SI unit of force is Newton (N)."
+  },
+  {
+    "exam": "SEE",
+    "subject": "Mathematics",
+    "topic": "Algebra",
+    "difficulty": "medium",
+    "question": "Solve for x: 2x + 5 = 15",
+    "options": { "A": "5", "B": "10", "C": "7", "D": "4" },
+    "correct_answer": "A",
+    "explanation": "2x + 5 = 15 → 2x = 10 → x = 5."
+  },
+  {
+    "exam": "Banking",
+    "subject": "General Knowledge",
+    "topic": "Banking Basics",
+    "difficulty": "easy",
+    "question": "What does NRB stand for?",
+    "options": { "A": "Nepal Rastra Bank", "B": "National Reserve Bank", "C": "Nepal Revenue Bank", "D": "National Rural Bank" },
+    "correct_answer": "A",
+    "explanation": "NRB stands for Nepal Rastra Bank, the central bank of Nepal."
+  },
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Current Affairs",
+    "difficulty": "medium",
+    "question": "What is the capital of Nepal?",
+    "options": { "A": "Pokhara", "B": "Biratnagar", "C": "Kathmandu", "D": "Lalitpur" },
+    "correct_answer": "C",
+    "explanation": "Kathmandu is the capital city of Nepal."
+  },
+  {
+    "exam": "SEE",
+    "subject": "Science",
+    "topic": "Biology",
+    "difficulty": "easy",
+    "question": "Which gas do plants absorb during photosynthesis?",
+    "options": { "A": "Oxygen", "B": "Nitrogen", "C": "Carbon dioxide", "D": "Hydrogen" },
+    "correct_answer": "C",
+    "explanation": "Plants absorb carbon dioxide during photosynthesis."
+  },
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Constitution",
+    "difficulty": "hard",
+    "question": "How many articles are there in the Constitution of Nepal?",
+    "options": { "A": "308", "B": "305", "C": "310", "D": "300" },
+    "correct_answer": "A",
+    "explanation": "The Constitution of Nepal has 308 articles."
+  },
+  {
+    "exam": "Banking",
+    "subject": "General Knowledge",
+    "topic": "Economy",
+    "difficulty": "medium",
+    "question": "What is the currency of Nepal?",
+    "options": { "A": "Rupee", "B": "Taka", "C": "Rupiah", "D": "Dollar" },
+    "correct_answer": "A",
+    "explanation": "The currency of Nepal is the Nepalese Rupee (NPR)."
+  }
+]
