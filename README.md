@@ -16,6 +16,7 @@ ExamSetu Nepal is a complete, production-ready full-stack online MCQ examination
 7. **Guru AI** (Gemini-backed)
 8. **Daily Challenge** — Special quiz every day with XP rewards
 9. **Leaderboard** — Compete with other students
+10. **Progress Analytics** — Weak topics tracking
 
 ---
 
@@ -45,16 +46,20 @@ Health check: `http://localhost:3000/health`
 Sample files ready for Admin import:
 - `data/sample-questions-loksewa.json`
 - `data/sample-questions-expanded.json`
+- `data/sample-questions-bulk.json`
 
 ---
 
-## 🔢 New API Endpoints
+## 🔢 New Pages & API Endpoints
 
-| Endpoint | Description |
-|----------|-------------|
+| Page / Endpoint | Description |
+|-----------------|-------------|
+| `/daily` | Daily Challenge page |
+| `/leaderboard` | Leaderboard page |
 | `GET /api/leaderboard` | Top users by XP |
-| `GET /api/daily-challenge` | Today's challenge questions (auth required) |
-| `POST /api/daily-challenge/submit` | Submit daily challenge answers |
+| `GET /api/daily-challenge` | Today's challenge questions |
+| `POST /api/daily-challenge/submit` | Submit daily challenge |
+| `GET /api/analytics/weak-topics` | Weak topics analytics |
 | `GET /health` | Server health check |
 
 ---
@@ -66,9 +71,10 @@ Sample files ready for Admin import:
 - [x] Secure sessions in production
 - [x] Health check
 - [x] Sample question banks
-- [x] Daily Challenge API
-- [x] Leaderboard API
-- [ ] Full progress analytics dashboard
+- [x] Daily Challenge (API + page)
+- [x] Leaderboard (API + page)
+- [x] Progress analytics (weak topics API)
+- [ ] Full analytics dashboard UI
 - [ ] Mobile test UI polish
 - [ ] 500+ questions
 
@@ -77,9 +83,9 @@ Sample files ready for Admin import:
 ## 🚀 Roadmap
 
 ### Next
-- Complete progress analytics (weak topics)
-- Frontend for Daily Challenge and Leaderboard
-- Expand question bank further
+- Full analytics dashboard UI
+- Expand question bank to 500+
+- Mobile test improvements
 
 ### Later
 - PWA / offline mode
