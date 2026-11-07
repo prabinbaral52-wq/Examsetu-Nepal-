@@ -25,6 +25,7 @@ const path = require('path');
 const cors = require('cors');
 const DB = require('./models/db');
 const apiRoutes = require('./routes/api');
+const leaderboardRoutes = require('./routes/leaderboard');
 
 const app = express();
 const PORT = process.env.APP_PORT || (process.env.PORT && process.env.PORT !== '8080' ? process.env.PORT : 3000);
@@ -77,6 +78,7 @@ app.get('/sitemap.xml', (req, res) => {
 
 // Mount API routes
 app.use('/api', apiRoutes);
+app.use('/api', leaderboardRoutes);
 
 // View routing helper
 const sendView = (res, viewFile) => {
@@ -140,5 +142,6 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`Configured administrator: ${process.env.ADMIN_EMAIL ? 'yes' : 'no'}`);
   console.log(`Health check: http://localhost:${PORT}/health`);
+  console.log(`Leaderboard & Daily Challenge: /api/leaderboard , /api/daily-challenge`);
   console.log(`====================================================`);
 });
