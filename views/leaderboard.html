@@ -6,13 +6,23 @@
   <title>Leaderboard - ExamSetu Nepal</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    .page-wrap { max-width: 640px; margin: 2rem auto; padding: 1rem; }
+    .card { background: #fff; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .rank-item { display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1rem; margin: 0.5rem 0; background: #f8fafc; border-radius: 10px; }
+    .rank-num { font-weight: 700; color: #2563eb; width: 2.5rem; }
+    .empty { color: #64748b; text-align: center; padding: 2rem; }
+  </style>
 </head>
 <body>
-  <div class="container" style="max-width:700px;margin:40px auto;padding:20px;">
-    <h1>🏆 Leaderboard</h1>
-    <p>Top students on ExamSetu Nepal</p>
-    <div id="leaderboard">Loading...</div>
+  <div class="page-wrap">
+    <div class="card">
+      <h1 style="margin:0 0 0.5rem;">🏆 Leaderboard</h1>
+      <p style="color:#64748b;margin:0 0 1.5rem;">Top students on ExamSetu Nepal</p>
+      <div id="leaderboard">Loading...</div>
+    </div>
   </div>
+
   <script>
     async function loadLeaderboard() {
       try {
@@ -20,14 +30,17 @@
         const data = await res.json();
         const el = document.getElementById('leaderboard');
         if (!data.leaderboard || data.leaderboard.length === 0) {
-          el.innerHTML = '<p>Leaderboard will show top users once more students join and earn XP. Keep practicing!</p>';
+          el.innerHTML = '<div class="empty">Leaderboard will show top users once more students join and earn XP.<br>Keep practicing!</div>';
           return;
         }
-        el.innerHTML = '<ol>' + data.leaderboard.map((u, i) =>
-          `<li style="margin:10px 0;padding:10px;background:#f8fafc;border-radius:8px;">#${i+1} ${u.name} — ${u.total_xp || 0} XP</li>`
-        ).join('') + '</ol>';
+        el.innerHTML = data.leaderboard.map((u, i) => `
+          <div class="rank-item">
+            <span><span class="rank-num">#${i+1}</span> ${u.name}</span>
+            <strong>${u.total_xp || 0} XP</strong>
+          </div>
+        `).join('');
       } catch (e) {
-        document.getElementById('leaderboard').innerHTML = 'Error loading leaderboard.';
+        document.getElementById('leaderboard').innerHTML = '<div class="empty">Error loading leaderboard.</div>';
       }
     }
     loadLeaderboard();
