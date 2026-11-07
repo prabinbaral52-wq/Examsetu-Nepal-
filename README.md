@@ -75,6 +75,8 @@ Then open your browser and navigate to:
 http://localhost:3000
 ```
 
+Health check: `http://localhost:3000/health`
+
 ---
 
 ## 🔐 Account Setup
@@ -91,7 +93,10 @@ Create a student account through `/register`. Configure an administrator with `A
 3. Click the **Manage Questions** tab to use the GUI question builder.
 4. Or click **Import Questions** and paste a JSON array of questions.
 
-### Option B: Sample JSON Format for Import
+### Option B: Sample JSON File
+A ready-to-import sample file is available at `data/sample-questions-loksewa.json`.
+
+### Sample JSON Format
 ```json
 [
   {
@@ -160,8 +165,31 @@ Configure Nginx reverse proxy to forward port 80/443 to `http://127.0.0.1:3000`.
 - [x] User Registration, Login, Logout, and Session Authentication
 - [x] User Dashboard with test history and saved bookmarks
 - [x] Admin Portal with Statistics, Question Manager, Bulk JSON Import, and Attempts Audit
-- [x] 35 original sample MCQs (Lok Sewa GK, Lok Sewa IT, SEE Science, SEE Math, Banking, TSC)
+- [x] Sample MCQs (Lok Sewa GK and others)
 - [x] Legal pages: About Us, Contact Us, Privacy Policy, Terms & Conditions, Disclaimer
 - [x] Google AdSense-ready responsive placeholder ad slots
 - [x] Dark/Light mode theme switch with local storage persistence
 - [x] Mobile-first responsive layout (smartphones, tablets, and desktops)
+- [x] Health check endpoint (`/health`)
+- [x] Secure session cookies in production
+
+---
+
+## 🚀 Roadmap — Making ExamSetu the Best
+
+### Near Term
+- [ ] Expand question bank to 500+ high-quality questions (Lok Sewa, SEE, Banking, TSC)
+- [ ] Better progress analytics (weak topics, accuracy over time)
+- [ ] Daily challenge / streak reminders
+- [ ] Improved mobile test experience
+
+### Medium Term
+- [ ] Leaderboards
+- [ ] Better college/institution onboarding
+- [ ] PWA / offline support
+- [ ] More Nepali-first content and explanations
+
+### Long Term
+- [ ] Full Android app polish
+- [ ] Advanced Guru AI features
+- [ ] Multi-language support expansion
