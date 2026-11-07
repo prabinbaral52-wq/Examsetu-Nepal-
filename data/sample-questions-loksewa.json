@@ -1,0 +1,122 @@
+[
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Nepal Constitution",
+    "difficulty": "easy",
+    "question": "According to the Constitution of Nepal (2072), how many fundamental rights are guaranteed?",
+    "options": {
+      "A": "25",
+      "B": "31",
+      "C": "35",
+      "D": "21"
+    },
+    "correct_answer": "B",
+    "explanation": "Part 3 (Articles 16 to 46) of the Constitution of Nepal 2072 guarantees 31 fundamental rights."
+  },
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Nepal Geography",
+    "difficulty": "medium",
+    "question": "Which is the longest river in Nepal?",
+    "options": {
+      "A": "Karnali",
+      "B": "Koshi",
+      "C": "Gandaki",
+      "D": "Bagmati"
+    },
+    "correct_answer": "A",
+    "explanation": "The Karnali River is the longest river in Nepal."
+  },
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Nepal History",
+    "difficulty": "easy",
+    "question": "In which year (AD) was Nepal unified by Prithvi Narayan Shah?",
+    "options": {
+      "A": "1768",
+      "B": "1769",
+      "C": "1770",
+      "D": "1767"
+    },
+    "correct_answer": "A",
+    "explanation": "Nepal was unified in 1768 AD after the conquest of the Kathmandu Valley."
+  },
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "International Affairs",
+    "difficulty": "medium",
+    "question": "Nepal became a member of the United Nations in which year?",
+    "options": {
+      "A": "1950",
+      "B": "1955",
+      "C": "1960",
+      "D": "1945"
+    },
+    "correct_answer": "B",
+    "explanation": "Nepal joined the United Nations on 14 December 1955."
+  },
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Nepal Constitution",
+    "difficulty": "medium",
+    "question": "Who is the constitutional head of the state of Nepal?",
+    "options": {
+      "A": "Prime Minister",
+      "B": "President",
+      "C": "Chief Justice",
+      "D": "Speaker of the House"
+    },
+    "correct_answer": "B",
+    "explanation": "According to the Constitution of Nepal, the President is the constitutional head of the state."
+  },
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Current Affairs",
+    "difficulty": "easy",
+    "question": "What is the national flower of Nepal?",
+    "options": {
+      "A": "Rhododendron",
+      "B": "Lotus",
+      "C": "Marigold",
+      "D": "Rose"
+    },
+    "correct_answer": "A",
+    "explanation": "The national flower of Nepal is the Rhododendron (Lali Gurans)."
+  },
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Nepal Geography",
+    "difficulty": "hard",
+    "question": "Mount Everest is located on the border of which two countries?",
+    "options": {
+      "A": "Nepal and China",
+      "B": "Nepal and India",
+      "C": "China and India",
+      "D": "Nepal and Bhutan"
+    },
+    "correct_answer": "A",
+    "explanation": "Mount Everest lies on the border between Nepal and China (Tibet)."
+  },
+  {
+    "exam": "Lok Sewa",
+    "subject": "General Knowledge",
+    "topic": "Government & Politics",
+    "difficulty": "medium",
+    "question": "How many provinces are there in Nepal according to the current constitution?",
+    "options": {
+      "A": "5",
+      "B": "6",
+      "C": "7",
+      "D": "8"
+    },
+    "correct_answer": "C",
+    "explanation": "Nepal is divided into 7 provinces under the federal structure of the Constitution of Nepal 2072."
+  }
+]
