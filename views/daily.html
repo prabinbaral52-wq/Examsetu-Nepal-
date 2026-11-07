@@ -6,16 +6,29 @@
   <title>Daily Challenge - ExamSetu Nepal</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    .page-wrap { max-width: 720px; margin: 2rem auto; padding: 1rem; }
+    .card { background: #fff; border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .q-card { border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin: 1rem 0; }
+    .opt { display: block; margin: 0.5rem 0; padding: 0.5rem; border-radius: 8px; cursor: pointer; }
+    .opt:hover { background: #f1f5f9; }
+    .btn-primary { background: #2563eb; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .result-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 1.25rem; margin-top: 1rem; }
+    .status { font-weight: 600; color: #2563eb; margin-bottom: 1rem; }
+  </style>
 </head>
 <body>
-  <div class="container" style="max-width:800px;margin:40px auto;padding:20px;">
-    <h1>🎯 Daily Challenge</h1>
-    <p>Complete today's special quiz and earn bonus XP!</p>
-    <div id="challenge-status">Loading today's challenge...</div>
+  <div class="page-wrap">
+    <div class="card">
+      <h1 style="margin:0 0 0.5rem;">🎯 Daily Challenge</h1>
+      <p style="color:#64748b;margin:0;">Complete today's special quiz and earn bonus XP</p>
+    </div>
+    <div id="challenge-status" class="status">Loading today's challenge...</div>
     <div id="questions-container"></div>
-    <button id="submit-btn" style="display:none;margin-top:20px;padding:12px 24px;background:#2563eb;color:white;border:none;border-radius:8px;cursor:pointer;">Submit Challenge</button>
-    <div id="result" style="margin-top:20px;"></div>
+    <button id="submit-btn" class="btn-primary" style="display:none;margin-top:1rem;">Submit Challenge</button>
+    <div id="result"></div>
   </div>
+
   <script>
     async function loadChallenge() {
       try {
@@ -25,32 +38,32 @@
           document.getElementById('challenge-status').innerHTML = 'Please <a href="/login">log in</a> to take the daily challenge.';
           return;
         }
-        document.getElementById('challenge-status').innerHTML = `<strong>Date:</strong> ${data.date} | Reward: ${data.rewardXp} XP`;
+        document.getElementById('challenge-status').innerHTML = `Date: ${data.date} · Reward: ${data.rewardXp} XP`;
         const container = document.getElementById('questions-container');
         data.questions.forEach((q, i) => {
           container.innerHTML += `
-            <div style="margin:20px 0;padding:16px;border:1px solid #e2e8f0;border-radius:12px;">
-              <p><strong>Q${i+1}.</strong> ${q.question}</p>
+            <div class="q-card">
+              <p style="font-weight:600;margin:0 0 0.75rem;">Q${i+1}. ${q.question}</p>
               ${['A','B','C','D'].map(opt => `
-                <label style="display:block;margin:8px 0;">
-                  <input type="radio" name="q${q.id}" value="${opt}"> ${opt}. ${q.options[opt]}
+                <label class="opt">
+                  <input type="radio" name="q${q.id}" value="${opt}" style="margin-right:8px;">
+                  <strong>${opt}.</strong> ${q.options[opt]}
                 </label>
               `).join('')}
             </div>
           `;
         });
-        document.getElementById('submit-btn').style.display = 'block';
+        document.getElementById('submit-btn').style.display = 'inline-block';
         document.getElementById('submit-btn').onclick = submitChallenge;
       } catch (e) {
-        document.getElementById('challenge-status').innerHTML = 'Error loading challenge.';
+        document.getElementById('challenge-status').innerHTML = 'Error loading challenge. Please try again.';
       }
     }
 
     async function submitChallenge() {
       const answers = {};
       document.querySelectorAll('input[type=radio]:checked').forEach(input => {
-        const qId = input.name.replace('q', '');
-        answers[qId] = input.value;
+        answers[input.name.replace('q', '')] = input.value;
       });
       const res = await fetch('/api/daily-challenge/submit', {
         method: 'POST',
@@ -59,13 +72,14 @@
       });
       const data = await res.json();
       document.getElementById('result').innerHTML = `
-        <div style="padding:20px;background:#f0fdf4;border-radius:12px;">
-          <h3>Result</h3>
-          <p>Score: ${data.result.correct}/${data.result.total} (${data.result.percentage}%)</p>
-          <p>XP Earned: ${data.result.xpEarned}</p>
+        <div class="result-box">
+          <h3 style="margin:0 0 0.5rem;">Result</h3>
+          <p>Score: <strong>${data.result.correct}/${data.result.total}</strong> (${data.result.percentage}%)</p>
+          <p>XP Earned: <strong>${data.result.xpEarned}</strong></p>
           <p>${data.result.message}</p>
         </div>
       `;
+      document.getElementById('submit-btn').style.display = 'none';
     }
 
     loadChallenge();
